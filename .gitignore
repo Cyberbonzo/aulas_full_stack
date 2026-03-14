@@ -1,17 +1,16 @@
-.aider*
-.claude/
+# Video files
 aulas/
 *.mp4
 *.mov
 *.avi
 
-# Documentation and configuration files - NEVER UPLOAD
-CLAUDE.md
-PRE-COMMIT-RULES.md
-.claude/
-.aider*
+# IDE and system files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
 
-# Claude markers and comments - REMOVE BEFORE COMMITTING
-**/Co-Authored-By:*
-**/*claude*
-**/*Claude*
+# Editor configs
+.vscode/
+.idea/
