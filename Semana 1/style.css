@@ -1,0 +1,300 @@
+/* ============================================================
+   O QUE É CSS?
+   CSS (Cascading Style Sheets) é a linguagem responsável pela
+   aparência visual da página. Enquanto o HTML define a estrutura
+   (o quê existe), o CSS define a apresentação (como parece).
+
+   SINTAXE BÁSICA:
+   seletor {
+     propriedade: valor;
+   }
+
+   seletor  → aponta para qual elemento HTML o estilo se aplica.
+   propriedade → o que será modificado (cor, tamanho, espaçamento...).
+   valor    → o novo valor dessa propriedade.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   RESET UNIVERSAL
+   O seletor * (asterisco) seleciona TODOS os elementos da página.
+   Navegadores diferentes aplicam margens e espaçamentos padrões
+   diferentes, o que causa inconsistências visuais.
+   Zerando tudo aqui garantimos um ponto de partida igual em todos.
+   ------------------------------------------------------------ */
+* {
+  margin: 0;       /* Remove espaço externo padrão de todos os elementos */
+  padding: 0;      /* Remove espaço interno padrão de todos os elementos */
+  box-sizing: border-box;
+  /* box-sizing: define como largura e altura são calculadas.
+     border-box → padding e borda são INCLUÍDOS no tamanho declarado.
+     Sem isso, um elemento com width:200px + padding:20px ficaria com 240px,
+     o que causa surpresas no layout. */
+}
+
+
+/* ------------------------------------------------------------
+   ESTILO DO BODY (corpo da página)
+   ------------------------------------------------------------ */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* font-family: define a fonte do texto.
+     São listadas várias opções como fallback: se a primeira não
+     estiver instalada no computador do usuário, tenta a próxima.
+     sans-serif → fallback genérico do sistema. */
+
+  background-color: #0f0f1a;
+  /* background-color: cor de fundo da página.
+     Valores aceitos: nome (red), hexadecimal (#ff0000), rgb(255,0,0).
+     #0f0f1a → azul escuro quase preto (estilo cinema/streaming). */
+
+  color: #e0e0e0;
+  /* color: cor padrão do texto.
+     Esta propriedade é HERDADA — todos os elementos filhos usarão
+     esta cor a menos que definam a própria. */
+
+  min-height: 100vh;
+  /* min-height: altura mínima do elemento.
+     100vh → 100% da altura visível da janela do navegador (viewport height).
+     Garante que o fundo escuro cubra a tela inteira mesmo com pouco conteúdo. */
+
+  display: flex;
+  /* display: define como o elemento organiza seus filhos.
+     flex → ativa o Flexbox, sistema de layout moderno e flexível.
+     Com flex, podemos alinhar e distribuir espaço entre elementos facilmente. */
+
+  justify-content: center;
+  /* justify-content: alinhamento no eixo principal (horizontal no flex padrão).
+     center → centraliza o conteúdo horizontalmente na tela. */
+
+  align-items: flex-start;
+  /* align-items: alinhamento no eixo cruzado (vertical no flex padrão).
+     flex-start → conteúdo começa do topo, não fica espremido no meio. */
+
+  padding: 40px 16px;
+  /* padding: espaço interno entre a borda do elemento e seu conteúdo.
+     Dois valores: 40px (cima e baixo) 16px (esquerda e direita).
+     Equivale a: padding-top:40px; padding-bottom:40px;
+                 padding-left:16px; padding-right:16px; */
+}
+
+
+/* ------------------------------------------------------------
+   CONTAINER PRINCIPAL
+   Limita a largura máxima do conteúdo para não ficar esticado
+   em telas muito largas, e ocupa toda a largura disponível
+   em telas menores.
+   ------------------------------------------------------------ */
+.container {
+  width: 100%;        /* Ocupa 100% da largura do pai (body) */
+  max-width: 600px;   /* Mas nunca ultrapassa 600px */
+}
+/* O ponto antes do nome (.container) indica que é um seletor de CLASSE.
+   Classes são reutilizáveis — vários elementos podem ter a mesma classe.
+   O # indica seletor de ID (único por página). Ex: #inputFilme */
+
+
+/* ------------------------------------------------------------
+   CABEÇALHO
+   ------------------------------------------------------------ */
+header {
+  text-align: center;   /* Centraliza o texto horizontalmente */
+  margin-bottom: 32px;  /* Espaço externo abaixo do header */
+}
+
+header h1 {
+  /* Seletor descendente: aplica estilo apenas nos <h1> que estão
+     DENTRO de um <header>. Evita afetar outros h1 da página. */
+  font-size: 2rem;
+  /* font-size: tamanho da fonte.
+     rem → unidade relativa ao tamanho base do navegador (geralmente 16px).
+     2rem = 32px. Preferível ao px pois respeita as configurações
+     de acessibilidade do usuário. */
+
+  color: #e50914;       /* Vermelho estilo Netflix */
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 0.95rem;
+  color: #aaa;  /* Cinza claro para texto secundário */
+}
+
+
+/* ------------------------------------------------------------
+   FORMULÁRIO (input + botão)
+   ------------------------------------------------------------ */
+.formulario {
+  display: flex;    /* Coloca input e botão lado a lado */
+  gap: 10px;        /* gap: espaço entre os itens filhos no Flexbox */
+  margin-bottom: 32px;
+}
+
+.formulario input {
+  flex: 1;
+  /* flex: 1 → o input cresce para ocupar todo o espaço disponível,
+     empurrando o botão para a direita. É a "magia" do Flexbox. */
+
+  padding: 12px 16px;
+  border: 2px solid #333;
+  /* border: borda do elemento.
+     Sintaxe: largura estilo cor
+     2px → espessura | solid → linha sólida | #333 → cinza escuro */
+
+  border-radius: 8px;
+  /* border-radius: arredonda os cantos do elemento.
+     Quanto maior o valor, mais arredondado. 50% = círculo. */
+
+  background-color: #1c1c2e;  /* Fundo levemente mais claro que o body */
+  color: #fff;                /* Texto branco dentro do input */
+  font-size: 1rem;
+  outline: none;
+  /* outline: contorno que aparece ao focar (clicar) no input.
+     none → remove o contorno padrão azul do navegador,
+     para que possamos criar o nosso próprio abaixo. */
+
+  transition: border-color 0.2s;
+  /* transition: suaviza mudanças de propriedades CSS.
+     border-color 0.2s → a cor da borda muda suavemente em 0.2 segundos.
+     Sem transition, a mudança seria instantânea (abrupta). */
+}
+
+.formulario input:focus {
+  border-color: #e50914;
+  /* :focus → pseudo-classe que ativa quando o elemento está selecionado.
+     Aqui a borda fica vermelha quando o usuário clica no campo. */
+}
+
+.formulario button {
+  padding: 12px 24px;
+  background-color: #e50914;
+  color: #fff;
+  border: none;         /* Remove a borda padrão do botão */
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  /* cursor: pointer → muda o cursor do mouse para uma mãozinha
+     ao passar sobre o botão, indicando que é clicável. */
+
+  transition: background-color 0.2s;
+}
+
+.formulario button:hover {
+  background-color: #b2070f;
+  /* :hover → pseudo-classe que ativa quando o mouse está sobre o elemento.
+     Aqui escurece o botão ao passar o mouse, dando feedback visual. */
+}
+
+
+/* ------------------------------------------------------------
+   SEÇÃO DA LISTA
+   ------------------------------------------------------------ */
+.lista-section h2 {
+  font-size: 1.1rem;
+  color: #bbb;
+  margin-bottom: 16px;
+}
+
+.lista-section h2 span {
+  color: #e50914;  /* O contador fica em vermelho para destaque */
+}
+
+#listaFilmes {
+  /* # → seletor de ID. Aplica estilo ao elemento com id="listaFilmes". */
+  list-style: none;
+  /* list-style: none → remove os marcadores (bullets) padrão das listas. */
+
+  display: flex;
+  flex-direction: column;
+  /* flex-direction: column → os itens da lista ficam empilhados
+     verticalmente (um abaixo do outro). O padrão do flex é "row" (linha). */
+
+  gap: 10px;  /* Espaço entre cada item da lista */
+}
+
+#listaFilmes li {
+  /* Estilo de cada item da lista */
+  display: flex;
+  justify-content: space-between;
+  /* space-between → distribui o espaço entre os filhos:
+     o nome fica na esquerda, os botões na direita. */
+
+  align-items: center;  /* Alinha verticalmente ao centro */
+
+  background-color: #1c1c2e;
+  padding: 14px 18px;
+  border-radius: 8px;
+  border-left: 4px solid #e50914;
+  /* border-left → aplica borda apenas no lado esquerdo.
+     Cria um efeito visual de "marcação" lateral. */
+
+  transition: opacity 0.2s;
+}
+
+#listaFilmes li.assistido {
+  /* Estilo aplicado quando o JavaScript adiciona a classe "assistido" ao <li>.
+     Note: li.assistido (sem espaço) = <li> que TAMBÉM tem a classe assistido.
+           li .assistido (com espaço) = elemento com classe assistido DENTRO de <li>. */
+  opacity: 0.45;
+  /* opacity: transparência do elemento. 1 = totalmente visível, 0 = invisível. */
+
+  text-decoration: line-through;
+  /* text-decoration: line-through → risca o texto (efeito de "concluído"). */
+
+  border-left-color: #555;  /* Muda a cor da borda lateral para cinza */
+}
+
+#listaFilmes li .nome {
+  cursor: pointer;  /* Mãozinha ao passar o mouse (indica que é clicável) */
+  font-size: 1rem;
+}
+
+#listaFilmes li .acoes {
+  display: flex;
+  gap: 8px;
+}
+
+#listaFilmes li .acoes button {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#listaFilmes li .acoes button:hover {
+  opacity: 0.75;
+}
+
+.btn-check {
+  background-color: #2ecc71;  /* Verde */
+  color: #fff;
+}
+
+.btn-remove {
+  background-color: #555;  /* Cinza */
+  color: #fff;
+}
+
+
+/* ------------------------------------------------------------
+   MENSAGEM DE LISTA VAZIA
+   ------------------------------------------------------------ */
+.vazio {
+  text-align: center;
+  color: #555;
+  font-style: italic;  /* Texto em itálico */
+  padding: 24px 0;
+}
+
+
+/* ------------------------------------------------------------
+   RODAPÉ
+   ------------------------------------------------------------ */
+footer {
+  text-align: center;
+  margin-top: 48px;
+  font-size: 0.8rem;
+  color: #444;
+}

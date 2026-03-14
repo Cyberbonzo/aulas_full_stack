@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apostila — Semana 1 | Full Stack</title>
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Variáveis ── */
+  :root {
+    --azul-escuro: #1a237e;
+    --azul-medio: #1c2a8a;
+    --azul-header: #1e2d99;
+    --laranja: #e85d04;
+    --vermelho: #e50914;
+    --verde: #2ecc71;
+    --cinza: #555;
+    --cinza-claro: #bbb;
+    --codigo-bg: #1a1a2e;
+    --codigo-texto: #e0e0e0;
+    --codigo-comentario: #6a9955;
+    --codigo-tag: #4ec9b0;
+    --codigo-atributo: #9cdcfe;
+    --codigo-string: #ce9178;
+    --codigo-js-comentario: #6a9955;
+    --codigo-js-keyword: #569cd6;
+    --codigo-js-string: #ce9178;
+    --codigo-js-metodo: #dcdcaa;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── Botão Salvar PDF ── */
+  #btn-pdf {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    background: var(--vermelho);
+    color: #fff;
+    border: none;
+    padding: 14px 26px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.5px;
+  }
+  #btn-pdf:hover { background: #b2070f; transform: translateY(-2px); }
+  #btn-pdf:active { transform: translateY(0); }
+  @media print { #btn-pdf { display: none !important; } }
+
+  /* ── Página ── */
+  .page {
+    width: 794px;
+    margin: 32px auto;
+    background: #fff;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+    page-break-after: always;
+    overflow: hidden;
+  }
+
+  /* ══════════════════════════════
+     CAPA
+  ══════════════════════════════ */
+  .capa {
+    background: var(--azul-medio);
+    min-height: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    position: relative;
+  }
+  .capa-label {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .capa h1 {
+    font-size: 3.2rem;
+    color: #fff;
+    font-weight: 300;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .capa-subtitulo {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 60px;
+  }
+  .capa-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+  }
+  .capa-tabela tr {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+  .capa-tabela td {
+    padding: 12px 8px;
+    font-size: 0.95rem;
+  }
+  .capa-tabela td:first-child {
+    color: #90caf9;
+    font-weight: 700;
+    width: 160px;
+  }
+  .capa-linha {
+    position: absolute;
+    bottom: 160px;
+    left: 80px;
+    right: 80px;
+    height: 3px;
+    background: linear-gradient(to right, var(--laranja), transparent);
+  }
+
+  /* ══════════════════════════════
+     HEADER DAS PÁGINAS INTERNAS
+  ══════════════════════════════ */
+  .page-header {
+    background: var(--azul-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 28px;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .page-header .tags { color: rgba(255,255,255,0.7); }
+  .page-header .tags span { color: var(--laranja); margin: 0 4px; }
+
+  /* ── Conteúdo interno ── */
+  .page-body {
+    padding: 36px 44px;
+    min-height: 820px;
+    position: relative;
+  }
+
+  /* ── Footer paginação ── */
+  .page-footer {
+    text-align: center;
+    padding: 14px;
+    color: #888;
+    font-size: 0.82rem;
+    border-top: 1px solid #eee;
+  }
+
+  /* ══════════════════════════════
+     SEÇÃO BANNER
+  ══════════════════════════════ */
+  .secao-banner {
+    background: var(--azul-medio);
+    color: #fff;
+    padding: 14px 20px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    border-left: 6px solid var(--laranja);
+  }
+
+  /* ══════════════════════════════
+     TÍTULOS
+  ══════════════════════════════ */
+  .titulo-secao {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a237e;
+    margin: 28px 0 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ddd;
+  }
+  .subtitulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--laranja);
+    margin: 20px 0 8px;
+  }
+  .titulo-verde { color: var(--verde); }
+
+  /* ══════════════════════════════
+     TEXTOS
+  ══════════════════════════════ */
+  p { margin-bottom: 10px; }
+  .destaque { font-weight: 700; }
+  ul.lista, ol.lista {
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 12px;
+  }
+  ul.lista li, ol.lista li {
+    padding: 3px 0 3px 0;
+    position: relative;
+  }
+  ul.lista li::before { content: "• "; font-weight: 700; }
+
+  /* ══════════════════════════════
+     CAIXAS INFORMATIVAS
+  ══════════════════════════════ */
+  .info-box {
+    background: #f5f5f5;
+    border-left: 4px solid var(--azul-medio);
+    padding: 14px 18px;
+    margin: 10px 0 16px;
+    border-radius: 0 4px 4px 0;
+  }
+  .info-box p { margin: 4px 0; }
+
+  /* ══════════════════════════════
+     TABELAS
+  ══════════════════════════════ */
+  .tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 0.92rem;
+  }
+  .tabela thead tr {
+    background: var(--azul-medio);
+    color: #fff;
+  }
+  .tabela thead td, .tabela thead th {
+    padding: 10px 14px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .tabela tbody tr:nth-child(even) { background: #f5f7ff; }
+  .tabela tbody tr:nth-child(odd) { background: #fff; }
+  .tabela tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .tabela .cod-200 { color: var(--verde); font-weight: 700; }
+  .tabela .cod-404 { color: #e67e22; font-weight: 700; }
+  .tabela .cod-500 { color: var(--vermelho); font-weight: 700; }
+
+  /* Tabela Tríade */
+  .tabela-triade { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+  .tabela-triade td { padding: 10px 14px; border: 1px solid #ddd; vertical-align: top; }
+  .tag-html  { background: #1a237e; color: #fff; font-weight: 700; width: 140px; }
+  .tag-css   { background: #1565c0; color: #fff; font-weight: 700; width: 140px; }
+  .tag-js    { background: #2e7d32; color: #fff; font-weight: 700; width: 140px; }
+  .tag-html-rosa { background: #fce4ec; }
+  .tag-css-azul  { background: #e3f2fd; }
+  .tag-js-verde  { background: #e8f5e9; }
+
+  /* Tabela Funcionalidades */
+  .tabela-func { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+  .tabela-func td { padding: 12px 14px; border: 1px solid #ddd; }
+  .tag-func-html { background: #1a237e; color: #fff; font-weight: 700; width: 140px; }
+  .tag-func-css  { background: #1565c0; color: #fff; font-weight: 700; width: 140px; }
+  .tag-func-js   { background: #2e7d32; color: #fff; font-weight: 700; width: 140px; }
+
+  /* ══════════════════════════════
+     BLOCOS DE CÓDIGO
+  ══════════════════════════════ */
+  .code-block {
+    background: #1a1a2e;
+    border-radius: 6px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .code-label {
+    background: var(--laranja);
+    color: #fff;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .code-label.css-label { background: #1565c0; }
+  .code-label.js-label  { background: #2e7d32; }
+  pre {
+    font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    padding: 18px 20px;
+    color: var(--codigo-texto);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+  }
+  /* Cores de sintaxe HTML */
+  .ht  { color: #4ec9b0; }  /* tags */
+  .ha  { color: #9cdcfe; }  /* atributos */
+  .hv  { color: #ce9178; }  /* valores */
+  .hc  { color: #6a9955; }  /* comentários */
+  .hw  { color: #e0e0e0; }  /* texto normal */
+  /* Cores de sintaxe CSS */
+  .cs  { color: #4ec9b0; }  /* seletor */
+  .cp  { color: #9cdcfe; }  /* propriedade */
+  .cv  { color: #ce9178; }  /* valor */
+  .cc  { color: #6a9955; }  /* comentário */
+  /* Cores de sintaxe JS */
+  .jc  { color: #6a9955; }  /* comentário */
+  .jk  { color: #569cd6; }  /* keyword */
+  .jm  { color: #dcdcaa; }  /* método/função */
+  .js  { color: #ce9178; }  /* string */
+  .jn  { color: #b5cea8; }  /* número */
+
+  /* ══════════════════════════════
+     SEÇÃO 3 subtítulos
+  ══════════════════════════════ */
+  .titulo-codigo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--laranja);
+    margin: 28px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* ── Rodapé final ── */
+  .fim-apostila {
+    text-align: center;
+    color: #666;
+    font-size: 0.88rem;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-style: italic;
+  }
+
+  /* ══════════════════════════════
+     PRINT
+  ══════════════════════════════ */
+  @media print {
+    body { background: #fff; }
+    .page {
+      width: 100%;
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+    }
+    @page { margin: 0; size: A4; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Botão Salvar PDF -->
+<button id="btn-pdf" onclick="window.print()">&#128438; Salvar como PDF</button>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 1 — CAPA
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="capa">
+    <p class="capa-label">Apostila</p>
+    <h1>Semana 1</h1>
+    <p class="capa-subtitulo">Fundamentos da Web: HTML, CSS &amp; JavaScript</p>
+
+    <table class="capa-tabela">
+      <tr><td>Programa</td><td>Full Stack — Mentoria Interna</td></tr>
+      <tr><td>Módulo</td><td>Frontend — Tríade Básica da Web</td></tr>
+      <tr><td>Tecnologias</td><td>HTML5 &nbsp;•&nbsp; CSS3 &nbsp;•&nbsp; JavaScript ES6+</td></tr>
+      <tr><td>Projeto</td><td>Lista de Filmes Favoritos (interativa)</td></tr>
+    </table>
+
+    <div class="capa-linha"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 2 — SEÇÃO 1 (parte 1)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-banner">SEÇÃO 1 | Resumo da Aula 1</div>
+
+    <h2 class="titulo-secao">1. O que é ser Full Stack e a Visão de Negócio</h2>
+
+    <p><span class="destaque">Definição:</span> Ser um desenvolvedor Full Stack significa conhecer <strong>todas as camadas da aplicação</strong> — telas, APIs, banco de dados e integração — tendo uma visão do todo sem necessariamente ser especialista em cada parte.</p>
+    <p><span class="destaque">Foco Prático:</span> O objetivo é auxiliar os colaboradores a entenderem como aplicar o conhecimento dentro do contexto do banco, criando ferramentas que atendam as necessidades reais do negócio.</p>
+
+    <h2 class="titulo-secao">2. Fundamentos da Web (Request e Response)</h2>
+
+    <div class="info-box">
+      <p><strong>Comunicação:</strong> A web funciona como uma conversa entre um <strong>cliente</strong> (navegador ou aplicativo) e um <strong>servidor</strong>.</p>
+      <p><strong>Protocolo HTTP:</strong> É a linguagem dessa conversa. O <strong>HTTPS</strong> adiciona uma camada de segurança via criptografia e certificados SSL/TLS.</p>
+      <p><strong>Infraestrutura:</strong> A configuração de servidores (Apache), sistemas operacionais e certificados é cuidada pela área de infraestrutura (DTEC), permitindo que os desenvolvedores foquem no código.</p>
+    </div>
+
+    <h2 class="titulo-secao">3. Anatomia de uma Requisição</h2>
+
+    <p class="subtitulo">Métodos Principais:</p>
+    <ul class="lista">
+      <li><strong>GET:</strong> Busca dados no servidor (ex: puxar um extrato de cliente). Os parâmetros ficam visíveis na URL.</li>
+      <li><strong>POST:</strong> Envia ou grava dados (ex: preencher formulários de balanço). É mais seguro que o GET para informações sensíveis.</li>
+    </ul>
+
+    <p class="subtitulo">Estrutura da Requisição:</p>
+    <ul class="lista">
+      <li><strong>Headers (Cabeçalhos):</strong> Contêm metadados como tipo de conteúdo e encoding (ex: UTF-8).</li>
+      <li><strong>Body (Corpo):</strong> Contém os dados reais, geralmente formatados em <strong>JSON</strong> (pares de chave e valor).</li>
+    </ul>
+
+    <p class="subtitulo">Status Codes:</p>
+    <table class="tabela">
+      <thead>
+        <tr><td>Código</td><td>Significado</td><td>Exemplo</td></tr>
+      </thead>
+      <tbody>
+        <tr><td class="cod-200">200</td><td>Sucesso</td><td>Página carregada corretamente</td></tr>
+        <tr><td class="cod-404">404</td><td>Não encontrado</td><td>URL digitada não existe no servidor</td></tr>
+        <tr><td class="cod-500">500</td><td>Erro interno</td><td>Falha no código do servidor</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="titulo-secao">4. A Tríade do Frontend</h2>
+
+    <table class="tabela-triade">
+      <tr>
+        <td class="tag-html">HTML</td>
+        <td>Estrutura (o esqueleto)</td>
+        <td>Tags como &lt;h1&gt;, &lt;p&gt;, &lt;ul&gt; definem o conteúdo.</td>
+      </tr>
+    </table>
+
+  </div>
+  <div class="page-footer">Página 2</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 3 — SEÇÃO 1 (continuação)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <table class="tabela-triade">
+      <tr>
+        <td class="tag-css">CSS</td>
+        <td>Apresentação (a aparência)</td>
+        <td>Define cores, fontes, espaçamentos e responsividade.</td>
+      </tr>
+      <tr>
+        <td class="tag-js">JavaScript</td>
+        <td>Comportamento (a lógica)</td>
+        <td>Cliques, animações, validações e manipulação do DOM.</td>
+      </tr>
+    </table>
+
+    <h2 class="titulo-secao">5. Backend e Banco de Dados</h2>
+
+    <div class="info-box">
+      <p><strong>Lógica de Negócio:</strong> O backend processa as regras, segurança e comunicação com o banco de dados. A linguagem foco desta mentoria é o <strong>PHP</strong>.</p>
+      <p><strong>Persistência:</strong> O banco de dados utilizado será o <strong>PostgreSQL</strong>, onde as informações são armazenadas em tabelas organizadas por chaves primárias e estrangeiras.</p>
+    </div>
+
+    <h2 class="titulo-secao">6. Ambiente de Desenvolvimento e Ferramentas</h2>
+
+    <table class="tabela">
+      <thead>
+        <tr><th>Ferramenta</th><th>Função</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>VS Code</strong></td><td>Editor de código — onde escrevemos HTML, CSS, JS e PHP</td></tr>
+        <tr><td><strong>XAMPP</strong></td><td>Simula um servidor web local (Apache) para rodar PHP</td></tr>
+        <tr><td><strong>HeidiSQL</strong></td><td>Interface gráfica para gerenciar e manipular o banco de dados</td></tr>
+        <tr><td><strong>php.ini</strong></td><td>Arquivo de configuração do PHP substituído por versão pré-configurada</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="page-footer">Página 3</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 4 — SEÇÃO 2
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-banner" style="background:#e85d04;">SEÇÃO 2 | O Trabalho da Semana 1</div>
+
+    <h2 class="titulo-secao" style="color:var(--laranja);">Objetivo da Atividade</h2>
+    <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px;">
+
+    <p>Desenvolver uma <strong>página web interativa simples</strong> utilizando exclusivamente tecnologias de front-end — HTML, CSS e JavaScript — sem necessidade de servidor ou banco de dados. O tema era livre: lista de tarefas, filmes favoritos, tópicos de estudo, etc.</p>
+
+    <h2 class="titulo-secao" style="color:var(--laranja);">Funcionalidades Esperadas</h2>
+    <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px;">
+
+    <table class="tabela-func">
+      <tr>
+        <td class="tag-func-html">HTML</td>
+        <td>Estruturar a página com títulos, parágrafos, listas e links.</td>
+      </tr>
+      <tr>
+        <td class="tag-func-css">CSS</td>
+        <td>Aplicar estilos: fontes, cores de fundo e organização visual.</td>
+      </tr>
+      <tr>
+        <td class="tag-func-js">JavaScript</td>
+        <td>Campo de texto para digitar uma informação e botão para adicioná-la a uma lista exibida na tela.</td>
+      </tr>
+    </table>
+
+    <h2 class="titulo-secao" style="color:var(--laranja);">Requisito Técnico</h2>
+    <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px;">
+
+    <ul class="lista">
+      <li>A página deve ser testada <strong>localmente no navegador</strong>, sem servidor.</li>
+      <li>Estrutura de arquivos obrigatória: <strong>index.html</strong>, <strong>style.css</strong> e <strong>script.js</strong>.</li>
+      <li>Os três arquivos devem estar na <strong>mesma pasta</strong> e interligados (link no HTML para o CSS; script no final do body para o JS).</li>
+    </ul>
+
+    <h2 class="titulo-secao" style="color:var(--laranja);">Projeto Entregue: Lista de Filmes Favoritos</h2>
+    <hr style="border:none;border-top:1px solid #ddd;margin-bottom:12px;">
+
+    <p>Tema escolhido: uma lista de filmes para assistir. O projeto implementa todas as funcionalidades solicitadas e acrescenta interações extras para reforçar o aprendizado:</p>
+
+    <ul class="lista">
+      <li>Adicionar filmes via botão <strong>ou</strong> tecla Enter (JavaScript)</li>
+      <li>Marcar como <strong>assistido</strong> com risco no texto e opacidade reduzida (CSS + JS)</li>
+      <li>Remover itens individualmente da lista (JS / DOM manipulation)</li>
+      <li>Contador dinâmico de filmes na lista (JS)</li>
+      <li>Mensagem de lista vazia criada e removida automaticamente (JS)</li>
+      <li>Visual estilo streaming (Netflix) com fundo escuro e vermelho (CSS)</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 4</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 5 — SEÇÃO 3 | index.html (parte 1)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-banner" style="background:#1b5e20;">SEÇÃO 3 | Código Comentado</div>
+
+    <p>A seguir está o código completo dos três arquivos do projeto, com comentários explicativos em cada linha ou bloco relevante. Leia o código junto com os comentários como se fosse um livro — cada conceito é explicado no momento em que aparece pela primeira vez.</p>
+
+    <h2 class="titulo-codigo">3.1 index.html — Estrutura da Página</h2>
+
+    <p>O HTML define <strong>o que existe</strong> na página. Cada tag tem um propósito semântico e os atributos <strong>id</strong> e <strong>class</strong> conectam o HTML ao CSS e ao JavaScript.</p>
+
+    <div class="code-block">
+      <div class="code-label">index.html</div>
+      <pre><span class="ht">&lt;!DOCTYPE html&gt;</span>
+<span class="hc">&lt;!--
+DOCTYPE: informa ao navegador que este é um documento HTML5.
+Sempre deve ser a primeira linha do arquivo.
+--&gt;</span>
+<span class="ht">&lt;html</span> <span class="ha">lang</span>=<span class="hv">"pt-BR"</span><span class="ht">&gt;</span>
+<span class="hc">&lt;!--
+&lt;html&gt;: elemento raiz que envolve todo o conteúdo da página.
+O atributo lang="pt-BR" informa ao navegador (e leitores de tela)
+que o idioma da página é Português Brasileiro.
+--&gt;</span>
+<span class="ht">&lt;head&gt;</span>
+<span class="hc">&lt;!--
+&lt;head&gt;: seção de configurações da página.
+O conteúdo aqui NÃO aparece visualmente — serve para configurar
+o comportamento e a aparência do documento.
+--&gt;</span>
+<span class="ht">&lt;meta</span> <span class="ha">charset</span>=<span class="hv">"UTF-8"</span> <span class="ht">/&gt;</span>
+<span class="hc">&lt;!--
+&lt;meta charset&gt;: define a codificação de caracteres.
+UTF-8 suporta acentos, cedilha e emojis corretamente.
+Sem isso, palavras como "ação" podem aparecer corrompidas.
+--&gt;</span>
+<span class="ht">&lt;meta</span> <span class="ha">name</span>=<span class="hv">"viewport"</span> <span class="ha">content</span>=<span class="hv">"width=device-width, initial-scale=1.0"</span> <span class="ht">/&gt;</span>
+<span class="hc">&lt;!--
+&lt;meta viewport&gt;: torna a página responsiva em celulares.
+width=device-width   a largura da página se adapta ao dispositivo.
+initial-scale=1.0    sem zoom inicial ao carregar.
+--&gt;</span>
+<span class="ht">&lt;title&gt;</span>Lista de Filmes Favoritos<span class="ht">&lt;/title&gt;</span>
+<span class="hc">&lt;!--
+&lt;title&gt;: define o texto que aparece na aba do navegador.
+--&gt;</span>
+<span class="ht">&lt;link</span> <span class="ha">rel</span>=<span class="hv">"stylesheet"</span> <span class="ha">href</span>=<span class="hv">"style.css"</span> <span class="ht">/&gt;</span>
+<span class="hc">&lt;!--
+&lt;link&gt;: conecta um arquivo externo ao HTML.
+rel="stylesheet"   informa que é um arquivo de estilos CSS.
+href="style.css"   caminho do arquivo (está na mesma pasta).
+--&gt;</span></pre>
+    </div>
+
+  </div>
+  <div class="page-footer">Página 5</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 6 — index.html (parte 2)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label">index.html (continuação)</div>
+      <pre><span class="ht">&lt;/head&gt;</span>
+<span class="ht">&lt;body&gt;</span>
+<span class="hc">&lt;!--
+&lt;body&gt;: tudo que está aqui aparece visualmente na página.
+É o "corpo" do documento.
+--&gt;</span>
+<span class="ht">&lt;div</span> <span class="ha">class</span>=<span class="hv">"container"</span><span class="ht">&gt;</span>
+<span class="hc">&lt;!--
+&lt;div&gt;: é uma caixa genérica usada para agrupar elementos.
+Não tem significado semântico próprio, mas é muito útil
+para organizar e aplicar estilos em blocos de conteúdo.
+class="container"    permite estilizar este div no CSS.
+--&gt;</span>
+  <span class="ht">&lt;header&gt;</span>
+<span class="hc">  &lt;!--
+  &lt;header&gt;: elemento semântico que representa o cabeçalho da página.
+  "Semântico" significa que o nome da tag já descreve seu propósito,
+  ajudando navegadores e mecanismos de busca a entenderem a estrutura.
+  --&gt;</span>
+    <span class="ht">&lt;h1&gt;</span>Minha Lista de Filmes<span class="ht">&lt;/h1&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;h1&gt;: título principal da página (heading nível 1).
+    Deve existir apenas um &lt;h1&gt; por página.
+    Os níveis vão de h1 (mais importante) até h6 (menos importante).
+    --&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Adicione os filmes que você quer assistir ou já assistiu!<span class="ht">&lt;/p&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;p&gt;: representa um parágrafo de texto.
+    O navegador adiciona automaticamente um espaço acima e abaixo.
+    --&gt;</span>
+  <span class="ht">&lt;/header&gt;</span>
+
+  <span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"formulario"</span><span class="ht">&gt;</span>
+<span class="hc">  &lt;!--
+  &lt;section&gt;: elemento semântico que agrupa um bloco de conteúdo
+  relacionado. Aqui usamos para isolar a área do formulário.
+  --&gt;</span>
+    <span class="ht">&lt;input</span> <span class="ha">type</span>=<span class="hv">"text"</span> <span class="ha">id</span>=<span class="hv">"inputFilme"</span> <span class="ha">placeholder</span>=<span class="hv">"Digite o nome do filme..."</span> <span class="ht">/&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;input&gt;: campo onde o usuário pode digitar informações.
+    type="text"      define que aceita texto comum.
+    id="inputFilme"  identificador único, usado pelo JavaScript
+                     para encontrar este elemento (document.getElementById).
+    placeholder      texto cinza exibido enquanto o campo está vazio,
+                     serve como dica para o usuário.
+    --&gt;</span>
+    <span class="ht">&lt;button</span> <span class="ha">id</span>=<span class="hv">"btnAdicionar"</span><span class="ht">&gt;</span>Adicionar<span class="ht">&lt;/button&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;button&gt;: cria um botão clicável.
+    O texto entre as tags ("Adicionar") é o rótulo visível.
+    id="btnAdicionar"   identificador para o JavaScript capturar
+                        o evento de clique neste botão.
+    --&gt;</span>
+  <span class="ht">&lt;/section&gt;</span>
+  <span class="ht">&lt;section</span> <span class="ha">class</span>=<span class="hv">"lista-section"</span><span class="ht">&gt;</span></pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 6</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 7 — index.html (parte 3) + início style.css
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label">index.html (continuação)</div>
+      <pre>    <span class="ht">&lt;h2&gt;</span>Filmes na lista <span class="ht">&lt;span</span> <span class="ha">id</span>=<span class="hv">"contador"</span><span class="ht">&gt;</span>(0)<span class="ht">&lt;/span&gt;&lt;/h2&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;h2&gt;: título de segundo nível, hierarquicamente abaixo do &lt;h1&gt;.
+    &lt;span&gt;: elemento inline genérico (como o &lt;div&gt;, mas para textos).
+    Usado aqui para isolar o contador e atualizá-lo via JavaScript
+    sem afetar o restante do texto do &lt;h2&gt;.
+    id="contador"   o JavaScript irá modificar este texto dinamicamente.
+    --&gt;</span>
+    <span class="ht">&lt;ul</span> <span class="ha">id</span>=<span class="hv">"listaFilmes"</span><span class="ht">&gt;</span>
+<span class="hc">    &lt;!--
+    &lt;ul&gt;: lista não ordenada (Unordered List) — exibe marcadores (bullets).
+    Use &lt;ol&gt; quando a ordem importa (lista numerada).
+    Os itens da lista são adicionados aqui pelo JavaScript,
+    por isso está vazio no HTML.
+    id="listaFilmes"   referenciado no script.js para inserir os &lt;li&gt;.
+    --&gt;</span>
+    <span class="ht">&lt;/ul&gt;</span>
+  <span class="ht">&lt;/section&gt;</span>
+
+  <span class="ht">&lt;footer&gt;</span>
+<span class="hc">  &lt;!--
+  &lt;footer&gt;: elemento semântico de rodapé.
+  Geralmente contém informações secundárias como créditos, links, etc.
+  --&gt;</span>
+    <span class="ht">&lt;p&gt;</span>Feito com HTML, CSS e JavaScript &amp;mdash; Semana 1<span class="ht">&lt;/p&gt;</span>
+<span class="hc">    &lt;!--
+    &amp;mdash;   é uma entidade HTML que representa o caractere "—" (travessão).
+    Entidades HTML são usados para caracteres especiais que poderiam
+    ser confundidos com código (como &lt; e &gt; que viram &amp;lt; e &amp;gt;).
+    --&gt;</span>
+  <span class="ht">&lt;/footer&gt;</span>
+<span class="ht">&lt;/div&gt;</span>
+<span class="ht">&lt;script</span> <span class="ha">src</span>=<span class="hv">"script.js"</span><span class="ht">&gt;&lt;/script&gt;</span>
+<span class="hc">&lt;!--
+&lt;script&gt;: carrega e executa um arquivo JavaScript.
+src="script.js"   caminho do arquivo (mesma pasta).
+IMPORTANTE: o &lt;script&gt; é colocado no FINAL do &lt;body&gt; para garantir
+que todos os elementos HTML já existam na página antes de o JavaScript
+tentar encontrá-los. Se colocado no &lt;head&gt;, os elementos ainda não
+existiriam e o script falharia.
+--&gt;</span>
+<span class="ht">&lt;/body&gt;</span>
+<span class="ht">&lt;/html&gt;</span></pre>
+    </div>
+
+    <h2 class="titulo-codigo">3.2 style.css — Estilização Visual</h2>
+
+    <p>O CSS define <strong>como os elementos aparecem</strong>. A ordem das regras importa — regras posteriores sobrescrevem anteriores quando o seletor é igual (Cascata).</p>
+
+    <div class="code-block">
+      <div class="code-label css-label">style.css</div>
+      <pre><span class="cc">/* ============================================================
+O QUE É CSS?
+CSS (Cascading Style Sheets) é a linguagem responsável pela
+aparência visual da página. Enquanto o HTML define a estrutura</span></pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 7</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 8 — style.css (parte 1)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label css-label">style.css (continuação)</div>
+      <pre><span class="cc">(o que existe), o CSS define a apresentação (como parece).
+
+SINTAXE BÁSICA:
+seletor {
+  propriedade: valor;
+}
+seletor      aponta para qual elemento HTML o estilo se aplica.
+propriedade  o que será modificado (cor, tamanho, espaçamento...).
+valor        o novo valor dessa propriedade.
+============================================================ */</span>
+
+<span class="cc">/* --------------------------------------------------------
+RESET UNIVERSAL
+O seletor * (asterisco) seleciona TODOS os elementos da página.
+Navegadores diferentes aplicam margens e espaçamentos padrões
+diferentes, o que causa inconsistências visuais.
+Zerando tudo aqui garantimos um ponto de partida igual em todos.
+-------------------------------------------------------- */</span>
+<span class="cs">*</span> {
+  <span class="cp">margin</span>: <span class="cv">0</span>; <span class="cc">/* Remove espaço externo padrão de todos os elementos */</span>
+  <span class="cp">padding</span>: <span class="cv">0</span>; <span class="cc">/* Remove espaço interno padrão de todos os elementos */</span>
+  <span class="cp">box-sizing</span>: <span class="cv">border-box</span>;
+  <span class="cc">/* box-sizing: define como largura e altura são calculadas.
+  border-box   padding e borda são INCLUÍDOS no tamanho declarado.
+  Sem isso, um elemento com width:200px + padding:20px ficaria com 240px,
+  o que causa surpresas no layout. */</span>
+}
+
+<span class="cc">/* --------------------------------------------------------
+ESTILO DO BODY (corpo da página)
+-------------------------------------------------------- */</span>
+<span class="cs">body</span> {
+  <span class="cp">font-family</span>: <span class="cv">'Segoe UI', Tahoma, Geneva, Verdana, sans-serif</span>;
+  <span class="cc">/* font-family: define a fonte do texto.
+  São listadas várias opções como fallback: se a primeira não
+  estiver instalada no computador do usuário, tenta a próxima.
+  sans-serif   fallback genérico do sistema. */</span>
+  <span class="cp">background-color</span>: <span class="cv">#0f0f1a</span>;
+  <span class="cc">/* background-color: cor de fundo da página.
+  Valores aceitos: nome (red), hexadecimal (#ff0000), rgb(255,0,0).
+  #0f0f1a   azul escuro quase preto (estilo cinema/streaming). */</span>
+  <span class="cp">color</span>: <span class="cv">#e0e0e0</span>;
+  <span class="cc">/* color: cor padrão do texto.
+  Esta propriedade é HERDADA — todos os elementos filhos usarão
+  esta cor a menos que definam a própria. */</span>
+  <span class="cp">min-height</span>: <span class="cv">100vh</span>;
+  <span class="cc">/* min-height: altura mínima do elemento.
+  100vh   100% da altura visível da janela do navegador (viewport height).
+  Garante que o fundo escuro cubra a tela inteira mesmo com pouco conteúdo. */</span>
+  <span class="cp">display</span>: <span class="cv">flex</span>;
+  <span class="cc">/* display: define como o elemento organiza seus filhos.
+  flex   ativa o Flexbox, sistema de layout moderno e flexível.
+  Com flex, podemos alinhar e distribuir espaço entre elementos facilmente. */</span>
+  <span class="cp">justify-content</span>: <span class="cv">center</span>;
+  <span class="cc">/* justify-content: alinhamento no eixo principal (horizontal no flex padrão).
+  center    centraliza o conteúdo horizontalmente na tela. */</span>
+  <span class="cp">align-items</span>: <span class="cv">flex-start</span>;</pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 8</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 9 — style.css (parte 2)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label css-label">style.css (continuação)</div>
+      <pre>  <span class="cc">/* align-items: alinhamento no eixo cruzado (vertical no flex padrão).
+  flex-start   conteúdo começa do topo, não fica espremido no meio. */</span>
+  <span class="cp">padding</span>: <span class="cv">40px 16px</span>;
+  <span class="cc">/* padding: espaço interno entre a borda do elemento e seu conteúdo.
+  Dois valores: 40px (cima e baixo) 16px (esquerda e direita).
+  Equivale a: padding-top:40px; padding-bottom:40px;
+  padding-left:16px; padding-right:16px; */</span>
+}
+
+<span class="cc">/* --------------------------------------------------------
+CONTAINER PRINCIPAL
+Limita a largura máxima do conteúdo para não ficar esticado
+em telas muito largas, e ocupa toda a largura disponível
+em telas menores (celular).
+-------------------------------------------------------- */</span>
+<span class="cs">.container</span> {
+  <span class="cp">width</span>: <span class="cv">100%</span>; <span class="cc">/* Ocupa 100% da largura do pai (body) */</span>
+  <span class="cp">max-width</span>: <span class="cv">600px</span>; <span class="cc">/* Mas nunca ultrapassa 600px */</span>
+}
+<span class="cc">/* O ponto antes do nome (.container) indica que é um seletor de CLASSE.
+Classes são reutilizáveis — vários elementos podem ter a mesma classe.
+O # indica seletor de ID (único por página). Ex: #inputFilme */</span>
+
+<span class="cc">/* --------------------------------------------------------
+CABEÇALHO
+-------------------------------------------------------- */</span>
+<span class="cs">header</span> {
+  <span class="cp">text-align</span>: <span class="cv">center</span>; <span class="cc">/* Centraliza o texto horizontalmente */</span>
+  <span class="cp">margin-bottom</span>: <span class="cv">32px</span>; <span class="cc">/* Espaço externo abaixo do header */</span>
+}
+<span class="cs">header h1</span> {
+  <span class="cc">/* Seletor descendente: aplica estilo apenas nos &lt;h1&gt; que estão
+  DENTRO de um &lt;header&gt;. Evita afetar outros h1 da página. */</span>
+  <span class="cp">font-size</span>: <span class="cv">2rem</span>;
+  <span class="cc">/* font-size: tamanho da fonte.
+  rem   unidade relativa ao tamanho base do navegador (geralmente 16px).
+  2rem = 32px. Preferível ao px pois respeita as configurações
+  de acessibilidade do usuário. */</span>
+  <span class="cp">color</span>: <span class="cv">#e50914</span>; <span class="cc">/* Vermelho estilo Netflix */</span>
+  <span class="cp">margin-bottom</span>: <span class="cv">8px</span>;
+}
+<span class="cs">header p</span> {
+  <span class="cp">font-size</span>: <span class="cv">0.95rem</span>;
+  <span class="cp">color</span>: <span class="cv">#aaa</span>; <span class="cc">/* Cinza claro para texto secundário */</span>
+}
+
+<span class="cc">/* --------------------------------------------------------
+FORMULÁRIO (input + botão)
+-------------------------------------------------------- */</span>
+<span class="cs">.formulario</span> {
+  <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cc">/* Coloca input e botão lado a lado */</span>
+  <span class="cp">gap</span>: <span class="cv">10px</span>; <span class="cc">/* gap: espaço entre os itens filhos no Flexbox */</span>
+  <span class="cp">margin-bottom</span>: <span class="cv">32px</span>;
+}
+<span class="cs">.formulario input</span> {
+  <span class="cp">flex</span>: <span class="cv">1</span>;
+  <span class="cc">/* flex: 1   o input cresce para ocupar todo o espaço disponível,</span></pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 9</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 10 — style.css (parte 3)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label css-label">style.css (continuação)</div>
+      <pre>  <span class="cc">empurrando o botão para a direita. É a "magia" do Flexbox. */</span>
+  <span class="cp">padding</span>: <span class="cv">12px 16px</span>;
+  <span class="cp">border</span>: <span class="cv">2px solid #333</span>;
+  <span class="cc">/* border: borda do elemento.
+  Sintaxe: largura estilo cor
+  2px   espessura | solid   linha sólida | #333   cinza escuro */</span>
+  <span class="cp">border-radius</span>: <span class="cv">8px</span>;
+  <span class="cc">/* border-radius: arredonda os cantos do elemento.
+  Quanto maior o valor, mais arredondado. 50% = círculo. */</span>
+  <span class="cp">background-color</span>: <span class="cv">#1c1c2e</span>; <span class="cc">/* Fundo levemente mais claro que o body */</span>
+  <span class="cp">color</span>: <span class="cv">#fff</span>; <span class="cc">/* Texto branco dentro do input */</span>
+  <span class="cp">font-size</span>: <span class="cv">1rem</span>;
+  <span class="cp">outline</span>: <span class="cv">none</span>;
+  <span class="cc">/* outline: contorno que aparece ao focar (clicar) no input.
+  none   remove o contorno padrão azul do navegador,
+  para que possamos criar o nosso próprio abaixo. */</span>
+  <span class="cp">transition</span>: <span class="cv">border-color 0.2s</span>;
+  <span class="cc">/* transition: suaviza mudanças de propriedades CSS.
+  border-color 0.2s   a cor da borda muda suavemente em 0.2 segundos.
+  Sem transition, a mudança seria instantânea (abrupta). */</span>
+}
+<span class="cs">.formulario input:focus</span> {
+  <span class="cp">border-color</span>: <span class="cv">#e50914</span>;
+  <span class="cc">/* :focus   pseudo-classe que ativa quando o elemento está selecionado.
+  Aqui a borda fica vermelha quando o usuário clica no campo. */</span>
+}
+<span class="cs">.formulario button</span> {
+  <span class="cp">padding</span>: <span class="cv">12px 24px</span>;
+  <span class="cp">background-color</span>: <span class="cv">#e50914</span>;
+  <span class="cp">color</span>: <span class="cv">#fff</span>;
+  <span class="cp">border</span>: <span class="cv">none</span>; <span class="cc">/* Remove a borda padrão do botão */</span>
+  <span class="cp">border-radius</span>: <span class="cv">8px</span>;
+  <span class="cp">font-size</span>: <span class="cv">1rem</span>;
+  <span class="cp">cursor</span>: <span class="cv">pointer</span>;
+  <span class="cc">/* cursor: pointer   muda o cursor do mouse para uma mãozinha
+  ao passar sobre o botão, indicando que é clicável. */</span>
+  <span class="cp">transition</span>: <span class="cv">background-color 0.2s</span>;
+}
+<span class="cs">.formulario button:hover</span> {
+  <span class="cp">background-color</span>: <span class="cv">#b2070f</span>;
+  <span class="cc">/* :hover   pseudo-classe que ativa quando o mouse está sobre o elemento.
+  Aqui escurece o botão ao passar o mouse, dando feedback visual. */</span>
+}
+
+<span class="cc">/* --------------------------------------------------------
+SEÇÃO DA LISTA
+-------------------------------------------------------- */</span>
+<span class="cs">.lista-section h2</span> {
+  <span class="cp">font-size</span>: <span class="cv">1.1rem</span>;
+  <span class="cp">color</span>: <span class="cv">#bbb</span>;
+  <span class="cp">margin-bottom</span>: <span class="cv">16px</span>;
+}
+<span class="cs">.lista-section h2 span</span> {
+  <span class="cp">color</span>: <span class="cv">#e50914</span>; <span class="cc">/* O contador fica em vermelho para destaque */</span>
+}</pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 10</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 11 — style.css (parte 4)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label css-label">style.css (continuação)</div>
+      <pre><span class="cs">#listaFilmes</span> {
+  <span class="cc">/* # = seletor de ID. Aplica estilo ao elemento com id="listaFilmes". */</span>
+  <span class="cp">list-style</span>: <span class="cv">none</span>;
+  <span class="cc">/* list-style: none   remove os marcadores (bullets) padrão das listas. */</span>
+  <span class="cp">display</span>: <span class="cv">flex</span>;
+  <span class="cp">flex-direction</span>: <span class="cv">column</span>;
+  <span class="cc">/* flex-direction: column   os itens da lista ficam empilhados
+  verticalmente (um abaixo do outro). O padrão do flex é "row" (linha). */</span>
+  <span class="cp">gap</span>: <span class="cv">10px</span>; <span class="cc">/* Espaço entre cada item da lista */</span>
+}
+<span class="cs">#listaFilmes li</span> {
+  <span class="cc">/* Estilo de cada item da lista */</span>
+  <span class="cp">display</span>: <span class="cv">flex</span>;
+  <span class="cp">justify-content</span>: <span class="cv">space-between</span>;
+  <span class="cc">/* space-between   distribui o espaço entre os filhos:
+  o nome fica na esquerda, os botões na direita. */</span>
+  <span class="cp">align-items</span>: <span class="cv">center</span>; <span class="cc">/* Alinha verticalmente ao centro */</span>
+  <span class="cp">background-color</span>: <span class="cv">#1c1c2e</span>;
+  <span class="cp">padding</span>: <span class="cv">14px 18px</span>;
+  <span class="cp">border-radius</span>: <span class="cv">8px</span>;
+  <span class="cp">border-left</span>: <span class="cv">4px solid #e50914</span>;
+  <span class="cc">/* border-left   aplica borda apenas no lado esquerdo.
+  Cria um efeito visual de "marcação" lateral. */</span>
+  <span class="cp">transition</span>: <span class="cv">opacity 0.2s</span>;
+}
+<span class="cs">#listaFilmes li.assistido</span> {
+  <span class="cc">/* Estilo aplicado quando o JavaScript adiciona a classe "assistido" ao &lt;li&gt;.
+  Nota: li.assistido (sem espaço) = &lt;li&gt; que TAMBÉM tem a classe assistido.
+        li .assistido (com espaço) = elemento com classe assistido DENTRO de &lt;li&gt;. */</span>
+  <span class="cp">opacity</span>: <span class="cv">0.45</span>;
+  <span class="cc">/* opacity: transparência do elemento. 1 = totalmente visível, 0 = invisível. */</span>
+  <span class="cp">text-decoration</span>: <span class="cv">line-through</span>;
+  <span class="cc">/* text-decoration: line-through   risca o texto (efeito de "concluído"). */</span>
+  <span class="cp">border-left-color</span>: <span class="cv">#555</span>; <span class="cc">/* Muda a cor da borda lateral para cinza */</span>
+}
+<span class="cs">#listaFilmes li .nome</span> {
+  <span class="cp">cursor</span>: <span class="cv">pointer</span>; <span class="cc">/* Mãozinha ao passar o mouse (indica que é clicável) */</span>
+  <span class="cp">font-size</span>: <span class="cv">1rem</span>;
+}
+<span class="cs">#listaFilmes li .acoes</span> {
+  <span class="cp">display</span>: <span class="cv">flex</span>;
+  <span class="cp">gap</span>: <span class="cv">8px</span>;
+}
+<span class="cs">#listaFilmes li .acoes button</span> {
+  <span class="cp">border</span>: <span class="cv">none</span>;
+  <span class="cp">border-radius</span>: <span class="cv">6px</span>;
+  <span class="cp">padding</span>: <span class="cv">6px 12px</span>;
+  <span class="cp">font-size</span>: <span class="cv">0.8rem</span>;
+  <span class="cp">cursor</span>: <span class="cv">pointer</span>;
+  <span class="cp">transition</span>: <span class="cv">opacity 0.2s</span>;
+}
+<span class="cs">#listaFilmes li .acoes button:hover</span> {
+  <span class="cp">opacity</span>: <span class="cv">0.75</span>;
+}</pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 11</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 12 — style.css (fim) + início script.js
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label css-label">style.css (conclusão)</div>
+      <pre><span class="cs">.btn-check</span> {
+  <span class="cp">background-color</span>: <span class="cv">#2ecc71</span>; <span class="cc">/* Verde */</span>
+  <span class="cp">color</span>: <span class="cv">#fff</span>;
+}
+<span class="cs">.btn-remove</span> {
+  <span class="cp">background-color</span>: <span class="cv">#555</span>; <span class="cc">/* Cinza */</span>
+  <span class="cp">color</span>: <span class="cv">#fff</span>;
+}
+
+<span class="cc">/* --------------------------------------------------------
+MENSAGEM DE LISTA VAZIA
+-------------------------------------------------------- */</span>
+<span class="cs">.vazio</span> {
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">color</span>: <span class="cv">#555</span>;
+  <span class="cp">font-style</span>: <span class="cv">italic</span>; <span class="cc">/* Texto em itálico */</span>
+  <span class="cp">padding</span>: <span class="cv">24px 0</span>;
+}
+
+<span class="cc">/* --------------------------------------------------------
+RODAPÉ
+-------------------------------------------------------- */</span>
+<span class="cs">footer</span> {
+  <span class="cp">text-align</span>: <span class="cv">center</span>;
+  <span class="cp">margin-top</span>: <span class="cv">48px</span>;
+  <span class="cp">font-size</span>: <span class="cv">0.8rem</span>;
+  <span class="cp">color</span>: <span class="cv">#444</span>;
+}</pre>
+    </div>
+
+    <h2 class="titulo-codigo">3.3 script.js — Comportamento e Interatividade</h2>
+
+    <p>O JavaScript <strong>manipula o DOM</strong> (Document Object Model) — a representação da página em memória — adicionando, removendo e modificando elementos em tempo real.</p>
+
+    <div class="code-block">
+      <div class="code-label js-label">script.js</div>
+      <pre><span class="jc">// ============================================================
+// O QUE É JAVASCRIPT?
+// JavaScript é a linguagem de programação da web. Enquanto o
+// HTML estrutura o conteúdo e o CSS cuida da aparência,
+// o JavaScript adiciona COMPORTAMENTO e INTERATIVIDADE à página.
+//
+// COMENTÁRIOS em JS:
+// //    comentário de linha única (o que vem depois é ignorado)
+// /* ... */   comentário de múltiplas linhas
+// ============================================================</span>
+
+<span class="jc">// --------------------------------------------------------
+// SELECIONANDO ELEMENTOS DO HTML
+// Para manipular elementos da página, primeiro precisamos
+// "capturá-los" pelo JavaScript usando document.getElementById().
+// document      representa a página HTML inteira.
+// getElementById('id')   busca o elemento que tem aquele id.
+// --------------------------------------------------------</span>
+
+<span class="jk">const</span> input = document.<span class="jm">getElementById</span>(<span class="js">'inputFilme'</span>);
+<span class="jc">// const   declara uma constante: uma variável cujo valor não
+// será reatribuído. Use const por padrão; use let quando</span></pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 12</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 13 — script.js (parte 2)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label js-label">script.js (continuação)</div>
+      <pre><span class="jc">// precisar reatribuir o valor depois.
+// "input" guarda referência ao campo de texto do HTML.</span>
+
+<span class="jk">const</span> btnAdicionar = document.<span class="jm">getElementById</span>(<span class="js">'btnAdicionar'</span>);
+<span class="jc">// Captura o botão "Adicionar" para escutar cliques nele.</span>
+
+<span class="jk">const</span> lista = document.<span class="jm">getElementById</span>(<span class="js">'listaFilmes'</span>);
+<span class="jc">// Captura a &lt;ul&gt; onde os filmes serão inseridos dinamicamente.</span>
+
+<span class="jk">const</span> contador = document.<span class="jm">getElementById</span>(<span class="js">'contador'</span>);
+<span class="jc">// Captura o &lt;span&gt; que exibe a quantidade de filmes na lista.</span>
+
+<span class="jc">// --------------------------------------------------------
+// FUNÇÃO: atualizarContador
+// Funções são blocos de código reutilizáveis. Em vez de repetir
+// o mesmo código várias vezes, escrevemos uma função e a chamamos.
+// Sintaxe: function nomeDaFuncao() { ... }
+// --------------------------------------------------------</span>
+
+<span class="jk">function</span> <span class="jm">atualizarContador</span>() {
+  <span class="jc">// querySelectorAll   busca TODOS os elementos que combinam com
+  // o seletor CSS passado. Retorna uma lista (NodeList).
+  // 'li'   seleciona todos os &lt;li&gt; dentro de "lista".</span>
+  <span class="jk">const</span> total = lista.<span class="jm">querySelectorAll</span>(<span class="js">'li'</span>).length;
+  <span class="jc">// .length   propriedade que retorna o número de itens encontrados.</span>
+  contador.textContent = <span class="js">`(${total})`</span>;
+  <span class="jc">// textContent    modifica o texto visível do elemento.
+  // Template literal (crase `)   permite inserir variáveis
+  // diretamente no texto com ${variavel}. Equivale a: '(' + total + ')'</span>
+}
+
+<span class="jc">// --------------------------------------------------------
+// FUNÇÃO: mostrarVazio
+// Exibe ou remove a mensagem "Nenhum filme na lista ainda..."
+// dependendo se a lista tem itens ou não.
+// --------------------------------------------------------</span>
+
+<span class="jk">function</span> <span class="jm">mostrarVazio</span>() {
+  <span class="jc">// querySelector   igual ao querySelectorAll, mas retorna apenas
+  // o PRIMEIRO elemento encontrado (ou null se não existir).</span>
+  <span class="jk">const</span> jaTemVazio = lista.<span class="jm">querySelector</span>(<span class="js">'.vazio'</span>);
+  <span class="jc">// li:not(.vazio)   seleciona &lt;li&gt; que NÃO possuem a classe "vazio".
+  // Isso garante que a mensagem de vazio em si não seja contada.</span>
+  <span class="jk">if</span> (lista.<span class="jm">querySelectorAll</span>(<span class="js">'li:not(.vazio)'</span>).length === <span class="jn">0</span>) {
+    <span class="jc">// if   estrutura condicional: executa o bloco {} apenas se
+    // a condição entre parênteses for verdadeira.
+    // ===   comparação estrita (valor E tipo devem ser iguais).</span>
+    <span class="jk">if</span> (!jaTemVazio) {
+      <span class="jc">// !   operador de negação. !jaTemVazio = "se NÃO existe o elemento vazio"
+      // Evita adicionar a mensagem duplicada.</span>
+      <span class="jk">const</span> li = document.<span class="jm">createElement</span>(<span class="js">'li'</span>);
+      <span class="jc">// createElement   cria um novo elemento HTML na memória.
+      // O elemento ainda não está na página; precisamos inseri-lo.</span>
+      li.classList.<span class="jm">add</span>(<span class="js">'vazio'</span>);
+      <span class="jc">// classList   lista de classes CSS do elemento.
+      // .add('vazio')   adiciona a classe CSS "vazio" ao elemento.</span>
+      li.textContent = <span class="js">'Nenhum filme na lista ainda...'</span>;
+      lista.<span class="jm">appendChild</span>(li);
+      <span class="jc">// appendChild   insere o elemento como último filho do pai.
+      // Aqui adiciona o &lt;li&gt; dentro da &lt;ul id="listaFilmes"&gt;.</span>
+    }
+  }</pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 13</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 14 — script.js (parte 3)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label js-label">script.js (continuação)</div>
+      <pre>  } <span class="jk">else</span> {
+    <span class="jc">// else   executado quando a condição do if é FALSA.
+    // Se há filmes, remove a mensagem de vazio (se existir).</span>
+    <span class="jk">if</span> (jaTemVazio) jaTemVazio.<span class="jm">remove</span>();
+    <span class="jc">// .remove()   remove o elemento do HTML completamente.</span>
+  }
+}
+
+<span class="jc">// --------------------------------------------------------
+// FUNÇÃO PRINCIPAL: adicionarFilme
+// Esta é a função central do projeto. É chamada ao clicar no
+// botão ou pressionar Enter. Ela lê o input, cria um novo
+// item de lista e o insere no HTML dinamicamente.
+// --------------------------------------------------------</span>
+
+<span class="jk">function</span> <span class="jm">adicionarFilme</span>() {
+  <span class="jc">// Lê o valor atual do campo de texto</span>
+  <span class="jk">const</span> nome = input.value.<span class="jm">trim</span>();
+  <span class="jc">// .value    texto digitado pelo usuário no input.
+  // .trim()   remove espaços em branco do início e fim.
+  // Evita que o usuário adicione um filme só com espaços.</span>
+
+  <span class="jc">// Validação: se o campo estiver vazio, interrompe a função</span>
+  <span class="jk">if</span> (nome === <span class="js">''</span>) {
+    input.<span class="jm">focus</span>();
+    <span class="jc">// .focus()   coloca o cursor de volta no campo, orientando o usuário.</span>
+    <span class="jk">return</span>;
+    <span class="jc">// return   interrompe a execução da função aqui.
+    // Tudo abaixo do return não será executado neste caso.</span>
+  }
+
+  <span class="jc">// --- Criando o elemento &lt;li&gt; ---</span>
+  <span class="jk">const</span> li = document.<span class="jm">createElement</span>(<span class="js">'li'</span>);
+  <span class="jc">// Cria o container de cada filme na lista.</span>
+
+  <span class="jc">// --- Criando o &lt;span&gt; com o nome do filme ---</span>
+  <span class="jk">const</span> spanNome = document.<span class="jm">createElement</span>(<span class="js">'span'</span>);
+  spanNome.classList.<span class="jm">add</span>(<span class="js">'nome'</span>);
+  spanNome.textContent = nome; <span class="jc">// Insere o texto digitado pelo usuário</span>
+  spanNome.title = <span class="js">'Clique para marcar como assistido'</span>;
+  <span class="jc">// .title   texto que aparece como tooltip ao passar o mouse.</span>
+
+  <span class="jc">// Adiciona evento de clique no nome para marcar/desmarcar como assistido</span>
+  spanNome.<span class="jm">addEventListener</span>(<span class="js">'click'</span>, () =&gt; {
+    li.classList.<span class="jm">toggle</span>(<span class="js">'assistido'</span>);
+    <span class="jc">// addEventListener   "escuta" um evento e executa uma função quando ele ocorre.
+    // 'click'      o evento que queremos escutar.
+    // () =&gt; { }   arrow function: forma moderna e compacta de escrever funções.
+    // .toggle('assistido')   ADICIONA a classe se não existe, REMOVE se já existe.
+    // Na prática: primeiro clique marca, segundo clique desmarca.</span>
+  });
+
+  <span class="jc">// --- Criando a div que agrupa os botões ---</span>
+  <span class="jk">const</span> divAcoes = document.<span class="jm">createElement</span>(<span class="js">'div'</span>);
+  divAcoes.classList.<span class="jm">add</span>(<span class="js">'acoes'</span>);
+
+  <span class="jc">// --- Botão "Assistido" ---</span>
+  <span class="jk">const</span> btnCheck = document.<span class="jm">createElement</span>(<span class="js">'button'</span>);
+  btnCheck.classList.<span class="jm">add</span>(<span class="js">'btn-check'</span>);
+  btnCheck.textContent = <span class="js">'✓  Assistido'</span>;
+  btnCheck.<span class="jm">addEventListener</span>(<span class="js">'click'</span>, () =&gt; {
+    li.classList.<span class="jm">toggle</span>(<span class="js">'assistido'</span>);
+    <span class="jc">// Mesmo comportamento do clique no nome: alterna o estado "assistido".</span>
+  });</pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 14</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 15 — script.js (parte 4)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label js-label">script.js (continuação)</div>
+      <pre>  });
+
+  <span class="jc">// --- Botão "Remover" ---</span>
+  <span class="jk">const</span> btnRemover = document.<span class="jm">createElement</span>(<span class="js">'button'</span>);
+  btnRemover.classList.<span class="jm">add</span>(<span class="js">'btn-remove'</span>);
+  btnRemover.textContent = <span class="js">'✕  Remover'</span>;
+  btnRemover.<span class="jm">addEventListener</span>(<span class="js">'click'</span>, () =&gt; {
+    li.<span class="jm">remove</span>();
+    <span class="jc">// Remove o &lt;li&gt; completo do HTML quando o botão é clicado.</span>
+    <span class="jm">atualizarContador</span>(); <span class="jc">// Atualiza a contagem após remoção</span>
+    <span class="jm">mostrarVazio</span>(); <span class="jc">// Verifica se deve exibir mensagem de vazio</span>
+  });
+
+  <span class="jc">// --- Montando a estrutura do item ---
+  // Aqui "encaixamos" os elementos criados dentro uns dos outros,
+  // reproduzindo a estrutura HTML que construiríamos manualmente.</span>
+  divAcoes.<span class="jm">appendChild</span>(btnCheck); <span class="jc">// &lt;div class="acoes"&gt; recebe o botão check</span>
+  divAcoes.<span class="jm">appendChild</span>(btnRemover); <span class="jc">// e o botão remover</span>
+  li.<span class="jm">appendChild</span>(spanNome); <span class="jc">// &lt;li&gt; recebe o nome do filme</span>
+  li.<span class="jm">appendChild</span>(divAcoes); <span class="jc">// &lt;li&gt; recebe a div com os botões</span>
+  lista.<span class="jm">appendChild</span>(li);
+  <span class="jc">// Finalmente, o &lt;li&gt; completo é inserido na &lt;ul&gt; da página.
+  // Resultado HTML gerado:
+  // &lt;li&gt;
+  //   &lt;span class="nome"&gt;Nome do Filme&lt;/span&gt;
+  //   &lt;div class="acoes"&gt;
+  //     &lt;button class="btn-check"&gt;✓  Assistido&lt;/button&gt;
+  //     &lt;button class="btn-remove"&gt;✕  Remover&lt;/button&gt;
+  //   &lt;/div&gt;
+  // &lt;/li&gt;</span>
+
+  <span class="jc">// --- Limpa o campo e reposiciona o cursor ---</span>
+  input.value = <span class="js">''</span>; <span class="jc">// Apaga o texto do input após adicionar</span>
+  input.<span class="jm">focus</span>(); <span class="jc">// Coloca o cursor no input, pronto para o próximo</span>
+  <span class="jm">atualizarContador</span>(); <span class="jc">// Atualiza o contador com o novo total</span>
+  <span class="jm">mostrarVazio</span>(); <span class="jc">// Remove a mensagem de vazio (se estava visível)</span>
+}
+
+<span class="jc">// --------------------------------------------------------
+// EVENTOS PRINCIPAIS
+// addEventListener conecta ações do usuário às nossas funções.
+// --------------------------------------------------------</span>
+btnAdicionar.<span class="jm">addEventListener</span>(<span class="js">'click'</span>, adicionarFilme);
+<span class="jc">// Quando o botão for clicado, chama a função adicionarFilme.
+// Note: passamos a REFERÊNCIA da função (sem parênteses).
+// adicionarFilme    correto: passa a função para ser chamada depois.
+// adicionarFilme()  errado: chamaria a função imediatamente ao carregar.</span>
+
+input.<span class="jm">addEventListener</span>(<span class="js">'keydown'</span>, (e) =&gt; {
+  <span class="jc">// 'keydown'   evento disparado ao pressionar qualquer tecla.
+  // O parâmetro "e" (ou "event") contém informações sobre o evento,
+  // incluindo qual tecla foi pressionada.</span>
+  <span class="jk">if</span> (e.key === <span class="js">'Enter'</span>) <span class="jm">adicionarFilme</span>();
+  <span class="jc">// e.key   nome da tecla pressionada como string.
+  // Se for Enter, chama a função para adicionar o filme.
+  // Melhora a usabilidade: o usuário não precisa usar o mouse.</span>
+});
+
+<span class="jc">// --------------------------------------------------------
+// INICIALIZAÇÃO</span></pre>
+    </div>
+  </div>
+  <div class="page-footer">Página 15</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PÁGINA 16 — script.js (conclusão)
+══════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 1 | FULL STACK</span>
+    <span class="tags">HTML <span>•</span> CSS <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+    <div class="code-block">
+      <div class="code-label js-label">script.js (conclusão)</div>
+      <pre><span class="jc">// Código executado uma vez quando a página carrega.
+// --------------------------------------------------------</span>
+<span class="jm">mostrarVazio</span>();
+<span class="jc">// Exibe a mensagem de lista vazia logo ao abrir a página,
+// já que ainda não há filmes adicionados.</span></pre>
+    </div>
+
+    <div class="fim-apostila">
+      Fim da Apostila — Semana 1 | Próxima aula: Lógica de Programação com JavaScript
+    </div>
+  </div>
+  <div class="page-footer">Página 16</div>
+</div>
+
+</body>
+</html>

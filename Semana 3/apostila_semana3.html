@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apostila — Semana 3 | Lógica de Programação em JavaScript</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    /* ──────────────────────────────────
+       BOTÃO SALVAR PDF — Fixed Position
+    ────────────────────────────────── */
+    #btn-pdf {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      background: #e50914;
+      color: #fff;
+      border: none;
+      padding: 14px 26px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.5px;
+    }
+    #btn-pdf:hover { background: #b2070f; transform: translateY(-2px); }
+    #btn-pdf:active { transform: translateY(0); }
+    @media print { #btn-pdf { display: none !important; } }
+
+    .page {
+      width: 794px;
+      margin: 32px auto;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      page-break-after: always;
+    }
+
+    /* ──────────────────────────────────
+       CAPA
+    ────────────────────────────────── */
+    .capa {
+      background: linear-gradient(135deg, #1a237e 0%, #1565c0 100%);
+      color: #fff;
+      padding: 80px 60px;
+      text-align: center;
+      min-height: 900px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .capa::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .capa .label {
+      font-size: 0.9rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+
+    .capa h1 {
+      font-size: 3.2rem;
+      font-weight: 300;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .capa .subtitulo {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      margin-bottom: 60px;
+    }
+
+    .capa-tabela {
+      width: 100%;
+      color: #fff;
+      border-collapse: collapse;
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    .capa-tabela td {
+      padding: 12px 8px;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .capa-tabela td:first-child {
+      color: #90caf9;
+      font-weight: 700;
+      width: 150px;
+    }
+
+    .linha-vermelha {
+      position: absolute;
+      bottom: 160px;
+      left: 60px;
+      right: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #ff5252, transparent);
+    }
+
+    /* ──────────────────────────────────
+       HEADER PÁGINAS INTERNAS
+    ────────────────────────────────── */
+    .page-header {
+      background: #1a237e;
+      color: #fff;
+      padding: 14px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .page-header .direita { color: #90caf9; }
+    .page-header .direita span { color: #ff5252; margin: 0 4px; }
+
+    .page-body {
+      padding: 44px;
+      min-height: 800px;
+    }
+
+    /* ──────────────────────────────────
+       FOOTER
+    ────────────────────────────────── */
+    .page-footer {
+      text-align: center;
+      padding: 14px;
+      color: #888;
+      font-size: 0.78rem;
+      border-top: 1px solid #eee;
+    }
+
+    /* ──────────────────────────────────
+       TÍTULOS E HIERARQUIA
+    ────────────────────────────────── */
+    .secao-titulo {
+      background: #1a237e;
+      color: #fff;
+      padding: 14px 18px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      border-left: 6px solid #ff5252;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1a237e;
+      margin: 28px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ff5252;
+      margin: 18px 0 8px;
+    }
+
+    /* ──────────────────────────────────
+       PARÁGRAFOS E LISTAS
+    ────────────────────────────────── */
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    .destaque {
+      font-weight: 700;
+      color: #1a237e;
+    }
+
+    ul, ol {
+      padding-left: 28px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* ──────────────────────────────────
+       CAIXAS INFORMATIVAS
+    ────────────────────────────────── */
+    .info-box {
+      background: #f0f4ff;
+      border-left: 5px solid #1565c0;
+      padding: 16px 18px;
+      margin: 16px 0 20px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .info-box strong { color: #1a237e; }
+
+    /* ──────────────────────────────────
+       BLOCOS DE CÓDIGO
+    ────────────────────────────────── */
+    .codigo-box {
+      background: #1a1a2e;
+      border-radius: 6px;
+      margin: 16px 0 20px;
+      overflow: hidden;
+    }
+
+    .codigo-label {
+      background: #ff5252;
+      color: #fff;
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    pre {
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.76rem;
+      line-height: 1.55;
+      padding: 16px 18px;
+      color: #e0e0e0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: auto;
+    }
+
+    .kw  { color: #569cd6; }
+    .fn  { color: #dcdcaa; }
+    .str { color: #ce9178; }
+    .num { color: #b5cea8; }
+    .cmt { color: #6a9955; }
+    .op  { color: #d4d4d4; }
+
+    /* ──────────────────────────────────
+       TABELAS
+    ────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 20px;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: #1a237e;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    tbody tr:nth-child(even) { background: #f9f9f9; }
+
+    /* ──────────────────────────────────
+       SEPARADORES
+    ────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 28px 0;
+    }
+
+    /* ──────────────────────────────────
+       RODAPÉ APOSTILA
+    ────────────────────────────────── */
+    .fim-apostila {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+      font-style: italic;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page {
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+      }
+      @page { margin: 0; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Botão Salvar PDF -->
+<button id="btn-pdf" onclick="window.print()">📄 Salvar como PDF</button>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 1 — CAPA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="capa">
+    <p class="label">Apostila Técnica</p>
+    <h1>Semana 3</h1>
+    <p class="subtitulo">Lógica de Programação em JavaScript</p>
+
+    <table class="capa-tabela">
+      <tr>
+        <td>Programa</td>
+        <td>Full Stack — Mentoria Interna</td>
+      </tr>
+      <tr>
+        <td>Módulo</td>
+        <td>Frontend — Fundamentos de Programação</td>
+      </tr>
+      <tr>
+        <td>Linguagem</td>
+        <td>JavaScript ES6+</td>
+      </tr>
+      <tr>
+        <td>Tópicos</td>
+        <td>Variáveis · Loops · Funções · Validação</td>
+      </tr>
+    </table>
+
+    <div class="linha-vermelha"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 2 — RESUMO DA AULA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Lógica de Programação <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">RESUMO DA AULA 3</div>
+
+    <p>A Aula 3 da mentoria foi focada em <span class="destaque">Linguagens de Programação</span>, com ênfase especial no <span class="destaque">JavaScript</span>, detalhando sua sintaxe e aplicação prática no desenvolvimento frontend.</p>
+
+    <h2>1. Conceitos de Linguagem de Programação</h2>
+
+    <h3>Definição</h3>
+    <p>Uma linguagem de programação é um conjunto de <span class="destaque">regras, símbolos e palavras-chave</span> que permitem dar instruções ao computador de forma estruturada e compreensível.</p>
+
+    <h3>Níveis de Linguagem</h3>
+    <ul>
+      <li><span class="destaque">Linguagens de Baixo Nível:</span> Mais próximas do hardware, como Assembly. Difíceis de aprender, mas oferecem controle máximo do sistema.</li>
+      <li><span class="destaque">Linguagens de Alto Nível:</span> Mais próximas da linguagem humana, como PHP e JavaScript. Mais fáceis de aprender e manter.</li>
+    </ul>
+
+    <h3>Modelos de Processamento</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Compilada</strong></td>
+          <td>Traduzida integralmente antes da execução (build)</td>
+          <td>C, C++, Java</td>
+        </tr>
+        <tr>
+          <td><strong>Interpretada</strong></td>
+          <td>Traduzida linha a linha em tempo real (runtime)</td>
+          <td>JavaScript, Python</td>
+        </tr>
+        <tr>
+          <td><strong>JIT</strong></td>
+          <td>Combinação das duas: compilação durante execução</td>
+          <td>JavaScript moderno (V8)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Fundamentos do JavaScript</h2>
+
+    <h3>Papel na Web</h3>
+    <p>JavaScript é uma linguagem de <span class="destaque">frontend</span> que roda no navegador do cliente, responsável por trazer <span class="destaque">interatividade</span> às páginas web. Também pode rodar no servidor através do Node.js.</p>
+
+    <h3>Java vs JavaScript</h3>
+    <div class="info-box">
+      <strong>Esclarecimento importante:</strong> Java e JavaScript são linguagens completamente diferentes. O nome foi uma escolha de marketing em 1995 quando JavaScript foi criado. As sintaxes, paradigmas e aplicações são distintos. Java é compilada e roda na JVM; JavaScript é interpretada e roda em navegadores.
+    </div>
+
+    <h3>Ambiente de Teste: Console do Navegador</h3>
+    <p>Uma das vantagens do JavaScript é a possibilidade de testar código rapidamente:</p>
+    <ul>
+      <li>Pressione <span class="destaque">F12</span> para abrir as ferramentas do desenvolvedor</li>
+      <li>Acesse a aba <span class="destaque">Console</span></li>
+      <li>Digite e execute código JavaScript imediatamente</li>
+      <li>Sem necessidade de criar arquivos ou fazer build</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 2</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 3 — RESUMO CONTINUADO
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Lógica de Programação <span>•</span> JavaScript</span>
+  </div>
+  <div class="page-body">
+
+    <h2>3. Sintaxe e Estruturas de Dados</h2>
+
+    <h3>Variáveis e Constantes</h3>
+    <p>No JavaScript moderno (ES6+), existem duas formas principais de declarar dados:</p>
+    <ul>
+      <li><span class="destaque">let:</span> Para variáveis que mudam durante a execução</li>
+      <li><span class="destaque">const:</span> Para valores constantes (imutáveis)</li>
+      <li><span class="destaque">var:</span> Forma ultrapassada, evitar em código novo</li>
+    </ul>
+
+    <h3>Boas Práticas de Nomeação</h3>
+    <ul>
+      <li><span class="destaque">CamelCase:</span> nomeDeVariavel (primeira palavra minúscula, próximas com primeira letra maiúscula)</li>
+      <li><span class="destaque">Case Sensitive:</span> JavaScript diferencia MAIÚSCULAS de minúsculas (numero ≠ Numero)</li>
+      <li><span class="destaque">Clareza:</span> Nomes descritivos facilitam leitura: contador é melhor que c</li>
+    </ul>
+
+    <h3>Tipos de Dados Primitivos</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>number</strong></td>
+          <td>Inteiros e decimais (sem distinção)</td>
+          <td>42, 3.14, -7</td>
+        </tr>
+        <tr>
+          <td><strong>string</strong></td>
+          <td>Texto encapsulado em aspas</td>
+          <td>"Olá", 'Mundo', `Template`</td>
+        </tr>
+        <tr>
+          <td><strong>boolean</strong></td>
+          <td>Verdadeiro ou falso</td>
+          <td>true, false</td>
+        </tr>
+        <tr>
+          <td><strong>undefined</strong></td>
+          <td>Valor não definido</td>
+          <td>let x; (x é undefined)</td>
+        </tr>
+        <tr>
+          <td><strong>null</strong></td>
+          <td>Ausência proposital de valor</td>
+          <td>let x = null;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Arrays (Vetores)</h3>
+    <p>Arrays são coleções ordenadas de dados. <span class="destaque">Importante: a indexação sempre começa em zero.</span></p>
+    <div class="info-box">
+      <strong>Exemplo:</strong> const numeros = [1, 2, 3, 4, 5]<br>
+      numeros[0] = 1 (primeiro elemento)<br>
+      numeros[4] = 5 (último elemento)<br>
+      numeros.length = 5 (propriedade que retorna o tamanho)
+    </div>
+
+    <h2>4. Controle de Fluxo e Funções</h2>
+
+    <h3>Estruturas de Decisão</h3>
+    <p>Permitem executar diferentes blocos de código baseado em condições:</p>
+    <ul>
+      <li><span class="destaque">if:</span> Executa se a condição for verdadeira</li>
+      <li><span class="destaque">else:</span> Executa se a condição for falsa</li>
+      <li><span class="destaque">else if:</span> Múltiplas condições</li>
+      <li><span class="destaque">Operador Ternário:</span> (condição ? true : false) — forma simplificada em uma linha</li>
+    </ul>
+
+    <h3>Estruturas de Repetição (Loops)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Loop</th>
+          <th>Uso</th>
+          <th>Características</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>while</strong></td>
+          <td>Repetir enquanto condição for verdadeira</td>
+          <td>Pode não executar nenhuma vez</td>
+        </tr>
+        <tr>
+          <td><strong>do...while</strong></td>
+          <td>Repetir até condição ficar falsa</td>
+          <td>Executa pelo menos uma vez</td>
+        </tr>
+        <tr>
+          <td><strong>for</strong></td>
+          <td>Repetir um número fixo de vezes</td>
+          <td>Ideal para contadores e arrays</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Funções</h3>
+    <p>Blocos de código reutilizáveis que podem receber <span class="destaque">parâmetros</span> (entradas) e devolver um <span class="destaque">return</span> (saída).</p>
+    <ul>
+      <li>Encapsulam lógica em unidades independentes</li>
+      <li>Facilitam reutilização e organização do código</li>
+      <li>Melhoram legibilidade e manutenibilidade</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 3</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 4 — COMENTÁRIO SOBRE O CÓDIGO
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Análise de Código <span>•</span> Boas Práticas</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">ANÁLISE TÉCNICA DO CÓDIGO</div>
+
+    <h2>Estrutura e Organização</h2>
+
+    <p>O código dos exercícios foi estruturado seguindo <span class="destaque">padrões profissionais de desenvolvimento web</span>, separando responsabilidades e facilitando a manutenção. Cada exercício demonstra um conceito específico de programação imperativa.</p>
+
+    <h3>HTML — Estrutura Semântica</h3>
+    <p>O documento HTML utiliza elementos semânticos apropriados:</p>
+    <ul>
+      <li><span class="destaque">&lt;header&gt;:</span> Cabeçalho da página com informações contextuais</li>
+      <li><span class="destaque">&lt;section&gt;:</span> Agrupamento lógico de conteúdo relacionado</li>
+      <li><span class="destaque">&lt;button&gt;:</span> Elemento interativo que dispara eventos</li>
+      <li><span class="destaque">&lt;pre&gt;:</span> Preserva formatação de código (espaços e indentação)</li>
+    </ul>
+
+    <h3>CSS — Design System Consistente</h3>
+    <p>A folha de estilos implementa um design system coerente:</p>
+    <ul>
+      <li><span class="destaque">Variáveis de Cor:</span> Paleta consistente com azul (#1a237e), vermelho (#e50914), verde (#6a9955)</li>
+      <li><span class="destache">Flexbox:</span> Sistema de layout moderno para alinhamento e distribuição de espaço</li>
+      <li><span class="destaque">Responsive:</span> Adaptável a diferentes tamanhos de tela (mobile-first)</li>
+      <li><span class="destaque">Acessibilidade:</span> Contraste adequado, tamanhos legíveis (rem em vez de px)</li>
+      <li><span class="destaque">Transições:</span> Feedback visual suave ao interagir com botões</li>
+    </ul>
+
+    <h3>JavaScript — Lógica Modular</h3>
+    <p>O código JavaScript demonstra boas práticas de programação:</p>
+
+    <h4>Separação de Responsabilidades</h4>
+    <p>Cada função tem <span class="destaque">um único propósito claro:</span></p>
+    <ul>
+      <li>contarAteNumero() — realiza a lógica de contagem</li>
+      <li>somarNumeros() — calcula soma sequencial</li>
+      <li>lerNumeroValido() — valida entrada do usuário</li>
+      <li>gerarTabuada() — gera tabuada formatada</li>
+    </ul>
+
+    <h4>Reutilização e DRY (Don't Repeat Yourself)</h4>
+    <p>Funções são chamadas múltiplas vezes sem repetir código. Por exemplo, a função exibirSaida() é usada por todos os botões:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Padrão DRY</div>
+      <pre><span class="cmt">// ❌ Ruim — Código repetido</span>
+<span class="kw">function</span> rodarExercicio1() {
+  <span class="kw">const</span> saida = document.getElementById(<span class="str">"saida1"</span>);
+  saida.textContent = contarAteNumero();
+  saida.className = <span class="str">"saida visivel"</span>;
+}
+
+<span class="cmt">// ✓ Bom — Função reutilizável</span>
+<span class="kw">function</span> exibirSaida(id, texto) {
+  <span class="kw">const</span> saida = document.getElementById(id);
+  saida.textContent = texto;
+  saida.className = <span class="str">"saida visivel"</span>;
+}</pre>
+    </div>
+
+    <h4>Validação de Entrada</h4>
+    <p>Todos os exercícios validam a entrada do usuário antes de processar:</p>
+    <ul>
+      <li>isNaN() — verifica se o valor é um número válido</li>
+      <li>Verificações de intervalo — garante que valores estão dentro do esperado</li>
+      <li>Mensagens de erro — feedback claro ao usuário</li>
+    </ul>
+
+    <h4>Tratamento de Erros</h4>
+    <p>Uso de try...catch para capturar exceções (como quando usuário cancela prompt):</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Tratamento Seguro</div>
+      <pre><span class="kw">function</span> rodarExercicio1() {
+  <span class="kw">try</span> {
+    exibirSaida(<span class="str">"saida1"</span>, contarAteNumero());
+  } <span class="kw">catch</span> (e) {
+    <span class="cmt">// Operação cancelada pelo usuário</span>
+    exibirSaida(<span class="str">"saida1"</span>, <span class="str">"Operação cancelada."</span>, <span class="kw">true</span>);
+  }
+}</pre>
+    </div>
+
+  </div>
+  <div class="page-footer">Página 4</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 5 — ANÁLISE TÉCNICA CONTINUADA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Análise de Código <span>•</span> Boas Práticas</span>
+  </div>
+  <div class="page-body">
+
+    <h2>Técnicas Avançadas Utilizadas</h2>
+
+    <h3>Template Literals (Crase)</h3>
+    <p>Uso de crases permite interpolar variáveis dentro de strings:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Template Literals</div>
+      <pre><span class="cmt">// ❌ Concatenação tradicional (verbosa)</span>
+<span class="str">"A soma de 1 até "</span> + numero + <span class="str">" é: "</span> + soma
+
+<span class="cmt">// ✓ Template literal (legível)</span>
+<span class="str">`A soma de 1 até ${numero} é: ${soma}`</span></pre>
+    </div>
+
+    <h3>Operadores Aritméticos Compostos</h3>
+    <p>Usando += e ++ para código mais limpo:</p>
+    <ul>
+      <li><span class="destaque">soma += i</span> equivale a soma = soma + i (mais conciso)</li>
+      <li><span class="destaque">contador++</span> equivale a contador = contador + 1 (menos caracteres)</li>
+    </ul>
+
+    <h3>Operadores Lógicos</h3>
+    <p>Combinar múltiplas condições com lógica booleana:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Operador</th>
+          <th>Símbolo</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AND (E)</strong></td>
+          <td>&&</td>
+          <td>Verdadeiro APENAS SE ambas as condições forem verdadeiras</td>
+        </tr>
+        <tr>
+          <td><strong>OR (OU)</strong></td>
+          <td>||</td>
+          <td>Verdadeiro se QUALQUER UM das condições for verdadeira</td>
+        </tr>
+        <tr>
+          <td><strong>NOT (NÃO)</strong></td>
+          <td>!</td>
+          <td>Inverte o resultado (verdadeiro vira falso e vice-versa)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Manipulação do DOM (Document Object Model)</h3>
+    <p>JavaScript interage com HTML através do DOM:</p>
+    <ul>
+      <li><span class="destaque">document:</span> Representa a página HTML inteira</li>
+      <li><span class="destaque">getElementById():</span> Busca elemento por ID</li>
+      <li><span class="destaque">.textContent:</span> Modifica o texto dentro do elemento</li>
+      <li><span class="destaque">.className:</span> Define as classes CSS do elemento</li>
+    </ul>
+
+    <h2>Padrões de Design Aplicados</h2>
+
+    <h3>Single Responsibility Principle (SRP)</h3>
+    <p>Cada função tem uma única responsabilidade bem definida. Facilita testes e manutenção:</p>
+    <div class="info-box">
+      <strong>Exemplo:</strong> A função exibirSaida() é responsável APENAS por atualizar a interface. A lógica de cálculo fica em funções separadas como somarNumeros().
+    </div>
+
+    <h3>DRY — Don't Repeat Yourself</h3>
+    <p>Código comum é extraído em funções reutilizáveis. Mudanças precisam ser feitas em um único lugar.</p>
+
+    <h3>Progressive Enhancement</h3>
+    <p>O HTML funciona sozinho (estrutura), CSS melhora a apresentação, JavaScript adiciona interatividade. Se JavaScript falhar, a página ainda é estruturada.</p>
+
+    <h2>Fluxo de Execução Típico</h2>
+    <ol>
+      <li>Usuário clica no botão "Executar"</li>
+      <li>Função rodarExercicio() é invocada</li>
+      <li>Dentro dela, a função do exercício é chamada (ex: somarNumeros())</li>
+      <li>Se prompt() retornar null (cancelado), cai no catch</li>
+      <li>Resultado é passado para exibirSaida()</li>
+      <li>exibirSaida() atualiza o DOM com o resultado</li>
+      <li>CSS faz a <div> com classe "visivel" aparecer</li>
+    </ol>
+
+  </div>
+  <div class="page-footer">Página 5</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 6 — LISTA DE EXERCÍCIOS E DESAFIOS
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Exercícios Práticos <span>•</span> Desafios</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">TAREFA PRÁTICA DA SEMANA 3</div>
+
+    <p>A atividade prática consiste em entregar <span class="destaque">quatro exercícios</span> que exercitam a lógica de programação, o pensamento algorítmico e a codificação em JavaScript:</p>
+
+    <h2>Exercício 1: Contar até um Número</h2>
+    <h3>Objetivo</h3>
+    <p>Solicitar um número ao usuário e contar de 1 até ele usando o laço <span class="destaque">while</span>.</p>
+    <h3>Conceitos Aplicados</h3>
+    <ul>
+      <li>Laço while (enquanto)</li>
+      <li>Operador de incremento (++)</li>
+      <li>Variáveis de controle</li>
+      <li>Acumulação de strings</li>
+    </ul>
+
+    <h2>Exercício 2: Soma de Números Sequenciais</h2>
+    <h3>Objetivo</h3>
+    <p>Solicitar um número e somar todos os inteiros de 1 até ele usando <span class="destaque">for</span>.</p>
+    <h3>Conceitos Aplicados</h3>
+    <ul>
+      <li>Laço for (para)</li>
+      <li>Variável acumuladora (soma)</li>
+      <li>Operador composto (+=)</li>
+      <li>Padrão de contagem com passo fixo</li>
+    </ul>
+
+    <h2>Exercício 3: Validação com Função</h2>
+    <h3>Objetivo</h3>
+    <p>Solicitar um número entre 1 e 60. Enquanto inválido, pedir novamente. <span class="destaque">Obrigatoriamente usando função.</span></p>
+    <h3>Conceitos Aplicados</h3>
+    <ul>
+      <li>Encapsulamento em funções</li>
+      <li>Validação de entrada</li>
+      <li>Laço while com múltiplas condições</li>
+      <li>Operadores lógicos (||, &&)</li>
+      <li>Feedback ao usuário</li>
+    </ul>
+
+    <h2>Exercício 4: Desafio — Tabuada</h2>
+    <h3>Objetivo</h3>
+    <p>Criar a tabuada completa de um número (1 a 10) usando <span class="destaque">for</span>. Formatação visual padronizada.</p>
+    <h3>Conceitos Aplicados</h3>
+    <ul>
+      <li>Laço for com contagem fixa</li>
+      <li>Operações aritméticas (*)</li>
+      <li>Formatação de strings</li>
+      <li>Método padStart() para alinhamento</li>
+      <li>Acumulação de múltiplas linhas</li>
+    </ul>
+
+    <h2>Metodologia da Tríade de Raciocínio</h2>
+    <p>Para cada exercício, apresentar os três níveis de abstração:</p>
+    <ol>
+      <li><span class="destaque">Linguagem Natural:</span> Explicar em português claro, passo a passo, como o algoritmo funciona</li>
+      <li><span class="destaque">Pseudocódigo:</span> Escrever a lógica usando estruturas algorítmicas (não código real)</li>
+      <li><span class="destaque">Código JavaScript:</span> Implementação real e funcional em JavaScript</li>
+    </ol>
+
+    <div class="info-box">
+      <strong>Objetivo Pedagógico:</strong> A tríade trabalha diferentes níveis cognitivos. Linguagem natural desenvolve clareza de pensamento. Pseudocódigo desenvolve estrutura lógica. Código real desenvolve habilidade técnica.
+    </div>
+
+    <h2>Critérios de Avaliação</h2>
+    <ul>
+      <li><span class="destaque">Funcionalidade:</span> Código executa e produz resultado correto</li>
+      <li><span class="destaque">Legibilidade:</span> Variáveis bem nomeadas, indentação correta</li>
+      <li><span class="destaque">Documentação:</span> Comentários explicam a lógica</li>
+      <li><span class="destaque">Validação:</span> Entrada do usuário é tratada adequadamente</li>
+      <li><span class="destaque">Pensamento Lógico:</span> Demonstra compreensão de estruturas de controle</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 6</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 7 — RECURSOS E REFERÊNCIAS
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 3 | FULL STACK</span>
+    <span class="direita">Recursos <span>•</span> Referências Técnicas</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">RECURSOS E REFERÊNCIAS</div>
+
+    <h2>Desenvolvimento e Aprendizado</h2>
+
+    <h3>Ambiente de Desenvolvimento Recomendado</h3>
+    <ul>
+      <li><span class="destaque">VS Code:</span> Editor de código leve e completo</li>
+      <li><span class="destaque">Chrome DevTools:</span> F12 → Console para testes rápidos</li>
+      <li><span class="destaque">Node.js:</span> Para executar JavaScript fora do navegador</li>
+    </ul>
+
+    <h3>Depuração e Testes</h3>
+    <ul>
+      <li><span class="destaque">console.log():</span> Exibir valores em tempo real</li>
+      <li><span class="destaque">Breakpoints:</span> Pausar execução para inspecionar estado</li>
+      <li><span class="destaque">DevTools Inspector:</span> Examinar HTML/CSS gerado</li>
+    </ul>
+
+    <h2>Boas Práticas de Programação</h2>
+
+    <h3>Padrões Essenciais</h3>
+    <ul>
+      <li><span class="destaque">Nomeação Significativa:</span> Nomes refletem propósito (contador, soma, resultado)</li>
+      <li><span class="destaque">DRY:</span> Não Repita Código — extraia em funções</li>
+      <li><span class="destaque">KISS:</span> Keep It Simple, Stupid — solução mais direta é melhor</li>
+      <li><span class="destaque">Validação:</span> Sempre validar entrada do usuário</li>
+      <li><span class="destaque">Comentários:</span> Explicar o "por quê", não apenas o "o quê"</li>
+    </ul>
+
+    <h3>Estrutura de Código Recomendada</h3>
+    <div class="codigo-box">
+      <div class="codigo-label">Padrão Profissional</div>
+      <pre><span class="cmt">// 1. Declarar variáveis e constantes</span>
+<span class="kw">const</span> numero = parseInt(prompt(...));
+
+<span class="cmt">// 2. Validar entrada</span>
+<span class="kw">if</span> (isNaN(numero)) {
+  <span class="kw">return</span> <span class="str">"Erro: entrada inválida"</span>;
+}
+
+<span class="cmt">// 3. Processar lógica</span>
+<span class="kw">let</span> resultado = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i &lt;= numero; i++) {
+  resultado += i;
+}
+
+<span class="cmt">// 4. Retornar resultado</span>
+<span class="kw">return</span> resultado;</pre>
+    </div>
+
+    <h2>Conceitos Avançados para Próximas Semanas</h2>
+
+    <h3>Tópicos que Expandem o Aprendizado</h3>
+    <ul>
+      <li><span class="destaque">Escopo (Scope):</span> Variáveis locais vs globais</li>
+      <li><span class="destaque">Closure:</span> Função dentro de função com acesso a variáveis externas</li>
+      <li><span class="destaque">Recursão:</span> Função que chama a si mesma</li>
+      <li><span class="destaque">Callbacks e Promises:</span> Operações assíncronas</li>
+      <li><span class="destaque">Array Methods:</span> map(), filter(), reduce(), etc</li>
+      <li><span class="destaque">Objetos:</span> Estrutura de dados mais complexa</li>
+    </ul>
+
+    <h2>Pensamento Computacional</h2>
+
+    <p>Aprender a programar não é apenas aprender sintaxe. É desenvolver <span class="destaque">pensamento computacional:</span></p>
+
+    <ol>
+      <li><span class="destaque">Decomposição:</span> Quebrar problema em partes menores</li>
+      <li><span class="destaque">Reconhecimento de Padrão:</span> Identificar estruturas que se repetem</li>
+      <li><span class="destaque">Abstração:</span> Esconder complexidade desnecessária</li>
+      <li><span class="destaque">Design de Algoritmo:</span> Sequência de passos para resolver</li>
+    </ol>
+
+    <h2>Próximas Etapas</h2>
+
+    <ul>
+      <li>Dominar os quatro exercícios desta semana</li>
+      <li>Praticar criando variações dos exercícios</li>
+      <li>Explorar o console do navegador para testes</li>
+      <li>Revisar conceitos de matemática básica (somas, multiplicação)</li>
+      <li>Estar preparado para objetos e arrays na próxima semana</li>
+    </ul>
+
+    <div class="fim-apostila">
+      Fim da Apostila — Semana 3<br>
+      Próxima semana: Estruturas de Dados Complexas — Objetos e Arrays
+    </div>
+
+  </div>
+  <div class="page-footer">Página 7</div>
+</div>
+
+</body>
+</html>

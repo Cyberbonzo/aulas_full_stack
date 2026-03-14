@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apostila — Semana 4 | Manipulação do DOM</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    /* ────────────────────────────────────
+       BOTÃO SALVAR PDF — Fixed
+    ──────────────────────────────────── */
+    #btn-pdf {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 14px 26px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.5px;
+    }
+    #btn-pdf:hover { background: #c0392b; transform: translateY(-2px); }
+    #btn-pdf:active { transform: translateY(0); }
+    @media print { #btn-pdf { display: none !important; } }
+
+    .page {
+      width: 794px;
+      margin: 32px auto;
+      background: #fff;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      page-break-after: always;
+    }
+
+    /* ────────────────────────────────────
+       CAPA
+    ──────────────────────────────────── */
+    .capa {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: #fff;
+      padding: 80px 60px;
+      text-align: center;
+      min-height: 900px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .capa .label {
+      font-size: 0.9rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+
+    .capa h1 {
+      font-size: 3.2rem;
+      font-weight: 300;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .capa .subtitulo {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      margin-bottom: 60px;
+    }
+
+    .capa-tabela {
+      width: 100%;
+      color: #fff;
+      border-collapse: collapse;
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    .capa-tabela td {
+      padding: 12px 8px;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .capa-tabela td:first-child {
+      color: #3498db;
+      font-weight: 700;
+      width: 150px;
+    }
+
+    .linha-vermelha {
+      position: absolute;
+      bottom: 160px;
+      left: 60px;
+      right: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #e74c3c, transparent);
+    }
+
+    /* ────────────────────────────────────
+       HEADER PÁGINAS INTERNAS
+    ──────────────────────────────────── */
+    .page-header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 14px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .page-header .direita { color: #3498db; }
+    .page-header .direita span { color: #e74c3c; margin: 0 4px; }
+
+    .page-body {
+      padding: 44px;
+      min-height: 800px;
+    }
+
+    .page-footer {
+      text-align: center;
+      padding: 14px;
+      color: #888;
+      font-size: 0.78rem;
+      border-top: 1px solid #eee;
+    }
+
+    /* ────────────────────────────────────
+       TÍTULOS E HIERARQUIA
+    ──────────────────────────────────── */
+    .secao-titulo {
+      background: #2c3e50;
+      color: #fff;
+      padding: 14px 18px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      border-left: 6px solid #e74c3c;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 28px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e74c3c;
+      margin: 18px 0 8px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    .destaque {
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    ul, ol {
+      padding-left: 28px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* ────────────────────────────────────
+       CAIXAS INFORMATIVAS
+    ──────────────────────────────────── */
+    .info-box {
+      background: #ecf0f1;
+      border-left: 5px solid #3498db;
+      padding: 16px 18px;
+      margin: 16px 0 20px;
+      border-radius: 4px;
+    }
+
+    .info-box strong { color: #2c3e50; }
+
+    /* ────────────────────────────────────
+       BLOCOS DE CÓDIGO
+    ──────────────────────────────────── */
+    .codigo-box {
+      background: #1e1e2e;
+      border-radius: 6px;
+      margin: 16px 0 20px;
+      overflow: hidden;
+    }
+
+    .codigo-label {
+      background: #e74c3c;
+      color: #fff;
+      padding: 7px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    pre {
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.75rem;
+      line-height: 1.55;
+      padding: 16px 18px;
+      color: #e0e0e0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-x: auto;
+    }
+
+    .kw  { color: #569cd6; }
+    .fn  { color: #dcdcaa; }
+    .str { color: #ce9178; }
+    .num { color: #b5cea8; }
+    .cmt { color: #6a9955; }
+
+    /* ────────────────────────────────────
+       TABELAS
+    ──────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 20px;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: #2c3e50;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:nth-child(even) { background: #f9f9f9; }
+
+    .fim-apostila {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+      font-style: italic;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page {
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+      }
+      @page { margin: 0; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Botão Salvar PDF -->
+<button id="btn-pdf" onclick="window.print()">📄 Salvar como PDF</button>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 1 — CAPA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="capa">
+    <p class="label">Apostila Técnica</p>
+    <h1>Semana 4</h1>
+    <p class="subtitulo">Manipulação do DOM com JavaScript</p>
+
+    <table class="capa-tabela">
+      <tr>
+        <td>Programa</td>
+        <td>Full Stack — Mentoria Interna</td>
+      </tr>
+      <tr>
+        <td>Módulo</td>
+        <td>Frontend — Interatividade com JavaScript</td>
+      </tr>
+      <tr>
+        <td>Tópico</td>
+        <td>DOM · Eventos · Manipulação de Estilos</td>
+      </tr>
+      <tr>
+        <td>Requisito</td>
+        <td>JavaScript ES6+ · HTML5 · CSS3</td>
+      </tr>
+    </table>
+
+    <div class="linha-vermelha"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 2 — RESUMO DA AULA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 4 | FULL STACK</span>
+    <span class="direita">DOM <span>•</span> Eventos <span>•</span> Interatividade</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">RESUMO DA AULA 4</div>
+
+    <p>A Aula 4 da mentoria foi dedicada à <span class="destaque">JavaScript e Manipulação do DOM</span> (Document Object Model), focando em como o JavaScript "dá vida" às páginas estáticas criadas com HTML e CSS.</p>
+
+    <h2>1. O que é o DOM?</h2>
+
+    <h3>Conceito Fundamental</h3>
+    <p>O DOM é a <span class="destaque">representação do HTML como uma árvore de objetos</span>. Cada elemento da página (tags, atributos, textos) é um "nó" nessa árvore, começando pela raiz <span class="destaque">document</span>.</p>
+
+    <h3>Estrutura em Árvore</h3>
+    <div class="info-box">
+      <strong>Exemplo:</strong><br>
+      document<br>
+      └── html<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── head<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── title<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── body<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── header<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── div (class="container")
+    </div>
+
+    <h3>Boas Práticas</h3>
+    <ul>
+      <li><span class="destaque">Script no final do &lt;body&gt;:</span> Garante que todos os elementos HTML já existem antes de JavaScript tentar acessá-los</li>
+      <li><span class="destaque">Não manipular antes de carregamento:</span> Usar eventos como DOMContentLoaded se script estiver no &lt;head&gt;</li>
+    </ul>
+
+    <h2>2. Métodos de Acesso aos Elementos</h2>
+
+    <p>JavaScript fornece diversas formas de encontrar elementos na página:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Método</th>
+          <th>Sintaxe</th>
+          <th>Retorna</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>getElementById</strong></td>
+          <td>getElementById('id')</td>
+          <td>Um elemento (único ou null)</td>
+        </tr>
+        <tr>
+          <td><strong>getElementsByClassName</strong></td>
+          <td>getElementsByClassName('classe')</td>
+          <td>HTMLCollection (múltiplos)</td>
+        </tr>
+        <tr>
+          <td><strong>querySelector</strong></td>
+          <td>querySelector('#id' ou '.classe')</td>
+          <td>Primeiro elemento ou null</td>
+        </tr>
+        <tr>
+          <td><strong>querySelectorAll</strong></td>
+          <td>querySelectorAll('.classe')</td>
+          <td>NodeList (múltiplos)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>querySelector vs getElementById</h3>
+    <div class="info-box">
+      <strong>querySelector é mais moderno:</strong><br>
+      ✗ getElementById('meuId')<br>
+      ✓ querySelector('#meuId')<br><br>
+      ✗ getElementsByClassName('ativa')<br>
+      ✓ querySelector('.ativa') ou querySelectorAll('.ativa')
+    </div>
+
+    <h2>3. Manipulação de Conteúdo e Estilo</h2>
+
+    <h3>Conteúdo (Propriedades de Texto)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Propriedade</th>
+          <th>Descrição</th>
+          <th>Segurança</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>innerHTML</strong></td>
+          <td>Altera HTML interno (permite tags)</td>
+          <td>⚠️ Risco XSS se dados são do usuário</td>
+        </tr>
+        <tr>
+          <td><strong>textContent</strong></td>
+          <td>Altera apenas texto (mais seguro)</td>
+          <td>✓ Seguro contra injeção</td>
+        </tr>
+        <tr>
+          <td><strong>value</strong></td>
+          <td>Lê/modifica valor de inputs</td>
+          <td>✓ Seguro (campo de form)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Estilo (Propriedade .style)</h3>
+    <p>Modificar CSS via JavaScript usando a propriedade <span class="destaque">.style</span>:</p>
+    <ul>
+      <li>Nomes com <span class="destaque">hífen</span> (CSS) viram <span class="destaque">camelCase</span> (JS)</li>
+      <li>Exemplo: <span class="destaque">font-size</span> vira <span class="destaque">fontSize</span></li>
+      <li>Exemplo: <span class="destaque">background-color</span> vira <span class="destaque">backgroundColor</span></li>
+    </ul>
+
+    <h2>4. Eventos e Interatividade</h2>
+
+    <h3>O que são Eventos</h3>
+    <p>Eventos são <span class="destaque">ações do usuário</span> que o JavaScript pode escutar e reagir:</p>
+    <ul>
+      <li><span class="destaque">click:</span> Clique do mouse</li>
+      <li><span class="destaque">keydown/keyup:</span> Pressionamento de tecla</li>
+      <li><span class="destaque">change:</span> Mudança de valor em input</li>
+      <li><span class="destaque">submit:</span> Submissão de formulário</li>
+      <li><span class="destaque">mouseover/mouseout:</span> Entrada/saída do mouse</li>
+    </ul>
+
+    <h3>addEventListener — A Forma Moderna</h3>
+    <p><span class="destaque">addEventListener</span> é a forma mais robusta de monitorar eventos:</p>
+    <ul>
+      <li>Permite <strong>múltiplos "ouvintes"</strong> no mesmo elemento</li>
+      <li>Um não sobrescreve o outro (diferente de onclick)</li>
+      <li>Mais controle (pode remover com removeEventListener)</li>
+      <li>Padrão profissional e seguro</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 2</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 3 — RESUMO CONTINUADO
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 4 | FULL STACK</span>
+    <span class="direita">DOM <span>•</span> Eventos <span>•</span> Interatividade</span>
+  </div>
+  <div class="page-body">
+
+    <h2>5. Segurança: Prevenção de Injeção</h2>
+
+    <h3>O Risco XSS (Cross-Site Scripting)</h3>
+    <p>Quando dados vêm do usuário ou de APIs externas, há risco de <span class="destaque">injeção maliciosa</span>:</p>
+
+    <div class="info-box">
+      <strong>❌ RISCO:</strong><br>
+      elemento.innerHTML = dadoDoUsuario;<br>
+      Se usuário digita: &lt;img src=x onerror="alert('Hackeado!)"&gt;<br>
+      O script malicioso é executado!<br><br>
+      <strong>✓ SEGURO:</strong><br>
+      elemento.textContent = dadoDoUsuario;<br>
+      Apenas texto é inserido, tags são escapadas
+    </div>
+
+    <h3>Proteção</h3>
+    <ul>
+      <li>Usar <span class="destaque">textContent</span> em vez de <span class="destaque">innerHTML</span> para dados do usuário</li>
+      <li>Validar e sanitizar entradas no servidor (back-end)</li>
+      <li>Usar bibliotecas como <span class="destaque">DOMPurify</span> se innerHTML é necessário</li>
+      <li>Nunca confiar em dados do cliente — sempre validar no servidor</li>
+    </ul>
+
+    <h2>6. Fluxo de Execução Típico</h2>
+
+    <ol>
+      <li><span class="destaque">Usuário interage:</span> Clica botão, digita texto, etc</li>
+      <li><span class="destaque">Evento é disparado:</span> Browser cria evento (click, keydown, etc)</li>
+      <li><span class="destaque">Listener escuta:</span> addEventListener detecta evento</li>
+      <li><span class="destaque">Callback executa:</span> Função associada é chamada</li>
+      <li><span class="destaque">DOM é manipulado:</span> JavaScript muda conteúdo/estilo</li>
+      <li><span class="destaque">Tela atualiza:</span> Browser renderiza mudanças (reflow/repaint)</li>
+    </ol>
+
+    <h2>Tarefa Prática da Semana 4</h2>
+
+    <p>A atividade prática consiste em criar uma <span class="destaque">página interativa</span> contendo:</p>
+
+    <h3>Requisitos</h3>
+    <ul>
+      <li><span class="destaque">Boas-vindas personalizadas:</span> Input de nome que exibe "Bem-vindo, [nome]" dinamicamente</li>
+      <li><span class="destaque">Contador:</span> Botões para incrementar (+) e decrementar (-) um número</li>
+      <li><span class="destaque">Modo Claro/Escuro:</span> Botão para alternar cores de fundo e texto</li>
+      <li><span class="destaque">Mostrar/Esconder:</span> Botão para ocultar ou exibir uma seção de texto</li>
+    </ul>
+
+    <h3>Objetivos Pedagógicos</h3>
+    <ul>
+      <li>Consolidar <strong>manipulação direta dos elementos</strong> da tela</li>
+      <li>Entender fluxo de eventos e callbacks</li>
+      <li>Praticar <strong>modificação de conteúdo</strong> (textContent, innerHTML)</li>
+      <li>Praticar <strong>modificação de estilos</strong> (classList, .style)</li>
+      <li>Aplicar validação de entrada do usuário</li>
+    </ul>
+
+    <h3>Visual Livre</h3>
+    <p>A mentora ressaltou que <span class="destaque">o visual é livre</span>. Cada aluno pode aplicar as cores, fontes e layout que desejar, desde que utilize os elementos de manipulação do DOM ensinados.</p>
+
+  </div>
+  <div class="page-footer">Página 3</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 4 — ANÁLISE DO CÓDIGO
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 4 | FULL STACK</span>
+    <span class="direita">Análise de Código <span>•</span> Boas Práticas</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">ANÁLISE TÉCNICA DO CÓDIGO</div>
+
+    <h2>Estrutura Geral</h2>
+
+    <p>O código foi desenvolvido seguindo <span class="destaque">padrões profissionais de desenvolvimento web</span>, separando HTML, CSS e JavaScript de forma clara e mantível.</p>
+
+    <h3>Arquitetura</h3>
+    <ul>
+      <li><span class="destaque">HTML:</span> Estrutura semântica com IDs descritivos</li>
+      <li><span class="destaque">CSS:</span> Design system com variáveis (temas)</li>
+      <li><span class="destaque">JavaScript:</span> Funções puras e reutilizáveis</li>
+    </ul>
+
+    <h2>Técnicas CSS Avançadas Utilizadas</h2>
+
+    <h3>1. Variáveis CSS (Custom Properties)</h3>
+    <p>O código usa <span class="destaque">:root { --cor-fundo, --cor-texto, etc }</span> para criar um sistema de temas:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Variáveis CSS</div>
+      <pre><span class="cmt">/* Definir variáveis no :root */</span>
+<span class="cmt">:root {</span>
+  <span class="kw">--cor-fundo</span>: #ffffff;
+  <span class="kw">--cor-texto</span>: #333333;
+<span class="cmt">}</span>
+
+<span class="cmt">/* Usar em qualquer elemento */</span>
+<span class="fn">body</span> {
+  background-color: <span class="fn">var</span>(<span class="kw">--cor-fundo</span>);
+  color: <span class="fn">var</span>(<span class="kw">--cor-texto</span>);
+}</pre>
+    </div>
+
+    <h3>2. Tema Escuro com Seletor de Classe</h3>
+    <p>Ao adicionar classe <span class="destaque">.dark-theme</span>, as variáveis são sobrescritas:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Dark Theme Override</div>
+      <pre><span class="cmt">/* Modo escuro — sobrescreve variáveis */</span>
+<span class="cmt">:root.dark-theme {</span>
+  <span class="kw">--cor-fundo</span>: #1a1a2e;  <span class="cmt">/* Azul escuro */</span>
+  <span class="kw">--cor-texto</span>: #ffffff;  <span class="cmt">/* Branco */</span>
+<span class="cmt">}</span></pre>
+    </div>
+
+    <h3>3. Transições Suaves</h3>
+    <p>CSS transitions criam animações automáticas quando propriedades mudam:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Transições</div>
+      <pre><span class="fn">body</span> {
+  transition: background-color <span class="num">0.3s</span> ease,
+              color <span class="num">0.3s</span> ease;
+}</pre>
+    </div>
+
+    <h3>4. Toggle de Classes com Opacidade</h3>
+    <p>Usar opacity + max-height para animação de mostrar/esconder:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Show/Hide Animation</div>
+      <pre><span class="cmt">/* Estado normal */</span>
+#secao-ocultavel {
+  opacity: <span class="num">1</span>;
+  max-height: <span class="num">1000px</span>;
+  transition: opacity <span class="num">0.3s</span> ease;
+}
+
+<span class="cmt">/* Classe adicionada por JavaScript */</span>
+#secao-ocultavel.escondida {
+  opacity: <span class="num">0</span>;
+  max-height: <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h2>Técnicas JavaScript Utilizadas</h2>
+
+    <h3>1. Variáveis Globais para Estado</h3>
+    <p>As variáveis <span class="destaque">contador</span>, <span class="destaque">temaEscuroAtivo</span> e <span class="destaque">secaoVisivel</span> mantêm estado entre chamadas de função:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Global State</div>
+      <pre><span class="cmt">// Mantém contador mesmo após função terminar</span>
+<span class="kw">let</span> contador = <span class="num">0</span>;
+<span class="kw">let</span> temaEscuroAtivo = <span class="kw">false</span>;
+<span class="kw">let</span> secaoVisivel = <span class="kw">true</span>;</pre>
+    </div>
+
+    <h3>2. Validação de Entrada</h3>
+    <p>Todas as funções validam entrada antes de processar:</p>
+    <div class="codigo-box">
+      <div class="codigo-label">Validação</div>
+      <pre><span class="kw">const</span> nome = inputNome.value.trim();
+<span class="kw">if</span> (nome === <span class="str">''</span>) {
+  alert(<span class="str">'Por favor, digite seu nome!'</span>);
+  <span class="kw">return</span>;
+}</pre>
+    </div>
+
+    <h3>3. DOM Manipulation Patterns</h3>
+    <p>Padrões recorrentes no código:</p>
+    <ul>
+      <li><span class="destaque">getElementById → .value:</span> Ler entrada de user</li>
+      <li><span class="destaque">getElementById → .textContent:</span> Atualizar texto</li>
+      <li><span class="destaque">.classList.toggle():</span> Alternar classes CSS</li>
+      <li><span class="destaque">.classList.add/remove():</span> Adicionar/remover classes específicas</li>
+    </ul>
+
+  </div>
+  <div class="page-footer">Página 4</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 5 — ANÁLISE CONTINUADA
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 4 | FULL STACK</span>
+    <span class="direita">Análise de Código <span>•</span> Padrões</span>
+  </div>
+  <div class="page-body">
+
+    <h2>Exemplos de Funções Chave</h2>
+
+    <h3>1. Boas-Vindas Personalizadas</h3>
+    <div class="codigo-box">
+      <div class="codigo-label">exibirBoasVindas()</div>
+      <pre><span class="kw">function</span> <span class="fn">exibirBoasVindas</span>() {
+  <span class="cmt">// 1. Encontrar elemento e ler valor</span>
+  <span class="kw">const</span> nome = document.<span class="fn">getElementById</span>(<span class="str">'nome-usuario'</span>).value.trim();
+
+  <span class="cmt">// 2. Validar</span>
+  <span class="kw">if</span> (nome === <span class="str">''</span>) <span class="kw">return</span>;
+
+  <span class="cmt">// 3. Modificar conteúdo</span>
+  <span class="kw">const</span> msg = document.<span class="fn">getElementById</span>(<span class="str">'mensagem-boas-vindas'</span>);
+  msg.textContent = <span class="str">`🎉 Bem-vindo, ${nome}!`</span>;
+
+  <span class="cmt">// 4. Adicionar classe CSS (transition ativa automaticamente)</span>
+  msg.classList.<span class="fn">add</span>(<span class="str">'visivel'</span>);
+}</pre>
+    </div>
+
+    <h3>2. Contador com Validação Condicional</h3>
+    <div class="codigo-box">
+      <div class="codigo-label">atualizarDisplay()</div>
+      <pre><span class="kw">function</span> <span class="fn">atualizarDisplay</span>() {
+  <span class="kw">const</span> display = document.<span class="fn">getElementById</span>(<span class="str">'numero-contador'</span>);
+  display.textContent = contador;
+
+  <span class="cmt">// Mudar cor se negativo</span>
+  <span class="kw">if</span> (contador &lt; <span class="num">0</span>) {
+    display.classList.<span class="fn">add</span>(<span class="str">'negativo'</span>);
+  } <span class="kw">else</span> {
+    display.classList.<span class="fn">remove</span>(<span class="str">'negativo'</span>);
+  }
+}</pre>
+    </div>
+
+    <h3>3. Alternar Tema com Toggle</h3>
+    <div class="codigo-box">
+      <div class="codigo-label">alternarTema()</div>
+      <pre><span class="kw">function</span> <span class="fn">alternarTema</span>() {
+  <span class="cmt">// Encontrar raiz (&lt;html&gt;)</span>
+  <span class="kw">const</span> html = document.documentElement;
+
+  <span class="cmt">// Toggle classe .dark-theme</span>
+  html.classList.<span class="fn">toggle</span>(<span class="str">'dark-theme'</span>);
+
+  <span class="cmt">// Atualizar flag e botão</span>
+  temaEscuroAtivo = !temaEscuroAtivo;
+  <span class="kw">const</span> btn = document.<span class="fn">getElementById</span>(<span class="str">'btn-tema'</span>);
+  btn.textContent = temaEscuroAtivo ? <span class="str">'☀️ Tema Claro'</span> : <span class="str">'🌙 Tema Escuro'</span>;
+}</pre>
+    </div>
+
+    <h3>4. Toggle de Visibilidade</h3>
+    <div class="codigo-box">
+      <div class="codigo-label">alternarVisibilidade()</div>
+      <pre><span class="kw">function</span> <span class="fn">alternarVisibilidade</span>() {
+  <span class="kw">const</span> secao = document.<span class="fn">getElementById</span>(<span class="str">'secao-ocultavel'</span>);
+
+  <span class="cmt">// Toggle adiciona OU remove classe automaticamente</span>
+  secao.classList.<span class="fn">toggle</span>(<span class="str">'escondida'</span>);
+
+  <span class="cmt">// CSS transition faz animação suave automaticamente</span>
+  secaoVisivel = !secaoVisivel;
+}</pre>
+    </div>
+
+    <h2>Pontos Fortes do Código</h2>
+
+    <ul>
+      <li><span class="destaque">✓ Separação de responsabilidades:</span> Cada função tem um propósito claro</li>
+      <li><span class="destaque">✓ Reutilização:</span> atualizarDisplay() é chamada por ambas as funções de contador</li>
+      <li><span class="destaque">✓ CSS-driven:</span> Animações e estilos ficam em CSS, JS apenas adiciona/remove classes</li>
+      <li><span class="destaque">✓ Validação:</span> Entrada do usuário é sempre validada</li>
+      <li><span class="destaque">✓ Acessibilidade:</span> IDs descritivos facilitam manutenção</li>
+      <li><span class="destaque">✓ Comentários educacionais:</span> Cada função explica o que faz</li>
+    </ul>
+
+    <h2>Melhorias Futuras Possíveis</h2>
+
+    <h3>1. Persistência com localStorage</h3>
+    <p>Salvar estado do contador no navegador para recuperar ao recarregar:</p>
+    <div class="info-box">
+      localStorage.setItem('contador', contador);<br>
+      contador = localStorage.getItem('contador');
+    </div>
+
+    <h3>2. Eventos Mais Complexos</h3>
+    <p>Usar addEventListener em vez de onclick para mais controle:</p>
+    <div class="info-box">
+      botao.addEventListener('click', incrementarContador);<br>
+      input.addEventListener('keypress', (e) =&gt; { if (e.key === 'Enter') ... })
+    </div>
+
+    <h3>3. Validação Aprimorada</h3>
+    <p>Limitar comprimento, apenas números, mensagens de erro inline</p>
+
+    <h3>4. Animações com requestAnimationFrame</h3>
+    <p>Para animações mais suaves em navegadores menos potentes</p>
+
+  </div>
+  <div class="page-footer">Página 5</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PÁGINA 6 — CONCEITOS-CHAVE
+════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <span>APOSTILA — SEMANA 4 | FULL STACK</span>
+    <span class="direita">Conceitos-Chave <span>•</span> Resumo Técnico</span>
+  </div>
+  <div class="page-body">
+
+    <div class="secao-titulo">CONCEITOS-CHAVE DO DOM</div>
+
+    <h2>1. Document Object Model (DOM)</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Conceito</th>
+          <th>Explicação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>document</strong></td>
+          <td>Objeto global que representa a página HTML inteira</td>
+        </tr>
+        <tr>
+          <td><strong>Node</strong></td>
+          <td>Qualquer elemento na árvore (tags, atributos, textos)</td>
+        </tr>
+        <tr>
+          <td><strong>Element</strong></td>
+          <td>Especificamente uma tag HTML (&lt;div&gt;, &lt;button&gt;, etc)</td>
+        </tr>
+        <tr>
+          <td><strong>NodeList</strong></td>
+          <td>Coleção estática de nodes (resultado de querySelectorAll)</td>
+        </tr>
+        <tr>
+          <td><strong>HTMLCollection</strong></td>
+          <td>Coleção dinâmica de elements (resultado de getElementsBy*)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Propriedades de Acesso e Manipulação</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Propriedade</th>
+          <th>O que faz</th>
+          <th>Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>.textContent</td>
+          <td>Lê/altera apenas TEXTO visível</td>
+          <td>elemento.textContent = "Novo texto"</td>
+        </tr>
+        <tr>
+          <td>.innerHTML</td>
+          <td>Lê/altera HTML (permite tags)</td>
+          <td>elemento.innerHTML = "&lt;b&gt;Bold&lt;/b&gt;"</td>
+        </tr>
+        <tr>
+          <td>.value</td>
+          <td>Lê/altera valor de inputs</td>
+          <td>input.value = "José"</td>
+        </tr>
+        <tr>
+          <td>.classList</td>
+          <td>Manipula classes CSS</td>
+          <td>elemento.classList.add('ativa')</td>
+        </tr>
+        <tr>
+          <td>.style</td>
+          <td>Altera estilos inline</td>
+          <td>elemento.style.color = "red"</td>
+        </tr>
+        <tr>
+          <td>.id / .className</td>
+          <td>Lê/altera ID ou class atributo</td>
+          <td>elemento.id = "novo-id"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. Métodos classList (mais usado)</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Método</th>
+          <th>O que faz</th>
+          <th>Caso de Uso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>.add('classe')</td>
+          <td>Adiciona classe (não remove outras)</td>
+          <td>Marcar como "ativa"</td>
+        </tr>
+        <tr>
+          <td>.remove('classe')</td>
+          <td>Remove classe específica</td>
+          <td>Desmarcar como "ativa"</td>
+        </tr>
+        <tr>
+          <td>.toggle('classe')</td>
+          <td>Adiciona se não existe, remove se existe</td>
+          <td>Botão de on/off</td>
+        </tr>
+        <tr>
+          <td>.contains('classe')</td>
+          <td>Verifica se tem classe (retorna boolean)</td>
+          <td>Condicional baseado em classe</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>4. Operadores Booleanos Essenciais</h2>
+
+    <div class="codigo-box">
+      <div class="codigo-label">Boolean Logic</div>
+      <pre><span class="cmt">// AND (&amp;&amp;) — AMBAS precisam ser TRUE</span>
+<span class="kw">if</span> (nome !== <span class="str">''</span> &amp;&amp; numero &gt; <span class="num">0</span>) { ... }
+
+<span class="cmt">// OR (||) — QUALQUER UMA pode ser TRUE</span>
+<span class="kw">if</span> (temaEscuro || modoNoturno) { ... }
+
+<span class="cmt">// NOT (!) — Inverte resultado</span>
+<span class="kw">if</span> (!secaoVisivel) { ... }  <span class="cmt">// Se NÃO visível</span>
+
+<span class="cmt">// Negação dupla (!!) — Converte para boolean</span>
+<span class="kw">const</span> ativo = !!valor;  <span class="cmt">// força true ou false</span></pre>
+    </div>
+
+    <h2>5. Template Literals (Interpolação de Strings)</h2>
+
+    <div class="codigo-box">
+      <div class="codigo-label">Template Literals</div>
+      <pre><span class="cmt">// ✗ Concatenação tradicional (verbosa)</span>
+<span class="str">"Bem-vindo, "</span> + nome + <span class="str">"!"</span>
+
+<span class="cmt">// ✓ Template literal (legível)</span>
+<span class="str">`Bem-vindo, ${nome}!`</span>
+
+<span class="cmt">// Múltiplas linhas</span>
+<span class="str">`Contador: ${contador}
+Tema: ${temaEscuroAtivo ? 'Escuro' : 'Claro'}`</span></pre>
+    </div>
+
+    <h2>Checklist de Implementação</h2>
+
+    <ul>
+      <li>☐ Script está no final do &lt;body&gt;</li>
+      <li>☐ Todos os elementos têm IDs únicos</li>
+      <li>☐ Funções validam entrada do usuário</li>
+      <li>☐ Usa textContent para dados de usuário (segurança)</li>
+      <li>☐ Usa classList em vez de className</li>
+      <li>☐ CSS define animações (não JavaScript)</li>
+      <li>☐ Variáveis globais rastreiam estado</li>
+      <li>☐ Comentários explicam lógica complexa</li>
+    </ul>
+
+    <div class="fim-apostila">
+      Fim da Apostila — Semana 4<br>
+      Próxima semana: Estruturas de Dados — Objetos e Arrays
+    </div>
+
+  </div>
+  <div class="page-footer">Página 6</div>
+</div>
+
+</body>
+</html>

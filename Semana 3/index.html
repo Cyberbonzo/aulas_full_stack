@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- ════════════════════════════════════════════════════════════════
+       META TAGS — Configuração do documento HTML
+  ════════════════════════════════════════════════════════════════
+       As meta tags fornecem informações sobre o documento ao navegador.
+       Elas não aparecem visualmente na página, mas controlam como o
+       navegador interpreta e exibe o conteúdo.
+  ═════════════════════════════════════════════════════════════════ -->
+  <meta charset="UTF-8" />
+  <!-- charset="UTF-8": Define a codificação de caracteres como UTF-8.
+       UTF-8 suporta acentos (á, é, í, ó, ú), cedilha (ç) e outros
+       caracteres especiais. Sem esta tag, caracteres acentuados podem
+       aparecer corrompidos no navegador. -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- viewport: Instrui o navegador a adaptar o layout para o tamanho
+       da tela do dispositivo (responsividade).
+       width=device-width    a largura da página se adapta à largura do dispositivo.
+       initial-scale=1.0     sem zoom inicial ao carregar a página. -->
+
+  <title>Exercícios — Semana 3 | Lógica de Programação</title>
+  <!-- title: Define o texto que aparece na aba do navegador. Importante
+       para SEO (otimização para mecanismos de busca) e UX. -->
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       CSS — CASCADING STYLE SHEETS (Folhas de Estilo em Cascata)
+    ════════════════════════════════════════════════════════════════
+
+       CSS é a linguagem que define a APARÊNCIA dos elementos HTML.
+       Enquanto HTML estrutura o conteúdo (o que existe), CSS cuida
+       de cores, fontes, espaçamentos, layout e responsividade.
+
+       ESTRUTURA BÁSICA DO CSS:
+       seletor {
+         propriedade: valor;
+         propriedade: valor;
+       }
+
+       seletor      — apontador para qual(is) elemento(s) HTML o estilo se aplica.
+       propriedade  — o que será modificado (color, font-size, padding, etc).
+       valor        — o novo valor dessa propriedade.
+
+       TIPOS DE SELETORES:
+       *            — seletor universal (todos os elementos)
+       elemento     — seletor de elemento (ex: body, h1, button)
+       .classe      — seletor de classe (elementos com class="nome")
+       #id          — seletor de ID (elemento com id="nome")
+       elemento.classe — combinação de elemento e classe
+
+       A CASCATA funciona assim: se dois seletores apontam para o mesmo
+       elemento, o que vem por último (mais abaixo no arquivo) sobrescreve
+       o anterior. Também há ESPECIFICIDADE: seletores mais específicos
+       (como #id) têm prioridade sobre genéricos (como *).
+    ═════════════════════════════════════════════════════════════════ -->
+
+    /* ──────────────────────────────────────────────────────────
+       RESET UNIVERSAL — Zerando estilos padrão
+    ──────────────────────────────────────────────────────────
+
+       Todo navegador (Chrome, Firefox, Safari, Edge) aplica estilos
+       padrões (chamados de "user agent styles") aos elementos HTML.
+       Por exemplo, <body> tem margin padrão, <h1> tem tamanho grande, etc.
+
+       Esses estilos variam entre navegadores, causando inconsistências visuais.
+       O reset universal (* {}) seleciona TODOS os elementos e zera os
+       espaçamentos padrão, criando uma base neutra.
+    ─────────────────────────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      /* box-sizing: define como o tamanho (width/height) de um elemento
+         é calculado.
+
+         Há dois valores principais:
+         • content-box (padrão): width/height afeta APENAS o conteúdo.
+           Se você declara width:200px e adiciona padding:20px, o elemento
+           fica com 240px. Causa surpresas no layout.
+
+         • border-box (recomendado): width/height inclui padding e border.
+           width:200px com padding:20px = elemento com 200px total.
+           Muito mais previsível para layouts. */
+
+      margin: 0;
+      /* margin: espaço EXTERNO entre o elemento e seus vizinhos.
+         Zerar aqui remove o espaço padrão que os navegadores adicionam. */
+
+      padding: 0;
+      /* padding: espaço INTERNO entre a borda do elemento e seu conteúdo.
+         Zerar aqui remove o espaço padrão. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       ESTILO DO BODY — O corpo da página
+    ──────────────────────────────────────────────────────────
+
+       O elemento <body> é a raiz de todo o conteúdo visível da página.
+       Estilos aplicados aqui geralmente são HERDADOS por todos os elementos
+       filhos (a menos que sobrescrevam).
+    ─────────────────────────────────────────────────────────── */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* font-family: define a fonte do texto.
+         A lista de fontes funciona como "fallback" (plano B):
+         1. Tenta usar 'Segoe UI' (fonte do Windows moderno)
+         2. Se não existir, tenta 'Tahoma'
+         3. Se não existir, tenta 'Geneva'
+         4. Se nada funcionar, usa a fonte genérica 'sans-serif' do sistema.
+
+         Fontes com espaço no nome (como 'Segoe UI') devem estar entre aspas.
+         Fontes genéricas (sans-serif, serif, monospace) não precisam. */
+
+      background: #0f0f1a;
+      /* background: cor de fundo da página.
+         #0f0f1a é um código hexadecimal (hex):
+         • Começa com #
+         • 6 dígitos representando valores RGB (Red, Green, Blue)
+         • Cada par (0f, 0f, 1a) vai de 00 (escuro) a FF (claro)
+         • #0f0f1a = um azul muito escuro quase preto (estilo cinema) */
+
+      color: #e0e0e0;
+      /* color: cor PADRÃO do texto em todo o documento.
+         Esta propriedade é HERDADA — todos os elementos filhos (<p>, <h1>,
+         etc) usarão esta cor a menos que definam a própria.
+         #e0e0e0 é um cinza claro (bom contraste em fundo escuro). */
+
+      padding: 40px 16px;
+      /* padding: espaço INTERNO ao redor do conteúdo do body.
+         Dois valores:
+         • 40px (cima e baixo) — espaço vertical
+         • 16px (esquerda e direita) — espaço horizontal
+
+         Equivalente a:
+         padding-top: 40px;
+         padding-bottom: 40px;
+         padding-left: 16px;
+         padding-right: 16px; */
+
+      min-height: 100vh;
+      /* min-height: altura MÍNIMA do elemento.
+         100vh = 100% da altura visível da janela do navegador (viewport height).
+         "vh" = "viewport height" — unidade relativa ao tamanho da tela.
+
+         Isso garante que o fundo escuro preencha a tela inteira mesmo que
+         o conteúdo seja pequeno. Se o conteúdo for maior que 100vh, o body
+         crescerá além disso. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       CONTAINER — Elemento envolvedor do conteúdo
+    ──────────────────────────────────────────────────────────
+
+       A classe .container é usada para limitar a largura máxima do
+       conteúdo e centralizá-lo na tela. Padrão muito comum em web design.
+    ─────────────────────────────────────────────────────────── */
+    .container {
+      max-width: 860px;
+      /* max-width: largura MÁXIMA do elemento.
+         860px = o container nunca ultrapassa 860 pixels de largura.
+
+         Em telas pequenas (celular), o container respeitará a largura
+         disponível. Em telas grandes (desktop), ficará limitado a 860px. */
+
+      margin: 0 auto;
+      /* margin: espaço externo ao redor do elemento.
+         Dois valores:
+         • 0 (cima e baixo) — sem espaço vertical
+         • auto (esquerda e direita) — distribuir espaço automaticamente
+
+         "auto" na margem horizontal é um truque para CENTRALIZAR um elemento:
+         o navegador calcula espaço igual nos dois lados.
+
+         Equivalente a:
+         margin-top: 0;
+         margin-bottom: 0;
+         margin-left: auto;
+         margin-right: auto; */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       HEADER — Cabeçalho da página
+    ──────────────────────────────────────────────────────────
+
+       O <header> é um elemento semântico que representa o topo da página.
+       "Semântico" significa que o nome da tag descreve seu propósito.
+    ─────────────────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      /* text-align: alinhamento do texto HORIZONTAL.
+         center = texto centralizado.
+         Valores comuns: left, center, right, justify. */
+
+      margin-bottom: 48px;
+      /* margin-bottom: espaço externo ABAIXO do header.
+         Cria separação entre o header e o próximo elemento. */
+    }
+
+    header .label {
+      font-size: 0.85rem;
+      /* font-size: tamanho da fonte.
+         0.85rem = 85% do tamanho base do navegador (geralmente 16px).
+         "rem" = "root em" — unidade relativa ao tamanho base.
+
+         Por que usar rem em vez de px?
+         • rem respeita as configurações de acessibilidade do usuário.
+         • Se o usuário configura fonte maior para ler melhor, rem escala.
+         • px é fixo e ignora preferências de acessibilidade. */
+
+      letter-spacing: 4px;
+      /* letter-spacing: espaço ENTRE as letras.
+         4px = 4 pixels de espaço entre cada caractere.
+         Comum em títulos e rótulos para um visual mais elegante. */
+
+      text-transform: uppercase;
+      /* text-transform: transformação de maiúsculas/minúsculas.
+         uppercase = converte o texto para MAIÚSCULAS.
+         Valores: uppercase, lowercase, capitalize. */
+
+      color: #888;
+      /* color: cor do texto especificamente para este elemento.
+         Sobrescreve a cor herdada do body (#e0e0e0). */
+
+      margin-bottom: 8px;
+      /* Espaço abaixo do rótulo (antes do <h1>). */
+    }
+
+    header h1 {
+      font-size: 2rem;
+      /* Título principal: 2rem = ~32px. Bem maior que o texto normal. */
+
+      color: #e50914;
+      /* Vermelho vivo (estilo Netflix). */
+
+      margin-bottom: 8px;
+      /* Pouco espaço abaixo do h1 antes do parágrafo descritivo. */
+    }
+
+    header p {
+      color: #aaa;
+      /* Cinza mais escuro para texto descritivo secundário. */
+
+      font-size: 0.95rem;
+      /* Levemente menor que o tamanho padrão (95% do padrão). */
+    }
+
+    .linha-divisora {
+      height: 3px;
+      /* height: altura do elemento.
+         3px = uma linha fina. */
+
+      background: linear-gradient(to right, #e50914, transparent);
+      /* background: cor ou padrão de fundo.
+         linear-gradient: um padrão de gradiente (degradê) linear.
+         to right = direção do gradiente (da esquerda para direita).
+         #e50914 = cor de início (vermelho vivo).
+         transparent = cor de fim (transparência/invisível).
+
+         Resultado visual: linha vermelha que desaparece para a direita. */
+
+      margin: 24px 0 0;
+      /* margin: espaços externos.
+         24px 0 0 = 24px acima, 0 nos lados, 0 abaixo. */
+
+      border-radius: 2px;
+      /* border-radius: arredonda os cantos do elemento.
+         2px = leve arredondamento (quase imperceptível).
+         Valores maiores deixam mais arredondado. 50% = círculo perfeito. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       CARD DE EXERCÍCIO — Contêiner visual de cada exercício
+    ──────────────────────────────────────────────────────────
+
+       Cada exercício é envolvido em um "card" (cartão) que agrupa
+       visualmente seu conteúdo.
+    ─────────────────────────────────────────────────────────── */
+    .exercicio {
+      background: #1c1c2e;
+      /* Fundo cinza escuro (mais claro que o body para contraste). */
+
+      border-radius: 10px;
+      /* Cantos bem arredondados para um visual moderno. */
+
+      border-left: 5px solid #e50914;
+      /* border-left: borda apenas no lado ESQUERDO.
+         5px solid #e50914 = linha vermelha de 5 pixels de espessura.
+
+         "border" tem 4 propriedades específicas:
+         border-top, border-right, border-bottom, border-left.
+         Sintaxe: largura estilo cor. */
+
+      margin-bottom: 40px;
+      /* Espaço abaixo de cada card (separação entre exercícios). */
+
+      overflow: hidden;
+      /* overflow: controla o que acontece quando conteúdo é maior que o elemento.
+         hidden = qualquer conteúdo que ultrapasse as bordas fica oculto.
+         Importante aqui para que os cantos arredondados funcionem corretamente. */
+    }
+
+    .exercicio-header {
+      background: #16213e;
+      /* Fundo ainda mais escuro para o cabeçalho do card. */
+
+      padding: 18px 24px;
+      /* Espaço interno: 18px vertical, 24px horizontal. */
+
+      display: flex;
+      /* display: flex ativa o FLEXBOX, um sistema de layout moderno.
+         Flexbox é muito poderoso para alinhar e distribuir espaço entre elementos.
+
+         Com flex, os elementos filhos (.numero e .exercicio-titulo) são
+         colocados em uma ROW (linha) por padrão. */
+
+      align-items: center;
+      /* align-items: alinha os itens filhos no eixo VERTICAL (centralizados). */
+
+      gap: 16px;
+      /* gap: espaço ENTRE os itens filhos no Flexbox.
+         16px de espaço entre .numero e .exercicio-titulo. */
+    }
+
+    .numero {
+      background: #e50914;
+      /* Fundo vermelho. */
+
+      color: #fff;
+      /* Texto branco. */
+
+      font-weight: 700;
+      /* font-weight: espessura da fonte.
+         700 = bold (negrito). Valores: 400 (normal), 700 (bold), 900 (extra bold). */
+
+      font-size: 1.1rem;
+      /* Levemente maior que o normal. */
+
+      width: 40px;
+      height: 40px;
+      /* width e height: largura e altura.
+         40px × 40px = quadrado. */
+
+      border-radius: 50%;
+      /* 50% = faz o quadrado virar um CÍRCULO perfeito. */
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Flexbox novamente: coloca o número (1, 2, 3, etc) exatamente
+         no centro do círculo. */
+
+      flex-shrink: 0;
+      /* flex-shrink: permite que o elemento encolha se necessário.
+         0 = NUNCA encolha. Mantém 40px × 40px sempre.
+         Importante para não deixar o círculo distorcido. */
+    }
+
+    .numero.desafio {
+      background: #f39c12;
+      /* Cor diferente (laranja) para o exercício desafio. */
+    }
+
+    .exercicio-titulo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      /* Título em branco negrito. */
+    }
+
+    .exercicio-titulo span {
+      /* <span> dentro do título com informações secundárias. */
+
+      font-size: 0.8rem;
+      /* Menor que o título principal. */
+
+      color: #aaa;
+      /* Cinza (menos destaque). */
+
+      font-weight: 400;
+      /* Peso normal (não negrito). */
+
+      margin-left: 8px;
+      /* Espaço à esquerda do <span>. */
+    }
+
+    .exercicio-body {
+      padding: 24px;
+      /* Espaço interno ao redor do conteúdo principal. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       TÍTULOS DA TRÍADE — Rótulos para Linguagem Natural, Pseudocódigo, Código
+    ──────────────────────────────────────────────────────────
+
+       A "tríade de raciocínio" consiste em:
+       1. Linguagem natural (em português claro)
+       2. Pseudocódigo (estrutura lógica)
+       3. Código JavaScript (implementação real)
+    ─────────────────────────────────────────────────────────── */
+    .triade-titulo {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      /* display: inline-block torna o elemento "bloco pequeno".
+         Diferente de:
+         • block: ocupa a linha toda, quebra para próxima linha.
+         • inline: flui com o texto, não aceita width/height.
+         • inline-block: flui com o texto mas aceita width/height. */
+    }
+
+    .triade-titulo.natural { background: #1a3a5c; color: #90caf9; }
+    /* Azul para linguagem natural. */
+
+    .triade-titulo.pseudo  { background: #1a3a2a; color: #a5d6a7; }
+    /* Verde para pseudocódigo. */
+
+    .triade-titulo.codigo  { background: #3a1a1a; color: #ef9a9a; }
+    /* Vermelho para código JavaScript. */
+
+    /* ──────────────────────────────────────────────────────────
+       BLOCO DE TEXTO — Containers para linguagem natural e pseudocódigo
+    ──────────────────────────────────────────────────────────
+
+       Backgrounds ligeiramente diferentes para cada tipo de conteúdo.
+    ─────────────────────────────────────────────────────────── */
+    .bloco-texto {
+      background: #13131f;
+      /* Fundo bem escuro para contraste com o texto. */
+
+      border-radius: 6px;
+      padding: 16px 18px;
+      /* Espaço interno para o texto não ficar colado na borda. */
+
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      /* line-height: espaço ENTRE as linhas de texto.
+         1.7 = 170% da altura normal. Deixa o texto mais respirado e fácil de ler. */
+
+      color: #ccc;
+      /* Cinza claro para boa legibilidade. */
+    }
+
+    .bloco-texto ol, .bloco-texto ul {
+      padding-left: 20px;
+      /* Recua listas para melhor visualização. */
+
+      margin-top: 4px;
+    }
+
+    .bloco-texto li {
+      margin-bottom: 2px;
+      /* Pouco espaço entre items da lista. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       PRE — Bloco de código (preformatted text)
+    ──────────────────────────────────────────────────────────
+
+       <pre> preserva espaços e quebras de linha exatamente como digitadas.
+       Perfeito para exibir código mantendo indentação e alinhamento.
+    ─────────────────────────────────────────────────────────── */
+    pre {
+      background: #0d0d1a;
+      /* Fundo muito escuro (mais escuro que body) para destaque. */
+
+      border-radius: 6px;
+      padding: 18px 20px;
+      /* Espaço interno gerenso para o código respirar. */
+
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      /* Fonte monoespacial (todos os caracteres têm a mesma largura).
+         Obrigatório para código, pois alinha caracteres perfeitamente.
+
+         Fallback:
+         • Cascadia Code (fonte moderna do VS Code)
+         • Consolas (fonte do Windows)
+         • monospace (genérica do sistema) */
+
+      font-size: 0.82rem;
+      /* Ligeiramente menor para caber mais código sem quebra de linha. */
+
+      line-height: 1.6;
+      /* Espaço entre linhas de código para melhor legibilidade. */
+
+      color: #e0e0e0;
+      /* Texto cinza claro. */
+
+      overflow-x: auto;
+      /* Se o código for muito largo, permite scroll horizontal. */
+
+      margin-bottom: 20px;
+      white-space: pre;
+      /* white-space: controla como espaços/quebras são tratados.
+         pre = preserva tudo (espaços múltiplos, quebras de linha).
+         Padrão de <pre>. */
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       SYNTAX HIGHLIGHTING — Cores para diferentes partes do código
+    ──────────────────────────────────────────────────────────
+
+       Sintaxe é a estrutura da linguagem (palavras-chave, strings, etc).
+       Diferentes tipos são destacados com cores diferentes para legibilidade.
+
+       Classe              O que é             Cor
+       .cmt                Comentário          Verde (#6a9955)
+       .kw                 Keyword             Azul (#569cd6)
+       .fn                 Função              Amarelo (#dcdcaa)
+       .str                String (texto)      Laranja (#ce9178)
+       .num                Número              Verde claro (#b5cea8)
+       .op                 Operador            Cinza (#d4d4d4)
+    ─────────────────────────────────────────────────────────── */
+    .kw  { color: #569cd6; }   /* Keyword (if, for, while, function, etc) */
+    .fn  { color: #dcdcaa; }   /* Nome de função */
+    .str { color: #ce9178; }   /* String (texto entre aspas) */
+    .num { color: #b5cea8; }   /* Número literal */
+    .cmt { color: #6a9955; }   /* Comentário */
+    .op  { color: #d4d4d4; }   /* Operador (=, +, *, etc) */
+
+    /* ──────────────────────────────────────────────────────────
+       BOTÃO EXECUTAR — Elemento interativo para rodar o código
+    ──────────────────────────────────────────────────────────
+
+       Botões são elementos importantes para interação do usuário.
+    ─────────────────────────────────────────────────────────── */
+    .btn-executar {
+      background: #e50914;
+      /* Fundo vermelho (cor de ação/destaque). */
+
+      color: #fff;
+      border: none;
+      /* border: none remove a borda padrão do botão. */
+
+      padding: 11px 28px;
+      /* Espaço interno: 11px vertical, 28px horizontal. */
+
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      /* cursor: muda a aparência do cursor do mouse.
+         pointer = mão apontando (indica que é clicável). */
+
+      transition: background 0.2s, transform 0.15s;
+      /* transition: suaviza mudanças de propriedades CSS.
+         background 0.2s = cor muda suavemente em 0.2 segundos.
+         transform 0.15s = transformação muda em 0.15 segundos.
+
+         Sem transition, mudanças são instantâneas (parecem duras). */
+
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      /* Flexbox para alinhar ícone e texto lado a lado. */
+    }
+
+    .btn-executar:hover {
+      background: #b2070f;
+      /* :hover é uma PSEUDO-CLASSE que ativa quando o mouse passa sobre o botão. */
+
+      transform: translateY(-1px);
+      /* transform: transformação 2D/3D.
+         translateY(-1px) = move 1 pixel para CIMA.
+         Efeito visual: botão sobe um pouquinho, parecendo "pressionável". */
+    }
+
+    .btn-executar:active {
+      transform: translateY(0);
+      /* :active ativa quando o botão está sendo clicado.
+         Volta para posição normal (pressed state). */
+    }
+
+    .btn-executar.amarelo { background: #f39c12; }
+    /* Classe adicional para botão do desafio em cor diferente. */
+
+    .btn-executar.amarelo:hover { background: #c87f10; }
+
+    /* ──────────────────────────────────────────────────────────
+       SAÍDA — Área onde o resultado da execução é exibido
+    ──────────────────────────────────────────────────────────
+
+       Usa display: none por padrão e fica visível quando o usuário
+       clica no botão "Executar".
+    ─────────────────────────────────────────────────────────── */
+    .saida {
+      margin-top: 14px;
+      background: #0a0a14;
+      /* Fundo ainda mais escuro (simula console/terminal). */
+
+      border: 1px solid #333;
+      /* Borda fina cinza para demarcar a área. */
+
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.83rem;
+      color: #2ecc71;
+      /* Verde (cor típica de terminal/console). */
+
+      min-height: 48px;
+      /* Altura mínima para ter espaço visual mesmo vazio. */
+
+      line-height: 1.8;
+      white-space: pre-wrap;
+      /* pre-wrap = preserva espaços/quebras E quebra linhas longas. */
+
+      display: none;
+      /* display: none = elemento não é exibido inicialmente. */
+    }
+
+    .saida.visivel { display: block; }
+    /* Quando a classe .visivel é adicionada via JavaScript, fica visível. */
+
+    .saida.erro { color: #e74c3c; }
+    /* Classe adicional para exibir erros em vermelho. */
+
+    footer {
+      text-align: center;
+      color: #444;
+      /* Texto cinza escuro para informação secundária. */
+
+      font-size: 0.82rem;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #1c1c2e;
+      /* Borda fina no topo para separar do conteúdo. */
+    }
+  </style>
+</head>
+<body>
+<!-- ════════════════════════════════════════════════════════════════
+     BODY — Corpo principal da página (conteúdo visível)
+════════════════════════════════════════════════════════════════
+
+     Tudo que está dentro de <body> é exibido visualmente no navegador.
+     O <body> é um elemento semântico que encapsula todo o conteúdo visível.
+═════════════════════════════════════════════════════════════════ -->
+
+<div class="container">
+  <!-- Container wrapper: limita a largura máxima e centraliza. -->
+
+  <!-- ──────────────────────────────────────────────────────────
+       HEADER — Cabeçalho da página
+  ────────────────────────────────────────────────────────────
+
+       <header> é um elemento semântico que representa o topo/cabeçalho
+       de uma seção ou da página.
+  ───────────────────────────────────────────────────────────── -->
+  <header>
+    <!-- Rótulo pequeno no topo -->
+    <p class="label">Full Stack — Mentoria Interna</p>
+
+    <!-- Título principal -->
+    <h1>Semana 3</h1>
+
+    <!-- Subtítulo descritivo -->
+    <p>Lógica de Programação · Loops · Funções</p>
+
+    <!-- Linha decorativa -->
+    <div class="linha-divisora"></div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       EXERCÍCIO 1 — Contar até um número
+  ══════════════════════════════════════════════════════════════
+
+       Este exercício ensina o uso de laço while (enquanto).
+       O usuário digita um número e o programa conta de 1 até ele.
+  ═════════════════════════════════════════════════════════════════ -->
+  <div class="exercicio">
+    <div class="exercicio-header">
+      <div class="numero">1</div>
+      <div class="exercicio-titulo">
+        Contar até um número
+        <span>· laço while</span>
+      </div>
+    </div>
+    <div class="exercicio-body">
+
+      <!-- ────────────────────────────────────────────────────
+           LINGUAGEM NATURAL
+      ───────────────────────────────────────────────────────
+
+           Explicação em português claro de como o algoritmo funciona,
+           passo a passo, sem sintaxe de programação.
+      ──────────────────────────────────────────────────────── -->
+      <p class="triade-titulo natural">🗣 Linguagem Natural</p>
+      <div class="bloco-texto">
+        <ol>
+          <li>Pedir ao usuário que informe um número inteiro positivo.</li>
+          <li>Verificar se o valor é realmente positivo. Se não for, avisar e encerrar.</li>
+          <li>Iniciar um contador em 1.</li>
+          <li>Enquanto o contador for menor ou igual ao número informado, exibir o valor do contador e incrementá-lo em 1.</li>
+          <li>Ao final do laço, a contagem estará completa.</li>
+        </ol>
+      </div>
+
+      <!-- ────────────────────────────────────────────────────
+           PSEUDOCÓDIGO
+      ───────────────────────────────────────────────────────
+
+           Pseudocódigo é uma forma de escrever algoritmos usando
+           estruturas lógicas mas sem sintaxe rigorosa de linguagem.
+           É um passo intermediário entre linguagem natural e código real.
+      ──────────────────────────────────────────────────────── -->
+      <p class="triade-titulo pseudo">📋 Pseudocódigo</p>
+      <div class="bloco-texto">
+        <pre style="background:transparent;padding:0;margin:0;font-size:0.88rem;color:#ccc;">INÍCIO
+  LEIA numero
+  SE numero <= 0 ENTÃO
+    ESCREVA "Por favor, informe um número positivo."
+    FIM
+  FIM_SE
+  contador ← 1
+  ENQUANTO contador <= numero FAÇA
+    ESCREVA contador
+    contador ← contador + 1
+  FIM_ENQUANTO
+FIM</pre>
+      </div>
+
+      <!-- ────────────────────────────────────────────────────
+           CÓDIGO JAVASCRIPT
+      ───────────────────────────────────────────────────────
+
+           Implementação real em JavaScript, com syntax highlighting
+           e comentários explicativos de cada linha/bloco.
+      ──────────────────────────────────────────────────────── -->
+      <p class="triade-titulo codigo">💻 Código JavaScript</p>
+      <pre><span class="cmt">// Exercício 1 — Contar até um número (laço while)
+// ════════════════════════════════════════════════════════════════
+
+// FUNCTION: função em JavaScript é um bloco de código reutilizável.
+// Quando você define uma função, o código não executa imediatamente.
+// Executa apenas quando a função é CHAMADA (invocada).</span>
+
+<span class="kw">function</span> <span class="fn">contarAteNumero</span>() {
+  <span class="cmt">// prompt() exibe uma caixa de diálogo pedindo ao usuário um valor.
+  // parseInt() converte o texto digitado em um NÚMERO INTEIRO.
+  // Exemplo: prompt retorna "5" (texto), parseInt converte para 5 (número).</span>
+  <span class="kw">const</span> numero = parseInt(prompt(<span class="str">"Digite um número inteiro positivo:"</span>));
+
+  <span class="cmt">// VALIDAÇÃO — Verifica se o valor é válido.
+  // isNaN() retorna TRUE se o valor NÃO é um número.
+  // NaN = "Not a Number" (não é um número).
+  //
+  // Exemplo: isNaN("abc") = true (não é número)
+  //          isNaN("123") = false (é número)</span>
+  <span class="kw">if</span> (isNaN(numero) || numero &lt;= <span class="num">0</span>) {
+    <span class="cmt">// Se a validação falhar, retorna mensagem de erro.
+    // return encerra a execução da função e retorna um valor.</span>
+    <span class="kw">return</span> <span class="str">"Valor inválido. Por favor, informe um número inteiro positivo."</span>;
+  }
+
+  <span class="cmt">// VARIÁVEL RESULTADO — Acumula toda a contagem como texto.
+  // Template literal (crase ``) permite inserir variáveis com ${}.
+  // \n = caractere de quebra de linha (pula uma linha).</span>
+  <span class="kw">let</span> resultado = <span class="str">`Contagem de 1 até ${numero}:\n`</span>;
+
+  <span class="cmt">// CONTADOR — Variável que controla o loop.
+  // Iniciada em 1 (por isso let, não const, pois vai mudar).</span>
+  <span class="kw">let</span> contador = <span class="num">1</span>;
+
+  <span class="cmt">// LAÇO WHILE — "Enquanto" (enquanto condição é verdadeira).
+  // while (condição) { bloco de código }
+  //
+  // Funcionamento:
+  // 1. Verifica se a condição é TRUE.
+  // 2. Se sim, executa o bloco { }.
+  // 3. Volta ao passo 1, verifica novamente.
+  // 4. Se condição fica FALSE, sai do loop.
+  //
+  // IMPORTANTE: Você DEVE garantir que a condição fica FALSE eventualmente.
+  // Senão, o loop roda infinitamente (travamento).</span>
+  <span class="kw">while</span> (contador &lt;= numero) {
+    <span class="cmt">// += é um operador de atribuição composta.
+    // resultado += contador  é igual a:  resultado = resultado + contador
+    // Adiciona o valor do contador ao final da string resultado.</span>
+    resultado += contador + <span class="str">"  "</span>;
+
+    <span class="cmt">// ++ é o operador de incremento.
+    // contador++ é igual a: contador = contador + 1
+    // Aumenta o contador em 1.
+    //
+    // CRÍTICO: sem este incremento, o loop rodaria infinitamente
+    // porque contador sempre seria <= numero.</span>
+    contador++;
+  }
+
+  <span class="cmt">// Retorna a string com toda a contagem acumulada.</span>
+  <span class="kw">return</span> resultado;
+}</pre>
+
+      <!-- Botão para executar o exercício -->
+      <button class="btn-executar" onclick="rodarExercicio1()">▶ Executar</button>
+
+      <!-- Área onde o resultado é exibido -->
+      <div class="saida" id="saida1"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       EXERCÍCIO 2 — Soma de números
+  ══════════════════════════════════════════════════════════════
+
+       Este exercício ensina o laço FOR e variáveis acumuladoras.
+  ═════════════════════════════════════════════════════════════════ -->
+  <div class="exercicio">
+    <div class="exercicio-header">
+      <div class="numero">2</div>
+      <div class="exercicio-titulo">
+        Soma de números
+        <span>· laço for</span>
+      </div>
+    </div>
+    <div class="exercicio-body">
+
+      <p class="triade-titulo natural">🗣 Linguagem Natural</p>
+      <div class="bloco-texto">
+        <ol>
+          <li>Solicitar ao usuário um número inteiro positivo.</li>
+          <li>Criar uma variável acumuladora, iniciada em zero.</li>
+          <li>Usar um laço for que vai de 1 até o número informado.</li>
+          <li>A cada repetição, somar o valor atual do laço ao acumulador.</li>
+          <li>Ao terminar o laço, exibir o resultado final da soma.</li>
+        </ol>
+      </div>
+
+      <p class="triade-titulo pseudo">📋 Pseudocódigo</p>
+      <div class="bloco-texto">
+        <pre style="background:transparent;padding:0;margin:0;font-size:0.88rem;color:#ccc;">INÍCIO
+  LEIA numero
+  soma ← 0
+  PARA i DE 1 ATÉ numero FAÇA
+    soma ← soma + i
+  FIM_PARA
+  ESCREVA "A soma de 1 até", numero, "é:", soma
+FIM</pre>
+      </div>
+
+      <p class="triade-titulo codigo">💻 Código JavaScript</p>
+      <pre><span class="cmt">// Exercício 2 — Soma de números (laço for)
+// ════════════════════════════════════════════════════════════════
+
+// FOR LOOP — Um dos loops mais comuns em programação.
+// O FOR é ideal quando você SABE quantas vezes quer repetir.
+//
+// Sintaxe:
+// for (inicialização; condição; incremento) {
+//   bloco de código
+// }
+//
+// Inicialização: executada UMA VEZ antes do loop começar.
+// Condição: verificada ANTES de cada repetição.
+// Incremento: executado APÓS cada repetição (antes de verificar novamente).</span>
+
+<span class="kw">function</span> <span class="fn">somarNumeros</span>() {
+  <span class="kw">const</span> numero = parseInt(prompt(<span class="str">"Digite um número inteiro positivo:"</span>));
+
+  <span class="cmt">// Validação — mesma lógica do exercício anterior.</span>
+  <span class="kw">if</span> (isNaN(numero) || numero &lt;= <span class="num">0</span>) {
+    <span class="kw">return</span> <span class="str">"Valor inválido. Por favor, informe um número inteiro positivo."</span>;
+  }
+
+  <span class="cmt">// ACUMULADOR — Variável que acumula valores ao longo do loop.
+  // Iniciada em 0 (elemento neutro para soma).</span>
+  <span class="kw">let</span> soma = <span class="num">0</span>;
+
+  <span class="cmt">// FOR LOOP em detalhes:
+  //
+  // let i = 1;        ← Inicialização: i começa em 1
+  // i <= numero;      ← Condição: continua enquanto i <= numero
+  // i++               ← Incremento: aumenta i em 1 após cada iteração
+  //
+  // Fluxo de execução para numero = 5:
+  // Repetição 1: i=1, 1<=5? SIM, executa bloco, depois i++ (i=2)
+  // Repetição 2: i=2, 2<=5? SIM, executa bloco, depois i++ (i=3)
+  // Repetição 3: i=3, 3<=5? SIM, executa bloco, depois i++ (i=4)
+  // Repetição 4: i=4, 4<=5? SIM, executa bloco, depois i++ (i=5)
+  // Repetição 5: i=5, 5<=5? SIM, executa bloco, depois i++ (i=6)
+  // Verificação: i=6, 6<=5? NÃO, sai do loop.</span>
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i &lt;= numero; i++) {
+    <span class="cmt">// += é operador de atribuição composta.
+    // soma += i   é igual a:  soma = soma + i
+    //
+    // Exemplo com numero = 5:
+    // i=1: soma = 0 + 1 = 1
+    // i=2: soma = 1 + 2 = 3
+    // i=3: soma = 3 + 3 = 6
+    // i=4: soma = 6 + 4 = 10
+    // i=5: soma = 10 + 5 = 15</span>
+    soma += i;
+  }
+
+  <span class="cmt">// Retorna o resultado final da soma.</span>
+  <span class="kw">return</span> <span class="str">`A soma de 1 até ${numero} é: ${soma}`</span>;
+}</pre>
+
+      <button class="btn-executar" onclick="rodarExercicio2()">▶ Executar</button>
+      <div class="saida" id="saida2"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       EXERCÍCIO 3 — Validação de número com Função
+  ══════════════════════════════════════════════════════════════
+
+       Este exercício ensina encapsulamento de lógica em funções.
+       Uma função valida entrada e retorna só quando é válida.
+  ═════════════════════════════════════════════════════════════════ -->
+  <div class="exercicio">
+    <div class="exercicio-header">
+      <div class="numero">3</div>
+      <div class="exercicio-titulo">
+        Validação de número
+        <span>· função + laço while</span>
+      </div>
+    </div>
+    <div class="exercicio-body">
+
+      <p class="triade-titulo natural">🗣 Linguagem Natural</p>
+      <div class="bloco-texto">
+        <ol>
+          <li>Criar uma função responsável por ler e validar o número.</li>
+          <li>Dentro da função, pedir ao usuário um número entre 1 e 60.</li>
+          <li>Verificar se o valor está dentro do intervalo válido.</li>
+          <li>Enquanto o número for inválido, exibir uma mensagem de erro e pedir novamente.</li>
+          <li>Quando o número for válido, retorná-lo e exibir uma confirmação.</li>
+        </ol>
+      </div>
+
+      <p class="triade-titulo pseudo">📋 Pseudocódigo</p>
+      <div class="bloco-texto">
+        <pre style="background:transparent;padding:0;margin:0;font-size:0.88rem;color:#ccc;">FUNÇÃO lerNumeroValido()
+  LEIA numero
+  ENQUANTO numero < 1 OU numero > 60 FAÇA
+    ESCREVA "Número inválido! Digite um valor entre 1 e 60."
+    LEIA numero
+  FIM_ENQUANTO
+  RETORNE numero
+FIM_FUNÇÃO
+
+INÍCIO
+  numeroValido ← lerNumeroValido()
+  ESCREVA "Número válido recebido:", numeroValido
+FIM</pre>
+      </div>
+
+      <p class="triade-titulo codigo">💻 Código JavaScript</p>
+      <pre><span class="cmt">// Exercício 3 — Validação de número com função (laço while)
+// ════════════════════════════════════════════════════════════════
+
+// ENCAPSULAMENTO — A lógica de validação fica em sua própria função.
+// Vantagem: reutilizável, legível, fácil de manter.
+//
+// Função 1: lerNumeroValido()  — Responsável APENAS por validação
+// Função 2: validarNumero()   — Chama a primeira e exibe resultado
+
+// ESCOPO — Variáveis dentro de uma função existem apenas lá.
+// "numero" só existe dentro de lerNumeroValido().
+// Funções externas não podem acessá-lo direto.</span>
+
+<span class="cmt">// Função dedicada a ler e validar entrada do usuário.</span>
+<span class="kw">function</span> <span class="fn">lerNumeroValido</span>() {
+  <span class="cmt">// Pede o número ao usuário.</span>
+  <span class="kw">let</span> numero = parseInt(prompt(<span class="str">"Digite um número entre 1 e 60:"</span>));
+
+  <span class="cmt">// WHILE + LÓGICA DE VALIDAÇÃO
+  // Continue pedindo enquanto a entrada for inválida.
+  //
+  // Condição de invalidez:
+  // • isNaN(numero)    — não é um número
+  // • numero < 1       — menor que 1
+  // • numero > 60      — maior que 60
+  //
+  // OPERADOR ||  (OR — "ou")
+  // Retorna TRUE se QUALQUER uma das condições for TRUE.
+  // Exemplo: isNaN(numero) || numero < 1 || numero > 60
+  //          Retorna TRUE se QUALQUER Uma for verdadeira.
+  //
+  // OPERADOR &&  (AND — "e")
+  // Retorna TRUE APENAS SE todas as condições forem TRUE.
+  // Exemplo: numero >= 1 && numero <= 60
+  //          Retorna TRUE APENAS SE ambas forem verdadeiras.</span>
+  <span class="kw">while</span> (isNaN(numero) || numero &lt; <span class="num">1</span> || numero &gt; <span class="num">60</span>) {
+    <span class="cmt">// Se chegou aqui, o número é inválido.
+    // Mostra mensagem de erro e pede novamente.</span>
+    numero = parseInt(prompt(<span class="str">"Número inválido! Digite um valor entre 1 e 60:"</span>));
+  }
+
+  <span class="cmt">// Quando sai do while, numero GARANTIDAMENTE é válido (entre 1 e 60).
+  // IMPORTANTE: return encerra a função IMEDIATAMENTE.
+  // Código abaixo do return não executa.</span>
+  <span class="kw">return</span> numero;
+}
+
+<span class="cmt">// Função que chama lerNumeroValido() e exibe o resultado.</span>
+<span class="kw">function</span> <span class="fn">validarNumero</span>() {
+  <span class="cmt">// Chama lerNumeroValido() e recebe o número válido de volta.
+  // numeroValido = resultado da função lerNumeroValido().</span>
+  <span class="kw">const</span> numeroValido = <span class="fn">lerNumeroValido</span>();
+
+  <span class="cmt">// Retorna mensagem de confirmação.</span>
+  <span class="kw">return</span> <span class="str">`Número válido recebido: ${numeroValido} ✓`</span>;
+}</pre>
+
+      <button class="btn-executar" onclick="rodarExercicio3()">▶ Executar</button>
+      <div class="saida" id="saida3"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       EXERCÍCIO 4 — DESAFIO Tabuada
+  ══════════════════════════════════════════════════════════════
+
+       Exercício final integrando tudo: entrada, validação, loops.
+       Gera a tabuada completa de um número (1 a 10).
+  ═════════════════════════════════════════════════════════════════ -->
+  <div class="exercicio" style="border-left-color:#f39c12;">
+    <div class="exercicio-header">
+      <div class="numero desafio">★</div>
+      <div class="exercicio-titulo">
+        Desafio — Tabuada
+        <span>· laço for</span>
+      </div>
+    </div>
+    <div class="exercicio-body">
+
+      <p class="triade-titulo natural">🗣 Linguagem Natural</p>
+      <div class="bloco-texto">
+        <ol>
+          <li>Pedir ao usuário um número inteiro.</li>
+          <li>Usar um laço for que vai de 1 a 10.</li>
+          <li>A cada repetição, multiplicar o número informado pelo valor atual do laço.</li>
+          <li>Exibir cada linha da tabuada no formato: "N × i = resultado".</li>
+          <li>Ao final do laço, a tabuada completa estará exibida.</li>
+        </ol>
+      </div>
+
+      <p class="triade-titulo pseudo">📋 Pseudocódigo</p>
+      <div class="bloco-texto">
+        <pre style="background:transparent;padding:0;margin:0;font-size:0.88rem;color:#ccc;">INÍCIO
+  LEIA numero
+  PARA i DE 1 ATÉ 10 FAÇA
+    resultado ← numero * i
+    ESCREVA numero, "×", i, "=", resultado
+  FIM_PARA
+FIM</pre>
+      </div>
+
+      <p class="triade-titulo codigo">💻 Código JavaScript</p>
+      <pre><span class="cmt">// Exercício 4 — Tabuada (laço for)
+// ════════════════════════════════════════════════════════════════
+
+// Este exercício integra:
+// • Entrada de dados (prompt)
+// • Validação
+// • Loops (for)
+// • Formatação de string (template literals)
+// • Método string (padStart para alinhamento)</span>
+
+<span class="kw">function</span> <span class="fn">gerarTabuada</span>() {
+  <span class="cmt">// Pede o número para o qual gerar a tabuada.</span>
+  <span class="kw">const</span> numero = parseInt(prompt(<span class="str">"Digite um número para ver a tabuada:"</span>));
+
+  <span class="cmt">// Validação simples.</span>
+  <span class="kw">if</span> (isNaN(numero)) {
+    <span class="kw">return</span> <span class="str">"Valor inválido. Por favor, informe um número inteiro."</span>;
+  }
+
+  <span class="cmt">// ACUMULADOR DE STRING
+  // Ao longo do loop, concatena (junta) todas as linhas da tabuada.
+  // \n = quebra de linha.</span>
+  <span class="kw">let</span> tabuada = <span class="str">`Tabuada do ${numero}:\n`</span>;
+  tabuada += <span class="str">"─────────────────\n"</span>;
+  <span class="cmt">// Linha decorativa de separação (caractere Unicode).</span>
+
+  <span class="cmt">// FOR LOOP de 1 a 10.
+  // Cada iteração representa uma linha da tabuada.
+  //
+  // Exemplo: numero = 7
+  // i=1: 7 × 1 = 7
+  // i=2: 7 × 2 = 14
+  // ...
+  // i=10: 7 × 10 = 70</span>
+  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+    <span class="cmt">// Calcula o resultado (numero multiplicado por i).</span>
+    <span class="kw">const</span> resultado = numero * i;
+
+    <span class="cmt">// Template literal com:
+    // • ${numero} — o número base
+    // • ${i.toString().padStart(2)} — número formatado com padding
+    //   .toString() converte número em string
+    //   .padStart(2) alinha com espaços à esquerda (mínimo 2 caracteres)
+    //   Exemplo: 1 vira "01", 10 vira "10" — alinha perfeitamente
+    // • ${resultado} — resultado da multiplicação
+    //
+    // Exemplo com numero=7:
+    // Para i=1: "7 × 01 = 7"
+    // Para i=9: "7 × 09 = 63"
+    // Para i=10: "7 × 10 = 70"</span>
+    tabuada += <span class="str">`${numero} × ${i.toString().padStart(2)} = ${resultado}\n`</span>;
+  }
+
+  <span class="cmt">// Retorna a tabuada completa acumulada.</span>
+  <span class="kw">return</span> tabuada;
+}</pre>
+
+      <button class="btn-executar amarelo" onclick="rodarExercicio4()">▶ Executar</button>
+      <div class="saida" id="saida4"></div>
+    </div>
+  </div>
+
+  <!-- ──────────────────────────────────────────────────────
+       RODAPÉ
+  ────────────────────────────────────────────────────────
+
+       Informação secundária no final da página.
+  ───────────────────────────────────────────────────────── -->
+  <footer>
+    Semana 3 — Lógica de Programação com JavaScript &mdash; Full Stack Mentoria Interna
+  </footer>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCRIPT — Código JavaScript que roda na página
+════════════════════════════════════════════════════════════════
+
+     <script> carrega e executa código JavaScript.
+     Colocado no final do <body> para garantir que todos os elementos
+     HTML já foram carregados.
+═════════════════════════════════════════════════════════════════ -->
+<script>
+  /* ════════════════════════════════════════════════════════════════
+     FUNÇÕES DOS EXERCÍCIOS
+  ════════════════════════════════════════════════════════════════
+
+     Estas são as mesmas funções apresentadas nos blocos <pre> acima.
+     Repetidas aqui para executar quando o usuário clica no botão.
+  ═════════════════════════════════════════════════════════════════ */
+
+  /* ──────────────────────────────────────────────────────
+     EXERCÍCIO 1 — Contar até um número
+  ───────────────────────────────────────────────────────── */
+  function contarAteNumero() {
+    const numero = parseInt(prompt("Digite um número inteiro positivo:"));
+    if (isNaN(numero) || numero <= 0) {
+      return "Valor inválido. Por favor, informe um número inteiro positivo.";
+    }
+    let resultado = `Contagem de 1 até ${numero}:\n`;
+    let contador = 1;
+    while (contador <= numero) {
+      resultado += contador + "  ";
+      contador++;
+    }
+    return resultado;
+  }
+
+  /* ──────────────────────────────────────────────────────
+     EXERCÍCIO 2 — Soma de números
+  ───────────────────────────────────────────────────────── */
+  function somarNumeros() {
+    const numero = parseInt(prompt("Digite um número inteiro positivo:"));
+    if (isNaN(numero) || numero <= 0) {
+      return "Valor inválido. Por favor, informe um número inteiro positivo.";
+    }
+    let soma = 0;
+    for (let i = 1; i <= numero; i++) {
+      soma += i;
+    }
+    return `A soma de 1 até ${numero} é: ${soma}`;
+  }
+
+  /* ──────────────────────────────────────────────────────
+     EXERCÍCIO 3 — Validação com função
+  ───────────────────────────────────────────────────────── */
+  function lerNumeroValido() {
+    let numero = parseInt(prompt("Digite um número entre 1 e 60:"));
+    while (isNaN(numero) || numero < 1 || numero > 60) {
+      numero = parseInt(prompt("Número inválido! Digite um valor entre 1 e 60:"));
+    }
+    return numero;
+  }
+
+  function validarNumero() {
+    const numeroValido = lerNumeroValido();
+    return `Número válido recebido: ${numeroValido} ✓`;
+  }
+
+  /* ──────────────────────────────────────────────────────
+     EXERCÍCIO 4 — Tabuada (Desafio)
+  ───────────────────────────────────────────────────────── */
+  function gerarTabuada() {
+    const numero = parseInt(prompt("Digite um número para ver a tabuada:"));
+    if (isNaN(numero)) {
+      return "Valor inválido. Por favor, informe um número inteiro.";
+    }
+    let tabuada = `Tabuada do ${numero}:\n`;
+    tabuada += "─────────────────\n";
+    for (let i = 1; i <= 10; i++) {
+      const resultado = numero * i;
+      tabuada += `${numero} × ${i.toString().padStart(2)} = ${resultado}\n`;
+    }
+    return tabuada;
+  }
+
+  /* ════════════════════════════════════════════════════════════════
+     FUNÇÕES DOS BOTÕES — Executam as funções e exibem o resultado
+  ════════════════════════════════════════════════════════════════
+
+     Quando o usuário clica em um botão "Executar", a função
+     correspondente (rodarExercicio1, rodarExercicio2, etc) é chamada.
+
+     Cada uma:
+     1. Chama a função do exercício
+     2. Pega o resultado
+     3. Exibe na área <div class="saida">
+  ═════════════════════════════════════════════════════════════════ */
+
+  /* Função auxiliar para exibir resultado na tela
+     id = qual elemento <div class="saida"> exibir
+     texto = o resultado a mostrar
+     erro = se true, exibe em cor de erro (vermelho) */
+  function exibirSaida(id, texto, erro = false) {
+    const saida = document.getElementById(id);
+    /* getElementById: busca o elemento HTML com o ID especificado.
+       document = objeto que representa a página inteira.
+       .getElementById("saida1") = busca <div id="saida1">. */
+
+    saida.textContent = texto;
+    /* .textContent = propriedade que define o texto dentro do elemento.
+       Substitui todo o conteúdo anterior. */
+
+    saida.className = "saida visivel" + (erro ? " erro" : "");
+    /* .className = define as classes CSS do elemento.
+       "saida visivel" = sempre estas duas classes.
+       + (erro ? " erro" : "") = adiciona " erro" se erro=true, senão adiciona nada. */
+  }
+
+  /* Botão Exercício 1 */
+  function rodarExercicio1() {
+    try {
+      /* try...catch captura erros.
+         Se algo der erro, cai no catch em vez de travar a página. */
+      exibirSaida("saida1", contarAteNumero());
+    } catch (e) {
+      /* Se o usuário cancelar o prompt, cai aqui. */
+      exibirSaida("saida1", "Operação cancelada.", true);
+    }
+  }
+
+  /* Botão Exercício 2 */
+  function rodarExercicio2() {
+    try {
+      exibirSaida("saida2", somarNumeros());
+    } catch (e) {
+      exibirSaida("saida2", "Operação cancelada.", true);
+    }
+  }
+
+  /* Botão Exercício 3 */
+  function rodarExercicio3() {
+    try {
+      exibirSaida("saida3", validarNumero());
+    } catch (e) {
+      exibirSaida("saida3", "Operação cancelada.", true);
+    }
+  }
+
+  /* Botão Exercício 4 */
+  function rodarExercicio4() {
+    try {
+      exibirSaida("saida4", gerarTabuada());
+    } catch (e) {
+      exibirSaida("saida4", "Operação cancelada.", true);
+    }
+  }
+</script>
+</body>
+</html>

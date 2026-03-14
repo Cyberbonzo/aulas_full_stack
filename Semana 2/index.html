@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  DECLARAÇÃO DO TIPO DE DOCUMENTO (DOCTYPE)
+  ============================================================
+  A primeira linha de todo arquivo HTML deve ser o <!DOCTYPE html>.
+  Ela instrui o navegador a interpretar este arquivo usando o
+  padrão HTML5 — a versão mais recente e amplamente suportada.
+
+  SEM o DOCTYPE, o navegador entra em "quirks mode" (modo legado),
+  onde tenta adivinhar o formato do documento e pode renderizar
+  o layout de forma incorreta e inconsistente entre navegadores.
+-->
+
+<html lang="pt-BR">
+<!--
+  ============================================================
+  ELEMENTO RAIZ: <html>
+  ============================================================
+  Toda a estrutura de uma página fica dentro da tag <html>.
+  Ela é chamada de "elemento raiz" porque é o ancestral de
+  todos os outros elementos da página.
+
+  Atributo lang="pt-BR":
+    → Informa ao navegador e a ferramentas de processamento
+      de texto qual é o idioma principal do conteúdo.
+    → "pt-BR" significa Português do Brasil.
+    → Outros exemplos: lang="en" (inglês), lang="es" (espanhol).
+-->
+
+<!-- ============================================================
+     CABEÇALHO DO DOCUMENTO: <head>
+     ============================================================
+     O <head> contém metadados — informações SOBRE a página que
+     não são exibidas diretamente na tela, mas são essenciais
+     para o funcionamento correto do documento.
+
+     O que vai no <head>:
+       - Configurações de codificação de caracteres
+       - Configurações de viewport
+       - Título da aba do navegador
+       - Links para arquivos CSS externos
+       - Scripts JavaScript (em alguns casos)
+       - Metadados do documento
+     ============================================================ -->
+<head>
+
+  <meta charset="UTF-8" />
+  <!--
+    META TAG: CODIFICAÇÃO DE CARACTERES
+    ------------------------------------
+    Define o conjunto de caracteres (charset) usado para
+    interpretar o texto do arquivo.
+
+    UTF-8 (Unicode Transformation Format - 8 bits):
+      → É o padrão mais utilizado na web.
+      → Suporta praticamente todos os caracteres de todos os
+        idiomas do mundo: acentos (á, ã, ê), cedilha (ç),
+        caracteres japoneses, árabes, símbolos Unicode, etc.
+      → SEM esta tag, acentos e caracteres especiais aparecem
+        como símbolos estranhos (ex: "ã" vira "Ã£").
+
+    A barra no final ( /> ) é uma convenção do XHTML para
+    indicar que a tag não tem conteúdo interno nem tag de
+    fechamento. No HTML5 puro, <meta charset="UTF-8"> também
+    é válido.
+  -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    META TAG: VIEWPORT
+    -------------------
+    Define como o navegador deve ajustar a largura e o zoom
+    inicial da página ao renderizá-la.
+
+    Atributos:
+      width=device-width   → A largura da página se adapta
+                             à largura real da tela.
+      initial-scale=1.0    → O zoom inicial é 100% (sem zoom).
+  -->
+
+  <title>Algoritmo de Verificação de Notas</title>
+  <!--
+    TAG <title>
+    -----------
+    Define o texto que aparece:
+      1. Na aba do navegador.
+      2. No histórico do navegador.
+
+    Boas práticas:
+      → Seja descritivo e conciso (40–60 caracteres).
+      → Coloque o conteúdo mais importante no início.
+      → Cada página do site deve ter um título único.
+  -->
+
+  <!-- ============================================================
+       CSS INTERNO (ESTILOS EMBUTIDOS NO PRÓPRIO HTML)
+       ============================================================
+       Existem três formas de aplicar CSS a uma página HTML:
+
+         1. CSS EXTERNO   → <link rel="stylesheet" href="estilo.css">
+                            Arquivo .css separado. RECOMENDADO para
+                            projetos reais, pois o mesmo arquivo pode
+                            ser reutilizado em várias páginas.
+
+         2. CSS INTERNO   → <style> ... </style> dentro do <head>.
+                            Aplicado apenas à página atual.
+                            Bom para páginas únicas ou prototipagem.
+
+         3. CSS INLINE    → style="..." diretamente na tag HTML.
+                            Tem a maior prioridade, mas dificulta
+                            a manutenção. Evite para estilos gerais.
+
+       Neste projeto utilizamos CSS Interno por ser uma página
+       única e de fins didáticos.
+       ============================================================ -->
+  <style>
+
+    /* ============================================================
+       SELETOR UNIVERSAL: *
+       ============================================================
+       O asterisco (*) seleciona TODOS os elementos da página.
+       É usado aqui para aplicar um "reset" básico, removendo
+       margens e preenchimentos padrão que os navegadores adicionam
+       automaticamente a elementos como <body>, <h1>, <p>, etc.
+
+       Cada navegador tem uma "folha de estilos padrão" (user-agent
+       stylesheet) que aplica estilos próprios. O reset garante
+       um ponto de partida consistente entre Chrome, Firefox, etc.
+
+       box-sizing: border-box;
+         → Por padrão (content-box), largura e altura de um elemento
+           NÃO incluem padding nem borda.
+           Ex: um div de width:200px com padding:20px terá
+               na prática 240px de largura total.
+         → Com border-box, padding e borda SÃO incluídos.
+           Ex: um div de width:200px com padding:20px mantém
+               exatamente 200px de largura total.
+         → Torna o cálculo de layouts muito mais previsível.
+    ============================================================ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ============================================================
+       SELETOR DE ELEMENTO: body
+       ============================================================
+       Seleciona o elemento <body>, que contém TODO o conteúdo
+       visível da página. Estilos aplicados aqui são herdados por
+       elementos filhos (como <p>, <li>, etc.), salvo quando
+       sobrescritos por estilos mais específicos.
+
+       Conceito de HERANÇA no CSS:
+         Algumas propriedades são herdadas automaticamente pelos
+         filhos (font-family, color, line-height, font-size).
+         Outras não são herdadas (background, border, margin).
+    ============================================================ */
+    body {
+      /* font-family: lista de fontes em ordem de preferência.
+         O navegador usa a primeira disponível no sistema.
+         As últimas opções ('sans-serif') são genéricas — o
+         navegador escolhe qualquer fonte sem serifa instalada. */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+      /* background-color: cor de fundo da página.
+         Aceita: nomes ('red'), HEX ('#f0f2f5'), RGB, HSL.
+         #f0f2f5 → cinza-azulado claro, muito usado em UIs modernas. */
+      background-color: #f0f2f5;
+
+      /* color: cor padrão do texto. Herdada por todos os filhos. */
+      color: #333;
+
+      /* padding: espaçamento INTERNO (entre o conteúdo e a borda).
+         Sintaxe resumida:
+           padding: 40px 20px;
+             → 40px em cima/baixo (eixo vertical)
+             → 20px nos lados esquerdo/direito (eixo horizontal)
+         Evita que o conteúdo "grude" nas bordas da tela. */
+      padding: 40px 20px;
+    }
+
+    /* ============================================================
+       SELETOR DE ELEMENTO: header
+       ============================================================
+       <header> é um elemento HTML5 SEMÂNTICO. Indica ao navegador
+       que aquele bloco é o cabeçalho da página ou de uma seção.
+
+       Elementos semânticos do HTML5:
+         <header>  → Cabeçalho
+         <main>    → Conteúdo principal
+         <section> → Seção temática
+         <article> → Artigo independente
+         <aside>   → Conteúdo lateral/complementar
+         <footer>  → Rodapé
+
+       Em vez de usar <div id="header">, prefira <header>.
+       Benefícios: legibilidade e organização do código.
+    ============================================================ */
+    header {
+      /* text-align: alinha o texto horizontalmente.
+         Valores: left | center | right | justify */
+      text-align: center;
+
+      /* margin-bottom: espaçamento EXTERNO abaixo do elemento.
+         Separa o cabeçalho dos cartões abaixo. */
+      margin-bottom: 40px;
+    }
+
+    /* ============================================================
+       SELETOR DESCENDENTE: header h1
+       ============================================================
+       Seleciona apenas os <h1> que estão DENTRO de um <header>.
+       Não afeta <h1> em outros lugares da página.
+
+       Hierarquia de títulos HTML:
+         <h1> → Título principal (um por página, idealmente)
+         <h2> → Subtítulo de seção
+         <h3> → Subtítulo de subseção
+         ... até <h6>
+       São usados pelo navegador para entender
+       a estrutura e hierarquia do conteúdo.
+    ============================================================ */
+    header h1 {
+      font-size: 2rem;
+      /* rem (root em): unidade relativa ao tamanho de fonte
+         do elemento raiz (<html>). Se o padrão é 16px:
+           1rem = 16px
+           2rem = 32px
+         É preferível a px pois respeita
+         o tamanho de fonte configurado pelo usuário no sistema. */
+
+      color: #1a1a2e; /* azul-escuro quase preto */
+    }
+
+    header p {
+      /* margin-top: espaço acima do parágrafo. */
+      margin-top: 8px;
+      color: #555;
+      font-size: 1rem;
+    }
+
+    /* ============================================================
+       CLASSE CSS: .container
+       ============================================================
+       Classes são identificadas pelo ponto (.) antes do nome.
+       Podem ser aplicadas a qualquer elemento HTML com o atributo
+       class="container", por exemplo: <div class="container">.
+
+       Diferença entre classe e ID:
+         Classe (.)  → Pode ser usada em múltiplos elementos.
+         ID (#)      → Deve ser único na página. Usado para
+                       ancoragem (#ancora) ou manipulação em JS.
+
+       Esta classe centraliza o conteúdo e define a largura máxima,
+       um padrão de layout chamado "container centralizado".
+    ============================================================ */
+    .container {
+      max-width: 820px;
+      /* max-width: define a largura máxima. O elemento pode ser
+         menor (em telas pequenas), mas nunca maior que 820px. */
+
+      margin: 0 auto;
+      /* margin: 0 auto → margens superior/inferior = 0,
+         margens laterais = auto (iguais). Efeito: centraliza
+         horizontalmente o bloco na tela. */
+
+      /* display: flex → ativa o Flexbox no container.
+         Flexbox é um modelo de layout unidimensional que facilita
+         o alinhamento e distribuição de elementos filhos.
+         Os filhos diretos viram "flex items". */
+      display: flex;
+
+      /* flex-direction: column → empilha os filhos verticalmente
+         (um abaixo do outro). O padrão seria 'row' (lado a lado). */
+      flex-direction: column;
+
+      /* gap: espaço entre os itens flex/grid, sem precisar de margin. */
+      gap: 32px;
+    }
+
+    /* ============================================================
+       CLASSE CSS: .card
+       ============================================================
+       Representa cada "cartão" de conteúdo. Este padrão visual de
+       "card" é muito comum em interfaces modernas (Material Design,
+       Bootstrap, Tailwind, etc.).
+    ============================================================ */
+    .card {
+      background-color: #fff; /* fundo branco para destacar do body */
+
+      /* border-radius: arredonda os cantos do elemento.
+         Um valor único aplica o mesmo raio nos 4 cantos. */
+      border-radius: 12px;
+
+      padding: 32px; /* espaço interno generoso para conforto visual */
+
+      /* box-shadow: adiciona sombra ao redor do elemento.
+         Sintaxe: offset-x | offset-y | blur | spread | cor
+           0       → sem deslocamento horizontal
+           2px     → 2px para baixo
+           8px     → desfoque de 8px
+           (omitido) spread padrão = 0
+           rgba(0,0,0,0.08) → preto com 8% de opacidade
+
+         rgba(): função de cor com canal alfa (transparência).
+           rgba(vermelho, verde, azul, alfa)
+           alfa: 0 = totalmente transparente | 1 = opaco */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ============================================================
+       SELETOR DESCENDENTE: .card h2
+       ============================================================
+       Seleciona todos os <h2> dentro de elementos com class="card".
+    ============================================================ */
+    .card h2 {
+      font-size: 1.3rem;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+
+      /* border-bottom: adiciona uma linha divisória abaixo.
+         Sintaxe: espessura | estilo | cor
+         Estilos disponíveis: solid | dashed | dotted | double */
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    /* ====== ESTILOS DA SEÇÃO: LINGUAGEM NATURAL ====== */
+
+    /* SELETOR DESCENDENTE COMPOSTO: .steps ol
+       Seleciona <ol> dentro de elementos com classe .steps. */
+    .steps ol {
+      padding-left: 24px;
+      /* Recua a lista para que os números fiquem visíveis.
+         Sem padding-left, os números da lista seriam cortados. */
+
+      display: flex;
+      flex-direction: column;
+      gap: 12px; /* espaço entre cada item da lista */
+    }
+
+    .steps li {
+      /* line-height: altura da linha (entrelinhamento).
+         1.7 = 170% do tamanho da fonte atual. Melhora a
+         legibilidade de textos corridos. */
+      line-height: 1.7;
+      font-size: 0.97rem;
+    }
+
+    .steps li strong {
+      color: #1a1a2e;
+      /* <strong> tem significado semântico: indica importância.
+         Além de negrito visual, deixa claro para o navegador
+         que o trecho tem relevância especial. */
+    }
+
+    /* ====== COMPONENTE: BADGES (ETIQUETAS DE STATUS) ====== */
+    /*
+       Badges são pequenos rótulos visuais usados para indicar
+       status, categorias ou contagens. São muito comuns em
+       notificações, tabelas e sistemas de e-commerce.
+    */
+    .badge {
+      /* display: inline-block →
+           inline  = flui junto com o texto (não quebra linha)
+           block   = aceita width, height, padding, margin completos
+           inline-block = os dois ao mesmo tempo */
+      display: inline-block;
+
+      padding: 2px 10px; /* pequeno espaço interno: 2px vertical, 10px horizontal */
+
+      border-radius: 20px;
+      /* Valor alto de border-radius em elemento pequeno cria
+         o formato "pílula" (pill shape), comum em badges/tags. */
+
+      font-size: 0.82rem;
+
+      /* font-weight: espessura da fonte.
+         Valores numéricos: 100 (mais fino) a 900 (mais grosso).
+         Valores nomeados: normal (400) | bold (700) */
+      font-weight: 600;
+
+      margin-left: 4px;
+    }
+
+    /* Modificadores da classe .badge usando BEM-like naming:
+       .badge-aprovado, .badge-recuperacao, .badge-reprovado
+       Cada um sobrescreve apenas as propriedades de cor. */
+
+    .badge-aprovado {
+      background-color: #d4edda; /* verde claro */
+      color: #155724;            /* verde escuro */
+    }
+
+    .badge-recuperacao {
+      background-color: #fff3cd; /* amarelo claro */
+      color: #856404;            /* amarelo escuro */
+    }
+
+    .badge-reprovado {
+      background-color: #f8d7da; /* vermelho claro */
+      color: #721c24;            /* vermelho escuro */
+    }
+
+    /* ====== ESTILOS DA SEÇÃO: PSEUDOCÓDIGO ====== */
+
+    /* SELETOR DESCENDENTE: .pseudocode pre
+       <pre> (preformatted text): exibe o texto exatamente como
+       foi digitado no HTML, preservando espaços e quebras de linha.
+       Usa fonte monoespaçada por padrão (ex: Courier New).
+       Ideal para exibir código, pseudocódigo e logs. */
+    .pseudocode pre {
+      background-color: #1e1e2e; /* fundo escuro: tema "Catppuccin Mocha" */
+      color: #cdd6f4;            /* texto claro */
+      border-radius: 8px;
+      padding: 24px;
+
+      /* font-family para código: sempre use fontes monoespaçadas.
+         Cada caractere ocupa a mesma largura, facilitando a
+         leitura de código com alinhamento vertical. */
+      font-family: 'Courier New', Courier, monospace;
+
+      font-size: 0.92rem;
+      line-height: 1.9;
+
+      /* overflow-x: auto → se o conteúdo for mais largo que o
+         container, uma barra de rolagem horizontal aparece.
+         Evita que o layout "quebre" em telas pequenas. */
+      overflow-x: auto;
+
+      /* white-space: pre → preserva todos os espaços e quebras
+         de linha exatamente como estão no HTML.
+         Sem isso, o navegador colapsaria espaços múltiplos. */
+      white-space: pre;
+    }
+
+    /* ---- Syntax Highlighting (coloração de sintaxe) ----
+       Técnica que usa classes CSS para colorir partes do texto
+       conforme seu papel na linguagem (palavra-chave, string, etc.).
+       Em projetos reais, bibliotecas como highlight.js ou Prism.js
+       fazem isso automaticamente via JavaScript.
+       Aqui fazemos manualmente com <span class="kw"> etc. */
+
+    .kw  { color: #cba6f7; font-weight: bold; } /* keyword  (palavra-chave) */
+    .fn  { color: #89b4fa; }                    /* function (função/comando) */
+    .str { color: #a6e3a1; }                    /* string   (texto entre aspas)*/
+    .num { color: #fab387; }                    /* number   (valor numérico) */
+    .cmt { color: #6c7086; font-style: italic; }/* comment  (comentário) */
+
+    /* ====== ESTILOS DA SEÇÃO: TABELA ====== */
+    /*
+       Tabelas HTML são usadas para dados tabulares (linhas e colunas).
+       NÃO devem ser usadas para layout de página — isso era comum
+       nos anos 90 mas hoje é considerado má prática.
+
+       Estrutura de uma tabela:
+         <table>  → container da tabela
+           <thead> → cabeçalho (agrupa linhas de título)
+           <tbody> → corpo (agrupa linhas de dados)
+           <tfoot> → rodapé (agrupa linhas de resumo/total)
+             <tr>  → table row (linha)
+               <th> → table header (célula de cabeçalho, negrito por padrão)
+               <td> → table data (célula de dados)
+    */
+    .tabela table {
+      /* width: 100% → a tabela ocupa toda a largura do .card pai. */
+      width: 100%;
+
+      /* border-collapse: collapse → remove o espaço duplo entre
+         bordas adjacentes de células. Com 'separate' (padrão),
+         cada célula teria sua própria borda separada. */
+      border-collapse: collapse;
+
+      font-size: 0.95rem;
+    }
+
+    .tabela th,
+    .tabela td {
+      /* Usando vírgula, aplicamos o mesmo estilo a dois seletores. */
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0; /* linha divisória entre linhas */
+    }
+
+    .tabela th {
+      background-color: #f7f7fb;
+      color: #1a1a2e;
+      font-weight: 600;
+    }
+
+    /* Seletor de pseudo-classe: :last-child
+       Seleciona o elemento que é o ÚLTIMO filho de seu pai.
+       Aqui remove a borda inferior da última linha da tabela,
+       evitando borda dupla com o .card. */
+    .tabela tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ====== ESTILOS DO RODAPÉ ====== */
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 16px;
+    }
+
+  </style>
+  <!--
+    OBSERVAÇÃO SOBRE ONDE COLOCAR CSS E JS:
+    ----------------------------------------
+    CSS  → Sempre no <head>. O navegador precisa saber os estilos
+            ANTES de renderizar o conteúdo, para evitar o "flash"
+            de conteúdo sem estilo (FOUC - Flash of Unstyled Content).
+
+    JS   → Preferencialmente antes de </body> ou com atributo
+            "defer" no <head>. Scripts bloqueiam a renderização
+            da página se colocados no <head> sem defer/async.
+            <script defer src="script.js"></script>
+
+    PHP  → PHP é processado no SERVIDOR antes de o HTML ser enviado
+            ao navegador. O cliente nunca vê código PHP — recebe
+            apenas o HTML resultante.
+            Exemplo: <?php echo "Olá, Mundo!"; ?> vira "Olá, Mundo!"
+            no HTML enviado ao cliente.
+  -->
+
+</head>
+<!--
+  ============================================================
+  CORPO DO DOCUMENTO: <body>
+  ============================================================
+  Contém TODO o conteúdo visível da página:
+  textos, imagens, links, tabelas, formulários, etc.
+
+  O navegador percorre o HTML de cima para baixo, criando uma
+  estrutura em árvore chamada DOM (Document Object Model).
+  O DOM é o que o JavaScript manipula para criar interatividade.
+  ============================================================
+-->
+<body>
+
+  <!-- ============================================================
+       ELEMENTO SEMÂNTICO: <header>
+       ============================================================
+       Representa o cabeçalho da página. Contém informações
+       introdutórias: título, subtítulo, logo, etc.
+
+       Diferença de <head>:
+         <head>   → metadados, não visível na tela
+         <header> → conteúdo visível, apresentação da página
+       ============================================================ -->
+  <header>
+    <!-- <h1>: Título principal da página.
+         Regra geral: apenas UM <h1> por página para SEO.
+         Leitores de tela usam os títulos para criar um
+         sumário de navegação da página. -->
+    <h1>Algoritmo de Verificação de Notas</h1>
+
+    <!-- <p>: Parágrafo. Elemento de nível de bloco (block-level),
+         ocupa toda a largura disponível e quebra linha antes e depois.
+         &mdash; é uma entidade HTML para o travessão (—).
+         Entidades HTML representam caracteres especiais:
+           &lt;   → < (menor que)
+           &gt;   → > (maior que)
+           &amp;  → & (e comercial)
+           &nbsp; → espaço não quebrável
+           &mdash;→ — (travessão longo) -->
+    <p>Semana 2 &mdash; Controle de Fluxo e Estrutura de Dados</p>
+  </header>
+
+  <!-- ============================================================
+       ELEMENTO DE AGRUPAMENTO: <div>
+       ============================================================
+       <div> (division) é um contêiner genérico SEM significado
+       semântico. É usado apenas para agrupar elementos e aplicar
+       estilos ou layout via CSS.
+
+       Use elementos semânticos quando possível (<section>,
+       <article>, <main>). Recorra ao <div> quando não houver
+       um elemento semântico adequado.
+       ============================================================ -->
+  <div class="container">
+  <!--
+    class="container": aplica o estilo .container definido no CSS.
+    Um elemento pode ter múltiplas classes separadas por espaço:
+      class="container destaque ativo"
+  -->
+
+    <!-- ========================================================
+         CARTÃO 1: LINGUAGEM NATURAL
+         ========================================================
+         Demonstra o uso de <ol> (ordered list - lista ordenada)
+         e <ul> (unordered list - lista não-ordenada) para
+         descrever algoritmos em texto.
+         ======================================================== -->
+    <div class="card steps">
+    <!--
+      Este <div> possui DUAS classes: "card" e "steps".
+      Recebe os estilos de ambas. É uma técnica de composição
+      de estilos muito comum no CSS.
+    -->
+
+      <!-- <h2>: Subtítulo de seção. Nível abaixo do <h1>. -->
+      <h2>1. Linguagem Natural</h2>
+
+      <!-- <ol>: Lista ORDENADA — itens numerados automaticamente.
+           Use quando a ORDEM dos itens for importante (passos,
+           instruções, rankings).
+           Atributo start="2" iniciaria a contagem do número 2.
+           Atributo reversed inverteria a ordem (5, 4, 3...). -->
+      <ol>
+
+        <li>
+        <!--
+          <li>: List Item — item de lista.
+          Funciona dentro de <ol> (numerado) e <ul> (com marcador).
+          O número/marcador é gerado automaticamente pelo navegador.
+        -->
+          <!-- <strong>: negrito com importância semântica.
+               Para negrito puramente visual, use CSS: font-weight: bold. -->
+          <strong>Início do algoritmo.</strong>
+        </li>
+
+        <li>
+          <strong>Entrada:</strong> Solicitar ao usuário que informe a nota do aluno
+          (um número).
+        </li>
+
+        <li>
+          <strong>Validação:</strong> Verificar se a nota informada está dentro do
+          intervalo permitido, ou seja, se ela é maior ou igual a 0
+          <!-- <em>: ênfase semântica — renderiza em itálico por padrão.
+               Para itálico visual sem ênfase, use: font-style: italic. -->
+          <em>e</em> menor ou igual a 10.
+
+          <!-- <ul>: Lista NÃO-ORDENADA — itens com marcadores (bullets).
+               Use quando a ordem dos itens NÃO for relevante.
+               Estilos comuns: disc | circle | square | none
+               Controlados pela propriedade CSS list-style-type. -->
+          <ul style="margin-top: 8px; padding-left: 20px; list-style: disc;">
+          <!--
+            ATENÇÃO — CSS INLINE:
+            O atributo style="" aplica CSS diretamente na tag.
+            Tem a maior especificidade do CSS (exceto !important).
+            Use com moderação — preferível definir uma classe no <style>.
+            Útil para ajustes pontuais que não se repetem.
+          -->
+            <li>
+              Se a nota estiver <em>fora</em> desse intervalo, exibir a mensagem
+              <em>"Nota inválida. Por favor, informe um valor entre 0 e 10."</em>
+              e retornar ao passo 2.
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <strong>Classificação:</strong> Com a nota válida em mãos, verificar em
+          qual faixa ela se enquadra, na seguinte ordem:
+
+          <ul style="margin-top: 8px; padding-left: 20px; list-style: disc; display: flex; flex-direction: column; gap: 6px;">
+            <li>
+              Se a nota for <strong>maior ou igual a 7</strong>, o aluno está
+              <!-- <span>: contêiner INLINE genérico, sem semântica.
+                   Enquanto <div> é block-level, <span> é inline-level.
+                   Usado para estilizar trechos de texto sem quebrar a linha. -->
+              <span class="badge badge-aprovado">Aprovado</span>.
+            </li>
+            <li>
+              Caso contrário, se a nota for <strong>maior ou igual a 5</strong>
+              (e menor que 7), o aluno está
+              <span class="badge badge-recuperacao">Em Recuperação</span>.
+            </li>
+            <li>
+              Caso contrário (nota menor que 5), o aluno está
+              <span class="badge badge-reprovado">Reprovado</span>.
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <strong>Saída:</strong> Exibir o resultado da classificação do aluno.
+        </li>
+
+        <li><strong>Fim do algoritmo.</strong></li>
+
+      </ol>
+    </div><!-- fim .card.steps -->
+
+
+    <!-- ========================================================
+         CARTÃO 2: PSEUDOCÓDIGO
+         ========================================================
+         Pseudocódigo é uma representação da lógica de um
+         algoritmo em linguagem intermediária entre o português
+         e uma linguagem de programação real.
+
+         Não tem sintaxe rígida — o importante é a clareza
+         da lógica de controle de fluxo (SE/SENÃO, REPITA/ATÉ).
+
+         Estruturas de controle representadas:
+           REPITA ... ATÉ QUE → loop de pós-condição (do...while)
+           SE ... SENÃO SE ... SENÃO → condicional (if/else if/else)
+
+         Equivalências entre linguagens:
+         ┌──────────────┬───────────┬──────────┬──────────────┐
+         │ Pseudocódigo │ JavaScript│  PHP     │  Python      │
+         ├──────────────┼───────────┼──────────┼──────────────┤
+         │ SE           │ if        │ if       │ if           │
+         │ SENÃO SE     │ else if   │ elseif   │ elif         │
+         │ SENÃO        │ else      │ else     │ else         │
+         │ REPITA/ATÉ   │ do/while  │ do/while │ while (inv.) │
+         │ ESCREVA      │ console.log│ echo    │ print        │
+         │ LEIA         │ prompt()  │ $_POST[] │ input()      │
+         └──────────────┴───────────┴──────────┴──────────────┘
+         ======================================================== -->
+    <div class="card pseudocode">
+      <h2>2. Pseudocódigo</h2>
+
+      <!-- <pre>: Texto pré-formatado. Preserva espaços e quebras
+           de linha exatamente como escritos no HTML.
+           Usa fonte monoespaçada por padrão.
+           Ideal para: código, pseudocódigo, logs, poesia, ASCII art.
+
+           ATENÇÃO: No <pre>, espaços e indentação DO HTML são
+           exibidos literalmente. Por isso o conteúdo abaixo
+           começa imediatamente após a tag, sem indentação. -->
+      <pre><span class="kw">ALGORITMO</span> VerificacaoDeNota
+
+  <span class="cmt">// Declaração de variável</span>
+  <span class="kw">VARIÁVEL</span> nota: <span class="kw">REAL</span>
+  <span class="cmt">/*
+     Em JavaScript : let nota;  ou  const nota = 0;
+     Em PHP        : $nota;     (variáveis iniciam com $)
+     Em Python     : nota = 0   (sem declaração explícita de tipo)
+     Em Java/C#    : double nota;
+  */</span>
+
+  <span class="cmt">// Entrada e validação com laço de repetição</span>
+  <span class="kw">REPITA</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Informe a nota do aluno (0 a 10): "</span>)
+    <span class="fn">LEIA</span>(nota)
+    <span class="cmt">/*
+       JavaScript: nota = parseFloat(prompt("Informe a nota:"));
+       PHP       : $nota = (float) $_POST['nota'];
+    */</span>
+
+    <span class="kw">SE</span> (nota &lt; <span class="num">0</span> <span class="kw">OU</span> nota &gt; <span class="num">10</span>) <span class="kw">ENTÃO</span>
+    <span class="cmt">/*
+       Operadores de comparação:
+         <   menor que          |  >   maior que
+         <=  menor ou igual     |  >=  maior ou igual
+         ==  igual (valor)      |  !=  diferente
+         === igual (valor+tipo) — exclusivo do JS/PHP
+
+       Operadores lógicos:
+         OU  → OR  → ||  (JavaScript/PHP/C)
+         E   → AND → &&  (JavaScript/PHP/C)
+         NÃO → NOT → !   (JavaScript/PHP/C)
+
+       NOTA: No HTML dentro de <pre>, os sinais < e > devem
+       ser escritos como entidades HTML (&lt; e &gt;) para não
+       serem confundidos com tags HTML pelo navegador.
+    */</span>
+      <span class="fn">ESCREVA</span>(<span class="str">"Nota inválida. Informe um valor entre 0 e 10."</span>)
+    <span class="kw">FIM SE</span>
+
+  <span class="kw">ATÉ QUE</span> (nota &gt;= <span class="num">0</span> <span class="kw">E</span> nota &lt;= <span class="num">10</span>)
+  <span class="cmt">/*
+     Este é um laço de pós-condição: o bloco REPITA executa
+     pelo menos UMA VEZ antes de verificar a condição.
+
+     Equivalente em JavaScript:
+       do {
+         nota = parseFloat(prompt("Informe a nota:"));
+         if (nota < 0 || nota > 10) {
+           alert("Nota inválida.");
+         }
+       } while (nota < 0 || nota > 10);
+
+     Equivalente em PHP:
+       do {
+         $nota = (float) $_POST['nota']; // em formulário real
+         if ($nota < 0 || $nota > 10) {
+           echo "Nota inválida.";
+         }
+       } while ($nota < 0 || $nota > 10);
+  */</span>
+
+  <span class="cmt">// Classificação por estrutura condicional encadeada</span>
+  <span class="kw">SE</span> (nota &gt;= <span class="num">7</span>) <span class="kw">ENTÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Aprovado"</span>)
+
+  <span class="kw">SENÃO SE</span> (nota &gt;= <span class="num">5</span>) <span class="kw">ENTÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Em Recuperação"</span>)
+    <span class="cmt">// Não precisamos checar nota < 7 aqui porque,
+    // se chegou neste ponto, o SE anterior já foi falso,
+    // ou seja, nota < 7 já é garantido pelo fluxo.</span>
+
+  <span class="kw">SENÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Reprovado"</span>)
+    <span class="cmt">// Todos os casos não cobertos acima (nota < 5)</span>
+
+  <span class="kw">FIM SE</span>
+  <span class="cmt">/*
+     Equivalente em JavaScript:
+       if (nota >= 7) {
+         console.log("Aprovado");
+       } else if (nota >= 5) {
+         console.log("Em Recuperação");
+       } else {
+         console.log("Reprovado");
+       }
+
+     Equivalente em PHP:
+       if ($nota >= 7) {
+         echo "Aprovado";
+       } elseif ($nota >= 5) {  // PHP usa elseif (sem espaço)
+         echo "Em Recuperação";
+       } else {
+         echo "Reprovado";
+       }
+  */</span>
+
+<span class="kw">FIM ALGORITMO</span></pre>
+    </div><!-- fim .card.pseudocode -->
+
+
+    <!-- ========================================================
+         CARTÃO 3: TABELA DE CLASSIFICAÇÃO
+         ========================================================
+         Demonstra o uso correto de tabelas HTML para dados
+         tabulares — estrutura de linhas e colunas.
+         ======================================================== -->
+    <div class="card tabela">
+      <h2>3. Tabela de Classificação</h2>
+
+      <!-- <table>: define uma tabela. Elemento de nível de bloco.
+           Atributos antigos (border, cellpadding, cellspacing)
+           eram usados antes do CSS. Hoje: use apenas CSS. -->
+      <table>
+
+        <!-- <thead>: Agrupa as linhas de cabeçalho da tabela.
+             Semântico: navegadores, leitores de tela e ferramentas
+             de impressão tratam <thead> de forma diferente do <tbody>. -->
+        <thead>
+          <!-- <tr>: Table Row — define uma linha na tabela. -->
+          <tr>
+            <!-- <th>: Table Header — célula de cabeçalho.
+                 Negrito e centralizado por padrão.
+                 scope="col" melhora acessibilidade informando
+                 que o cabeçalho pertence a uma coluna. -->
+            <th>Faixa de Nota</th>
+            <th>Situação</th>
+          </tr>
+        </thead>
+
+        <!-- <tbody>: Agrupa as linhas de dados da tabela.
+             Se omitido, o navegador cria um <tbody> implicitamente.
+             Explicitá-lo melhora semântica e permite estilização
+             separada do cabeçalho. -->
+        <tbody>
+          <tr>
+            <!-- <td>: Table Data — célula de dado comum.
+                 &mdash; é a entidade HTML do travessão (—). -->
+            <td>7,0 &mdash; 10,0</td>
+            <td><span class="badge badge-aprovado">Aprovado</span></td>
+          </tr>
+          <tr>
+            <td>5,0 &mdash; 6,9</td>
+            <td><span class="badge badge-recuperacao">Em Recuperação</span></td>
+          </tr>
+          <tr>
+            <td>0,0 &mdash; 4,9</td>
+            <td><span class="badge badge-reprovado">Reprovado</span></td>
+          </tr>
+          <tr>
+            <td>Abaixo de 0 ou acima de 10</td>
+            <td>Nota inválida</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div><!-- fim .card.tabela -->
+
+  </div><!-- fim .container -->
+
+
+  <!-- ============================================================
+       ELEMENTO SEMÂNTICO: <footer>
+       ============================================================
+       Representa o rodapé da página ou de uma seção.
+       Geralmente contém: copyright, links de contato, créditos,
+       mapa do site, política de privacidade, etc.
+       ============================================================ -->
+  <footer>
+    <p style="margin-top: 32px;">Semana 2 &mdash; Full Stack</p>
+  </footer>
+
+  <!--
+    ============================================================
+    ONDE FICARIA O JAVASCRIPT NESTA PÁGINA?
+    ============================================================
+    JavaScript é a linguagem de programação que roda no NAVEGADOR
+    (client-side) e adiciona interatividade às páginas.
+
+    Nesta tarefa, não há JavaScript funcional pois o objetivo
+    é apenas exibir o algoritmo em formato estático.
+
+    Exemplo de como seria o código JS equivalente ao pseudocódigo:
+
+    <script>
+      // 'let' declara uma variável de escopo de bloco (ES6+)
+      let nota;
+
+      // Laço do...while: executa pelo menos uma vez
+      do {
+        // prompt() exibe uma caixa de diálogo para entrada do usuário
+        // parseFloat() converte string para número decimal
+        nota = parseFloat(prompt("Informe a nota do aluno (0 a 10):"));
+
+        // Valida a entrada
+        if (isNaN(nota) || nota < 0 || nota > 10) {
+          alert("Nota inválida! Informe um número entre 0 e 10.");
+          nota = -1; // força o laço a repetir
+        }
+      } while (nota < 0 || nota > 10);
+
+      // Estrutura condicional para classificação
+      if (nota >= 7) {
+        alert("Resultado: Aprovado");
+      } else if (nota >= 5) {
+        alert("Resultado: Em Recuperação");
+      } else {
+        alert("Resultado: Reprovado");
+      }
+    </script>
+
+    ============================================================
+    ONDE FICARIA O PHP NESTA PÁGINA?
+    ============================================================
+    PHP (Hypertext Preprocessor) é uma linguagem que roda no
+    SERVIDOR (server-side). O cliente recebe apenas o HTML final.
+
+    Exemplo de como o PHP processaria um formulário com a nota:
+
+    <?php
+      // Verifica se o formulário foi enviado via POST
+      if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        // Sanitização: remove caracteres perigosos da entrada
+        $nota = filter_input(INPUT_POST, 'nota', FILTER_VALIDATE_FLOAT);
+
+        // Validação
+        if ($nota === false || $nota < 0 || $nota > 10) {
+          echo "<p>Nota inválida. Informe um valor entre 0 e 10.</p>";
+        } else {
+          // Classificação
+          if ($nota >= 7) {
+            echo "<p>Resultado: <strong>Aprovado</strong></p>";
+          } elseif ($nota >= 5) {
+            echo "<p>Resultado: <strong>Em Recuperação</strong></p>";
+          } else {
+            echo "<p>Resultado: <strong>Reprovado</strong></p>";
+          }
+        }
+      }
+    ?>
+
+    Diferença fundamental PHP vs JavaScript:
+      PHP  → Executa no servidor. O usuário nunca vê o código PHP.
+             Acessa banco de dados, arquivos, sessões no servidor.
+      JS   → Executa no navegador do usuário (client-side).
+             Manipula o DOM, cria interatividade sem recarregar a página.
+
+    Full Stack = dominar os dois lados: servidor (PHP/Node/Python)
+                 e cliente (HTML/CSS/JavaScript).
+    ============================================================
+  -->
+
+</body>
+</html>

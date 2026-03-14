@@ -1,0 +1,287 @@
+/* ============================================================
+   SEMANA 5: Estilização
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+/* Navegação de breadcrumb */
+.breadcrumb {
+  padding: 15px 30px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95em;
+}
+
+.breadcrumb a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Seções principais */
+section {
+  padding: 40px 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+section h2 {
+  color: #667eea;
+  font-size: 2em;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 10px;
+}
+
+section > p {
+  font-size: 1.05em;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Cards */
+.card {
+  background: #f9f9f9;
+  border-left: 5px solid #667eea;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background: #f0f0f0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  transform: translateX(5px);
+}
+
+.card h3 {
+  color: #667eea;
+  margin-bottom: 12px;
+  font-size: 1.3em;
+}
+
+.card h4 {
+  color: #764ba2;
+  margin-bottom: 10px;
+}
+
+.card p {
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.card ul {
+  list-style-position: inside;
+  color: #666;
+}
+
+.card li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.card strong {
+  color: #333;
+}
+
+code {
+  background: #e8e8e8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #d63384;
+  font-size: 0.95em;
+}
+
+/* Cards especiais */
+.card.info {
+  border-left-color: #17a2b8;
+  background: #e7f3ff;
+}
+
+.card.info p {
+  font-size: 1.05em;
+  color: #0056b3;
+}
+
+.card.highlight {
+  border-left-color: #ffc107;
+  background: #fff8e1;
+}
+
+.card.highlight p,
+.card.highlight div {
+  color: #856404;
+}
+
+/* Highlight box */
+.highlight {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 15px 0;
+  color: #856404;
+}
+
+/* Trilhas de Estudo */
+.trilha {
+  margin-top: 20px;
+}
+
+.trilha h3 {
+  color: #333;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+/* Checklist */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist label {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checklist label:hover {
+  background: #e8e8e8;
+}
+
+.checklist input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-right: 12px;
+  accent-color: #667eea;
+}
+
+.checklist span {
+  color: #555;
+  font-size: 1em;
+  flex: 1;
+}
+
+.checklist input[type="checkbox"]:checked + span {
+  color: #28a745;
+  text-decoration: line-through;
+}
+
+/* Footer */
+footer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+  font-size: 0.95em;
+}
+
+footer p {
+  margin-bottom: 8px;
+}
+
+footer p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.8em;
+  }
+
+  section {
+    padding: 25px 20px;
+  }
+
+  section h2 {
+    font-size: 1.5em;
+  }
+
+  .container {
+    margin: 10px;
+    border-radius: 8px;
+  }
+
+  .card {
+    padding: 15px;
+    border-left: 4px solid #667eea;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+}
+
+/* Animações */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: slideIn 0.5s ease-out;
+}
+
+section:nth-child(1) .card:nth-child(1) { animation-delay: 0.1s; }
+section:nth-child(1) .card:nth-child(2) { animation-delay: 0.2s; }
+section:nth-child(2) .card:nth-child(1) { animation-delay: 0.3s; }
+section:nth-child(2) .card:nth-child(2) { animation-delay: 0.4s; }

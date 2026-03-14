@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apostila – Semana 2 | Lógica de Programação</title>
+  <style>
+
+    /* ============================================================
+       FONTES
+       Google Fonts carregadas via @import.
+       - Inter      : corpo do texto (legível em telas e impressão)
+       - Fira Code  : trechos de código (monoespaçada)
+       ============================================================ */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    /* ============================================================
+       VARIÁVEIS CSS (CUSTOM PROPERTIES)
+       Definem um "tema" centralizado. Para mudar a paleta de
+       cores basta alterar aqui — todas as referências atualizam.
+       ============================================================ */
+    :root {
+      --cor-primaria:   #1a1a2e;   /* azul-escuro : títulos, destaque */
+      --cor-secundaria: #16213e;   /* azul-médio  : subtítulos         */
+      --cor-acento:     #0f3460;   /* azul-forte  : bordas, linhas     */
+      --cor-destaque:   #e94560;   /* vermelho    : marcadores visuais  */
+      --cor-texto:      #2d2d2d;   /* quase preto : corpo do texto      */
+      --cor-suave:      #555e6e;   /* cinza       : legendas, notas     */
+      --cor-fundo:      #f7f8fc;   /* cinza-claro : fundo da página     */
+      --cor-branco:     #ffffff;
+      --cor-borda:      #dde2ee;
+
+      /* Aprovação / recuperação / reprovação */
+      --verde-bg:    #d4edda;  --verde-txt:    #155724;
+      --amarelo-bg:  #fff3cd;  --amarelo-txt:  #856404;
+      --vermelho-bg: #f8d7da;  --vermelho-txt: #721c24;
+
+      --fonte-corpo:  'Inter', sans-serif;
+      --fonte-codigo: 'Fira Code', 'Courier New', monospace;
+
+      --sombra: 0 2px 12px rgba(0,0,0,0.08);
+      --raio:   8px;
+    }
+
+    /* ============================================================
+       RESET E BASE
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.7;
+      -webkit-print-color-adjust: exact; /* mantém cores na impressão (Chrome) */
+      print-color-adjust: exact;
+    }
+
+    /* ============================================================
+       ESTRUTURA DE PÁGINA (para impressão tipo livro)
+       ============================================================ */
+    .pagina {
+      width: 210mm;           /* largura A4 */
+      min-height: 297mm;      /* altura A4  */
+      margin: 0 auto 32px;
+      background: var(--cor-branco);
+      box-shadow: var(--sombra);
+      padding: 20mm 20mm 24mm;
+      position: relative;
+    }
+
+    /* ============================================================
+       CAPA
+       ============================================================ */
+    .capa {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 297mm;
+      padding: 20mm;
+      background: linear-gradient(160deg, var(--cor-primaria) 0%, var(--cor-acento) 100%);
+      color: var(--cor-branco);
+      text-align: center;
+    }
+
+    .capa-logo {
+      width: 64px;
+      height: 64px;
+      background: var(--cor-destaque);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(233,69,96,0.4);
+    }
+
+    .capa-curso {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 12px;
+    }
+
+    .capa h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .capa h2 {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 48px;
+    }
+
+    .capa-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--cor-destaque);
+      margin: 0 auto 48px;
+      border-radius: 2px;
+    }
+
+    .capa-meta {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 2;
+    }
+
+    .capa-meta strong {
+      color: rgba(255,255,255,0.9);
+      font-weight: 500;
+    }
+
+    .capa-rodape {
+      position: absolute;
+      bottom: 24mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ============================================================
+       SUMÁRIO
+       ============================================================ */
+    .sumario h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cor-destaque);
+      margin-bottom: 32px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--cor-borda);
+    }
+
+    .sumario-titulo-pagina {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cor-primaria);
+      margin-bottom: 40px;
+    }
+
+    .sumario ol {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sumario ol li {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      font-size: 0.95rem;
+      padding: 6px 0;
+      border-bottom: 1px dotted var(--cor-borda);
+    }
+
+    .sumario ol li .num {
+      min-width: 32px;
+      font-weight: 700;
+      color: var(--cor-destaque);
+    }
+
+    .sumario ol li .titulo {
+      flex: 1;
+      color: var(--cor-texto);
+    }
+
+    .sumario ol li .sub {
+      font-size: 0.82rem;
+      color: var(--cor-suave);
+      font-style: italic;
+    }
+
+    /* ============================================================
+       CABEÇALHO DE SEÇÃO (dentro das páginas de conteúdo)
+       ============================================================ */
+    .secao-header {
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--cor-primaria);
+    }
+
+    .secao-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cor-destaque);
+      margin-bottom: 6px;
+    }
+
+    .secao-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--cor-primaria);
+      line-height: 1.25;
+    }
+
+    .secao-header p {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: var(--cor-suave);
+    }
+
+    /* ============================================================
+       TIPOGRAFIA GERAL
+       ============================================================ */
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cor-secundaria);
+      margin: 28px 0 10px;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--cor-primaria);
+      margin: 20px 0 8px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      font-size: 0.93rem;
+    }
+
+    ul, ol {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    li {
+      font-size: 0.93rem;
+      margin-bottom: 5px;
+      line-height: 1.6;
+    }
+
+    strong { font-weight: 600; color: var(--cor-primaria); }
+    em     { font-style: italic; color: var(--cor-suave); }
+    code   { font-family: var(--fonte-codigo); font-size: 0.84rem;
+             background: #eef1f8; padding: 1px 5px; border-radius: 4px;
+             color: #c0392b; }
+
+    /* ============================================================
+       COMPONENTES
+       ============================================================ */
+
+    /* --- Caixa de destaque (callout) --- */
+    .callout {
+      border-left: 4px solid var(--cor-acento);
+      background: #f0f3fb;
+      border-radius: 0 var(--raio) var(--raio) 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .callout.dica   { border-color: #27ae60; background: #f0faf4; }
+    .callout.aviso  { border-color: #f39c12; background: #fffbf0; }
+    .callout.perigo { border-color: var(--cor-destaque); background: #fff5f7; }
+
+    .callout-titulo {
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--cor-primaria);
+    }
+
+    /* --- Badge de status --- */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .badge-ap  { background: var(--verde-bg);    color: var(--verde-txt); }
+    .badge-rec { background: var(--amarelo-bg);  color: var(--amarelo-txt); }
+    .badge-rep { background: var(--vermelho-bg); color: var(--vermelho-txt); }
+
+    /* --- Tabela de classificação --- */
+    .tabela-notas {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 16px 0;
+    }
+    .tabela-notas th {
+      background: var(--cor-primaria);
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .tabela-notas td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--cor-borda);
+    }
+    .tabela-notas tr:nth-child(even) td { background: #f7f8fc; }
+
+    /* --- Tabela de operadores --- */
+    .tabela-ops {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin: 12px 0 20px;
+    }
+    .tabela-ops th {
+      background: var(--cor-acento);
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .tabela-ops td {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--cor-borda);
+      vertical-align: top;
+    }
+    .tabela-ops tr:nth-child(even) td { background: #f7f8fc; }
+    .tabela-ops td:first-child { font-family: var(--fonte-codigo); font-weight: 500; color: #c0392b; text-align: center; }
+
+    /* --- Bloco de código --- */
+    .codigo-bloco {
+      background: #1e1e2e;
+      border-radius: var(--raio);
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: var(--sombra);
+      font-size: 0.82rem;
+    }
+
+    .codigo-header {
+      background: #2a2a3e;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--fonte-codigo);
+      font-size: 0.78rem;
+      color: #888;
+    }
+
+    .codigo-header .dots span {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dots .d1 { background: #ff5f56; }
+    .dots .d2 { background: #ffbd2e; }
+    .dots .d3 { background: #27c93f; }
+
+    .codigo-header .nome { color: #ccc; margin-left: 8px; }
+
+    .codigo-bloco pre {
+      padding: 20px 24px;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.85;
+      color: #cdd6f4;
+      font-family: var(--fonte-codigo);
+    }
+
+    /* Syntax highlight tokens */
+    .kw  { color: #cba6f7; font-weight: 500; }   /* keyword  */
+    .fn  { color: #89b4fa; }                       /* function */
+    .str { color: #a6e3a1; }                       /* string   */
+    .num { color: #fab387; }                       /* number   */
+    .cm  { color: #6c7086; font-style: italic; }  /* comment  */
+    .op  { color: #89dceb; }                       /* operator */
+    .tp  { color: #f9e2af; }                       /* type     */
+
+    /* --- Tabela comparativa de linguagens --- */
+    .tabela-lang {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.81rem;
+      margin: 12px 0 20px;
+    }
+    .tabela-lang th {
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--cor-borda);
+      color: var(--cor-primaria);
+    }
+    .tabela-lang th:first-child { background: #f0f3fb; }
+    .tabela-lang td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--cor-borda);
+      font-family: var(--fonte-codigo);
+      color: #333;
+      vertical-align: top;
+    }
+    .tabela-lang td:first-child {
+      font-family: var(--fonte-corpo);
+      font-weight: 600;
+      color: var(--cor-primaria);
+      background: #f7f8fc;
+      font-size: 0.83rem;
+    }
+    .tabela-lang tr:hover td { background: #f0f3fb; }
+
+    /* --- Linha separadora --- */
+    hr {
+      border: none;
+      border-top: 1px solid var(--cor-borda);
+      margin: 24px 0;
+    }
+
+    /* --- Rodapé de página --- */
+    .rodape-pagina {
+      position: absolute;
+      bottom: 10mm;
+      left: 20mm;
+      right: 20mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: #aaa;
+      border-top: 1px solid var(--cor-borda);
+      padding-top: 8px;
+    }
+
+    /* --- Grid de conceitos --- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .conceito-card {
+      border: 1px solid var(--cor-borda);
+      border-radius: var(--raio);
+      padding: 14px;
+      background: #fff;
+    }
+
+    .conceito-card h5 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--cor-destaque);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .conceito-card p {
+      font-size: 0.83rem;
+      color: var(--cor-suave);
+      margin: 0;
+    }
+
+    /* ============================================================
+       IMPRESSÃO — @media print
+       Remove sombras, centraliza, garante quebras de página
+       corretas ao gerar PDF via Ctrl+P / Salvar como PDF.
+       ============================================================ */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .pagina {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+        padding: 15mm 18mm 20mm;
+        page-break-after: always; /* cada .pagina em uma folha */
+      }
+
+      .capa {
+        page-break-after: always;
+      }
+
+      .codigo-bloco {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+
+      /* Evita quebra de página dentro de blocos de código */
+      pre, .callout, .conceito-card, table {
+        page-break-inside: avoid;
+      }
+    }
+
+    /* ============================================================
+       BOTÃO DE IMPRESSÃO (não aparece no PDF)
+       ============================================================ */
+    .btn-imprimir {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--cor-destaque);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: var(--fonte-corpo);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(233,69,96,0.4);
+      z-index: 100;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-imprimir:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(233,69,96,0.5);
+    }
+    @media print { .btn-imprimir { display: none; } }
+
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     BOTÃO FLUTUANTE PARA IMPRIMIR / SALVAR COMO PDF
+     Ao clicar, abre o diálogo de impressão do navegador.
+     Em Chrome: escolha "Salvar como PDF" no destino.
+     ============================================================ -->
+<button class="btn-imprimir" onclick="window.print()">
+  Salvar como PDF
+</button>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 1 — CAPA                                        ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina capa">
+
+  <div class="capa-logo">&#60;/&#62;</div>
+
+  <p class="capa-curso">Full Stack · Trilha de Desenvolvimento Web</p>
+
+  <h1>Lógica de<br>Programação</h1>
+  <h2>Algoritmos, Variáveis, Operadores e Controle de Fluxo</h2>
+
+  <div class="capa-divider"></div>
+
+  <div class="capa-meta">
+    <strong>Semana 2</strong> — Aula 2<br>
+    Tarefa: Algoritmo de Verificação de Notas<br>
+    Linguagens abordadas: Pseudocódigo · JavaScript · PHP<br>
+    Formato de entrega: Página HTML estática
+  </div>
+
+  <div class="capa-rodape">
+    Este material é um complemento da mentoria e foi produzido para fins didáticos.
+  </div>
+
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 2 — SUMÁRIO                                     ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina sumario">
+
+  <p class="secao-label">Índice</p>
+  <h2 class="sumario-titulo-pagina">Sumário</h2>
+
+  <ol>
+    <li>
+      <span class="num">01</span>
+      <span class="titulo">Resumo da Aula</span>
+      <span class="sub">&nbsp;— o que foi visto na mentoria</span>
+    </li>
+    <li>
+      <span class="num">02</span>
+      <span class="titulo">Algoritmos &amp; Representações</span>
+      <span class="sub">&nbsp;— natural, fluxograma, pseudocódigo, linguagem</span>
+    </li>
+    <li>
+      <span class="num">03</span>
+      <span class="titulo">Variáveis, Constantes e Tipos de Dados</span>
+      <span class="sub">&nbsp;— memória RAM, tipagem, tipos primitivos</span>
+    </li>
+    <li>
+      <span class="num">04</span>
+      <span class="titulo">Operadores</span>
+      <span class="sub">&nbsp;— aritméticos, relacionais e lógicos</span>
+    </li>
+    <li>
+      <span class="num">05</span>
+      <span class="titulo">Controle de Fluxo</span>
+      <span class="sub">&nbsp;— if/else, for, while, do...while</span>
+    </li>
+    <li>
+      <span class="num">06</span>
+      <span class="titulo">A Tarefa Explicada</span>
+      <span class="sub">&nbsp;— regras de negócio e solução em linguagem natural</span>
+    </li>
+    <li>
+      <span class="num">07</span>
+      <span class="titulo">Pseudocódigo Comentado</span>
+      <span class="sub">&nbsp;— lógica da tarefa passo a passo</span>
+    </li>
+    <li>
+      <span class="num">08</span>
+      <span class="titulo">Equivalências entre Linguagens</span>
+      <span class="sub">&nbsp;— pseudocódigo → JavaScript → PHP → Python</span>
+    </li>
+    <li>
+      <span class="num">09</span>
+      <span class="titulo">O HTML da Entrega</span>
+      <span class="sub">&nbsp;— estrutura e tags utilizadas</span>
+    </li>
+    <li>
+      <span class="num">10</span>
+      <span class="titulo">O CSS da Entrega</span>
+      <span class="sub">&nbsp;— seletores, box model, flexbox</span>
+    </li>
+  </ol>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Lógica de Programação</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 3 — RESUMO DA AULA                              ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 01</p>
+    <h2>Resumo da Aula</h2>
+    <p>O que foi abordado na segunda mentoria da trilha Full Stack.</p>
+  </div>
+
+  <p>
+    A segunda aula da mentoria focou nos <strong>fundamentos da Lógica de Programação</strong>,
+    base para o desenvolvimento de qualquer sistema. O objetivo central é aprender a
+    transcrever a resolução de problemas para uma linguagem que o computador compreenda.
+  </p>
+
+  <h3>Tópicos abordados</h3>
+
+  <div class="grid-2">
+    <div class="conceito-card">
+      <h5>Algoritmos</h5>
+      <p>Sequência ordenada de passos para solucionar um problema, seguindo o ciclo Entrada → Processamento → Saída.</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Variáveis &amp; Constantes</h5>
+      <p>Espaços na memória RAM para armazenar dados. Variáveis mudam; constantes são fixas.</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Tipos de Dados</h5>
+      <p>Inteiro, Real/Float, String, Char e Booleano. Tipagem estática (Java) vs. dinâmica (PHP, JS).</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Operadores</h5>
+      <p>Aritméticos (+, -, *, /, %, **), relacionais (&gt;, &lt;, ==, ===) e lógicos (&amp;&amp;, ||, !).</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Controle de Fluxo</h5>
+      <p>if/else para decisões. for, while e do...while para repetições controladas.</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Tarefa Prática</h5>
+      <p>Algoritmo de verificação de notas: valida entrada (0–10) e classifica o aluno.</p>
+    </div>
+  </div>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 Sequência correta</p>
+    <p>Sempre valide a entrada <strong>antes</strong> de processá-la.
+    Não faz sentido classificar uma nota que pode ser inválida.
+    A ordem das instruções é tão importante quanto a lógica em si.</p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 01 · Resumo da Aula</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 4 — ALGORITMOS E REPRESENTAÇÕES                 ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 02</p>
+    <h2>Algoritmos &amp; Representações</h2>
+    <p>As quatro formas de descrever a solução de um problema.</p>
+  </div>
+
+  <p>
+    Um <strong>algoritmo</strong> é uma sequência finita, ordenada e não ambígua de passos
+    que, quando seguida, resolve um problema. Todo algoritmo segue o ciclo:
+  </p>
+
+  <div class="callout">
+    <p><strong>Entrada</strong> → dados fornecidos pelo usuário ou sistema<br>
+    <strong>Processamento</strong> → transformação dos dados por meio de regras<br>
+    <strong>Saída</strong> → resultado apresentado ao usuário</p>
+  </div>
+
+  <h3>Formas de Representação</h3>
+
+  <h4>1. Linguagem Natural</h4>
+  <p>Descrição em português (ou qualquer idioma) sem regras formais de sintaxe.
+  Vantagem: fácil de ler. Desvantagem: ambígua — frases podem ser interpretadas de formas diferentes.</p>
+  <div class="callout">
+    <em>Exemplo:</em> "Se a nota for maior ou igual a 7, o aluno está aprovado."
+  </div>
+
+  <h4>2. Fluxograma</h4>
+  <p>Representação visual com símbolos geométricos padronizados. Facilita visualizar
+  o caminho percorrido pelo programa. Não vimos exemplos visuais nesta apostila, mas os símbolos básicos são:</p>
+  <ul>
+    <li><strong>Oval</strong> → Início / Fim</li>
+    <li><strong>Retângulo</strong> → Processamento (instrução)</li>
+    <li><strong>Losango</strong> → Decisão (condição)</li>
+    <li><strong>Paralelogramo</strong> → Entrada / Saída de dados</li>
+  </ul>
+
+  <h4>3. Pseudocódigo</h4>
+  <p>Linguagem intermediária: usa estruturas formais (variáveis, SE, REPITA, ESCREVA) mas
+  sem a sintaxe rígida de uma linguagem real. É o mais próximo do código sem ser código.
+  Esta apostila utiliza pseudocódigo para descrever o algoritmo da tarefa.</p>
+
+  <h4>4. Linguagem de Programação</h4>
+  <p>Código executável com sintaxe precisa. Um erro de sintaxe impede a execução.
+  Exemplos: JavaScript, PHP, Python, Java, C#. Cada uma tem suas próprias regras,
+  mas a lógica por trás é a mesma — por isso aprender lógica primeiro é fundamental.</p>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 Analogia</p>
+    <p>Pense na lógica como a <strong>receita de bolo</strong> e na linguagem de programação como
+    o <strong>fogão</strong>. A receita não muda — você pode preparar o mesmo bolo em qualquer fogão.
+    Da mesma forma, a lógica do algoritmo é a mesma em qualquer linguagem.</p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 02 · Algoritmos</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 5 — VARIÁVEIS, CONSTANTES E TIPOS              ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 03</p>
+    <h2>Variáveis, Constantes e Tipos de Dados</h2>
+    <p>Como os programas armazenam e gerenciam informações na memória.</p>
+  </div>
+
+  <h3>Variáveis e Constantes</h3>
+  <p>
+    São <strong>espaços reservados na memória RAM</strong> do computador, identificados por um nome
+    (identificador), que guardam valores durante a execução do programa.
+  </p>
+
+  <div class="grid-2">
+    <div class="conceito-card">
+      <h5>Variável</h5>
+      <p>O valor pode ser <strong>alterado</strong> durante a execução.
+      Exemplo: a nota do aluno — recebemos do usuário e pode mudar se ele digitar errado.</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Constante</h5>
+      <p>O valor é <strong>fixo</strong> após a definição.
+      Exemplos: <code>PI = 3.14159</code>, <code>NOTA_APROVACAO = 7</code>,
+      <code>NOTA_MAX = 10</code>.</p>
+    </div>
+  </div>
+
+  <h3>Tipagem: Estática vs. Dinâmica</h3>
+  <p>A <strong>tipagem</strong> define quando e como o tipo de dado de uma variável é verificado:</p>
+  <ul>
+    <li><strong>Estática (Java, C#):</strong> o tipo é declarado explicitamente no código e verificado em tempo de compilação. Ex: <code>double nota = 8.5;</code></li>
+    <li><strong>Dinâmica (PHP, JavaScript, Python):</strong> o tipo é inferido pelo valor atribuído, em tempo de execução. Ex: <code>$nota = 8.5;</code> — PHP entende que é um float.</li>
+  </ul>
+
+  <h3>Tipos de Dados Primitivos</h3>
+
+  <table class="tabela-ops">
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Descrição</th>
+        <th>Exemplos de valores</th>
+        <th>Em JS / PHP</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>int</td>
+        <td>Número inteiro (sem decimais)</td>
+        <td>0, 5, -3, 100</td>
+        <td><code>let x = 5</code> / <code>$x = 5</code></td>
+      </tr>
+      <tr>
+        <td>float / real</td>
+        <td>Número com casas decimais</td>
+        <td>3.14, 8.5, -0.75</td>
+        <td><code>let n = 8.5</code> / <code>$n = 8.5</code></td>
+      </tr>
+      <tr>
+        <td>string</td>
+        <td>Sequência de caracteres (texto)</td>
+        <td>"Aprovado", "Usuário"</td>
+        <td><code>"texto"</code> / <code>'texto'</code></td>
+      </tr>
+      <tr>
+        <td>char</td>
+        <td>Um único caractere</td>
+        <td>'A', 'z', '9'</td>
+        <td>Em JS/PHP, é uma string de tamanho 1</td>
+      </tr>
+      <tr>
+        <td>boolean</td>
+        <td>Verdadeiro ou falso</td>
+        <td>true, false</td>
+        <td><code>true</code> / <code>false</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p class="callout-titulo">📌 Por que tipos importam?</p>
+    <p>
+      O tipo determina quanta memória é usada e quais operações são permitidas.
+      <code>"5" + 3</code> em JavaScript resulta em <code>"53"</code> (concatenação de string),
+      não em <code>8</code>. Entender tipos evita esse tipo de bug difícil de depurar.
+      Use <code>parseFloat()</code> ou <code>parseInt()</code> para converter strings em números.
+    </p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 03 · Variáveis e Tipos</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 6 — OPERADORES                                  ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 04</p>
+    <h2>Operadores</h2>
+    <p>Os meios para manipular dados e construir expressões lógicas.</p>
+  </div>
+
+  <h3>Operadores Aritméticos</h3>
+  <table class="tabela-ops">
+    <thead><tr><th>Operador</th><th>Operação</th><th>Exemplo</th><th>Resultado</th></tr></thead>
+    <tbody>
+      <tr><td>+</td><td>Adição</td><td><code>5 + 3</code></td><td>8</td></tr>
+      <tr><td>-</td><td>Subtração</td><td><code>5 - 3</code></td><td>2</td></tr>
+      <tr><td>*</td><td>Multiplicação</td><td><code>5 * 3</code></td><td>15</td></tr>
+      <tr><td>/</td><td>Divisão</td><td><code>10 / 4</code></td><td>2.5</td></tr>
+      <tr><td>%</td><td>Módulo (resto da divisão inteira)</td><td><code>10 % 3</code></td><td>1</td></tr>
+      <tr><td>**</td><td>Exponenciação (JS/Python)</td><td><code>2 ** 8</code></td><td>256</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 Usos práticos do módulo (%)</p>
+    <p>Verificar se número é par: <code>n % 2 === 0</code><br>
+    Verificar se é divisível por X: <code>n % X === 0</code><br>
+    Ciclar em um índice de array: <code>index = (index + 1) % array.length</code></p>
+  </div>
+
+  <h3>Operadores Relacionais</h3>
+  <table class="tabela-ops">
+    <thead><tr><th>Operador</th><th>Significado</th><th>JS / PHP</th><th>Exemplo verdadeiro</th></tr></thead>
+    <tbody>
+      <tr><td>==</td><td>Igual (valor)</td><td>==</td><td><code>"7" == 7</code> → true (JS)</td></tr>
+      <tr><td>===</td><td>Estritamente igual (valor + tipo)</td><td>=== / ===</td><td><code>7 === 7</code> → true</td></tr>
+      <tr><td>!=</td><td>Diferente (valor)</td><td>!= / !=</td><td><code>5 != 7</code> → true</td></tr>
+      <tr><td>!==</td><td>Estritamente diferente</td><td>!== / !==</td><td><code>"7" !== 7</code> → true</td></tr>
+      <tr><td>&gt;</td><td>Maior que</td><td>&gt;</td><td><code>8 &gt; 7</code> → true</td></tr>
+      <tr><td>&lt;</td><td>Menor que</td><td>&lt;</td><td><code>3 &lt; 5</code> → true</td></tr>
+      <tr><td>&gt;=</td><td>Maior ou igual</td><td>&gt;=</td><td><code>7 &gt;= 7</code> → true</td></tr>
+      <tr><td>&lt;=</td><td>Menor ou igual</td><td>&lt;=</td><td><code>5 &lt;= 6.9</code> → true</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout perigo">
+    <p class="callout-titulo">⛔ Armadilha clássica: == vs ===</p>
+    <p>Em JavaScript, <code>==</code> faz <strong>coerção de tipo</strong> (converte um dos lados antes de comparar).
+    <code>"7" == 7</code> é <code>true</code>. Isso pode causar bugs silenciosos.
+    <strong>Use sempre <code>===</code></strong> para comparações seguras em JavaScript e PHP.</p>
+  </div>
+
+  <h3>Operadores Lógicos</h3>
+  <table class="tabela-ops">
+    <thead><tr><th>Operador</th><th>Nome</th><th>Regra</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr><td>&amp;&amp;</td><td>E (AND)</td><td>Verdadeiro somente se <strong>todos</strong> forem verdadeiros</td><td><code>nota &gt;= 0 &amp;&amp; nota &lt;= 10</code></td></tr>
+      <tr><td>||</td><td>OU (OR)</td><td>Verdadeiro se <strong>pelo menos um</strong> for verdadeiro</td><td><code>nota &lt; 0 || nota &gt; 10</code></td></tr>
+      <tr><td>!</td><td>NÃO (NOT)</td><td><strong>Inverte</strong> o valor lógico</td><td><code>!valido</code> → se valido=true, retorna false</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 04 · Operadores</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 7 — CONTROLE DE FLUXO                          ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 05</p>
+    <h2>Controle de Fluxo</h2>
+    <p>Estruturas que permitem desvios condicionais e repetições no programa.</p>
+  </div>
+
+  <h3>Decisão: if / else if / else</h3>
+  <p>Permite executar blocos de código diferentes dependendo de uma condição.</p>
+
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">decisao.js</span>
+    </div>
+    <pre><span class="cm">// Estrutura básica</span>
+<span class="kw">if</span> (condicao) {
+  <span class="cm">// executado se condicao for VERDADEIRA</span>
+} <span class="kw">else if</span> (outraCondicao) {
+  <span class="cm">// executado se a primeira for falsa E esta for verdadeira</span>
+} <span class="kw">else</span> {
+  <span class="cm">// executado se TODAS as condições anteriores forem falsas</span>
+}
+
+<span class="cm">// Aplicado à tarefa:</span>
+<span class="kw">if</span> (nota <span class="op">>=</span> <span class="num">7</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Aprovado"</span>);
+} <span class="kw">else if</span> (nota <span class="op">>=</span> <span class="num">5</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Em Recuperação"</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="str">"Reprovado"</span>);
+}</pre>
+  </div>
+
+  <h3>Repetição: for, while e do...while</h3>
+  <table class="tabela-ops">
+    <thead><tr><th style="width:18%">Loop</th><th>Quando usar</th><th>Executa ao menos uma vez?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>for</td>
+        <td>Quando se sabe <strong>quantas vezes</strong> repetir (contador fixo)</td>
+        <td>Não (se o contador já não satisfaz a condição)</td>
+      </tr>
+      <tr>
+        <td>while</td>
+        <td>Quando a condição é verificada <strong>antes</strong> de cada iteração</td>
+        <td>Não (se condição inicial for falsa, nunca executa)</td>
+      </tr>
+      <tr>
+        <td>do...while</td>
+        <td>Quando o bloco deve rodar <strong>ao menos uma vez</strong> antes da verificação</td>
+        <td><strong>Sim</strong> — sempre executa ao menos uma vez</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">loops.js — do...while (usado na tarefa)</span>
+    </div>
+    <pre><span class="cm">// do...while: ideal para validação de entrada de dados.
+// O usuário DEVE fornecer uma entrada ao menos uma vez.</span>
+<span class="kw">let</span> nota;
+
+<span class="kw">do</span> {
+  nota <span class="op">=</span> <span class="fn">parseFloat</span>(<span class="fn">prompt</span>(<span class="str">"Informe a nota (0 a 10):"</span>));
+
+  <span class="kw">if</span> (nota <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> nota <span class="op">&gt;</span> <span class="num">10</span> <span class="op">||</span> <span class="fn">isNaN</span>(nota)) {
+    <span class="fn">alert</span>(<span class="str">"Valor inválido. Tente novamente."</span>);
+  }
+} <span class="kw">while</span> (nota <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> nota <span class="op">&gt;</span> <span class="num">10</span> <span class="op">||</span> <span class="fn">isNaN</span>(nota));
+
+<span class="cm">// Após o loop, temos certeza que nota está entre 0 e 10.</span></pre>
+  </div>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 Por que do...while para validação?</p>
+    <p>Com <code>while</code>, precisaríamos inicializar <code>nota</code> com um valor inválido artificial
+    (como <code>-1</code>) para forçar a primeira execução. Com <code>do...while</code>, a leitura do
+    usuário acontece naturalmente antes da verificação — código mais limpo e intuitivo.</p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 05 · Controle de Fluxo</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 8 — A TAREFA EXPLICADA                         ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 06</p>
+    <h2>A Tarefa Explicada</h2>
+    <p>Decomposição do problema em regras de negócio e solução em linguagem natural.</p>
+  </div>
+
+  <h3>O Problema</h3>
+  <p>Criar um algoritmo que receba a nota de um aluno, valide se está no intervalo
+  permitido e classifique o aluno em uma das três situações.</p>
+
+  <h3>Regras de Negócio</h3>
+
+  <table class="tabela-notas">
+    <thead>
+      <tr>
+        <th>Condição</th>
+        <th>Faixa de Nota</th>
+        <th>Situação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>nota &lt; 0 ou nota &gt; 10</td>
+        <td>Fora do intervalo</td>
+        <td>Nota inválida — solicitar novamente</td>
+      </tr>
+      <tr>
+        <td>nota &gt;= 7</td>
+        <td>7,0 — 10,0</td>
+        <td><span class="badge badge-ap">Aprovado</span></td>
+      </tr>
+      <tr>
+        <td>nota &gt;= 5 (e &lt; 7)</td>
+        <td>5,0 — 6,9</td>
+        <td><span class="badge badge-rec">Em Recuperação</span></td>
+      </tr>
+      <tr>
+        <td>nota &lt; 5</td>
+        <td>0,0 — 4,9</td>
+        <td><span class="badge badge-rep">Reprovado</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Solução em Linguagem Natural (passo a passo)</h3>
+
+  <ol>
+    <li><strong>Início do algoritmo.</strong></li>
+    <li><strong>Entrada:</strong> Solicitar ao usuário que informe a nota do aluno.</li>
+    <li>
+      <strong>Validação:</strong> Verificar se a nota está entre 0 e 10 (inclusive).
+      <ul>
+        <li>Se estiver <em>fora</em> do intervalo: exibir mensagem de erro e voltar ao passo 2.</li>
+        <li>Se estiver dentro: continuar para o passo 4.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Classificação:</strong> Verificar a faixa da nota na seguinte ordem:
+      <ul>
+        <li>Se nota ≥ 7 → <span class="badge badge-ap">Aprovado</span></li>
+        <li>Caso contrário, se nota ≥ 5 → <span class="badge badge-rec">Em Recuperação</span></li>
+        <li>Caso contrário → <span class="badge badge-rep">Reprovado</span></li>
+      </ul>
+    </li>
+    <li><strong>Saída:</strong> Exibir o resultado da classificação.</li>
+    <li><strong>Fim do algoritmo.</strong></li>
+  </ol>
+
+  <div class="callout">
+    <p class="callout-titulo">📌 Por que a ordem das condições importa?</p>
+    <p>
+      Na classificação, verificamos <code>nota &gt;= 7</code> <strong>primeiro</strong>.
+      Se chegamos ao <code>else if (nota &gt;= 5)</code>, já sabemos — pelo fluxo — que
+      <code>nota &lt; 7</code>. Não precisamos escrever <code>nota &gt;= 5 &amp;&amp; nota &lt; 7</code>.
+      Isso é <strong>uso eficiente do controle de fluxo</strong>: condições anteriores já descartam casos.
+    </p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 06 · A Tarefa</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 9 — PSEUDOCÓDIGO COMENTADO                     ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 07</p>
+    <h2>Pseudocódigo Comentado</h2>
+    <p>A lógica da tarefa linha a linha, com explicações de cada estrutura.</p>
+  </div>
+
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">verificacao-notas.pseudo</span>
+    </div>
+    <pre><span class="kw">ALGORITMO</span> VerificacaoDeNota
+<span class="cm">  // Nomear o algoritmo é boa prática de documentação.</span>
+
+  <span class="kw">VARIÁVEL</span> nota: <span class="tp">REAL</span>
+  <span class="cm">  // Declaramos a variável antes de usá-la.
+  // Tipo REAL = aceita números decimais (ex: 6.5, 7.0).
+  // Em linguagens dinâmicas (JS/PHP) esta linha não é
+  // necessária — a variável é criada ao receber o valor.</span>
+
+  <span class="kw">REPITA</span>
+  <span class="cm">    // Início do laço de pós-condição (do...while).
+    // O bloco dentro de REPITA executa ao menos UMA vez
+    // antes de a condição ser verificada no ATÉ QUE.</span>
+
+    <span class="fn">ESCREVA</span>(<span class="str">"Informe a nota do aluno (0 a 10): "</span>)
+    <span class="fn">LEIA</span>(nota)
+    <span class="cm">    // ESCREVA = console.log / echo / print
+    // LEIA    = prompt() / $_POST / input()</span>
+
+    <span class="kw">SE</span> (nota <span class="op">&lt;</span> <span class="num">0</span> <span class="kw">OU</span> nota <span class="op">&gt;</span> <span class="num">10</span>) <span class="kw">ENTÃO</span>
+      <span class="fn">ESCREVA</span>(<span class="str">"Nota inválida. Informe um valor entre 0 e 10."</span>)
+    <span class="kw">FIM SE</span>
+    <span class="cm">    // Se a nota é inválida, avisamos e o laço reinicia.</span>
+
+  <span class="kw">ATÉ QUE</span> (nota <span class="op">&gt;=</span> <span class="num">0</span> <span class="kw">E</span> nota <span class="op">&lt;=</span> <span class="num">10</span>)
+  <span class="cm">  // O laço PARA quando nota estiver no intervalo [0, 10].
+  // Enquanto a nota for inválida, o laço continua.</span>
+
+  <span class="kw">SE</span> (nota <span class="op">&gt;=</span> <span class="num">7</span>) <span class="kw">ENTÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Aprovado"</span>)
+
+  <span class="kw">SENÃO SE</span> (nota <span class="op">&gt;=</span> <span class="num">5</span>) <span class="kw">ENTÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Em Recuperação"</span>)
+    <span class="cm">    // Aqui já sabemos que nota < 7 (fluxo garante).
+    // Portanto, nota >= 5 implica 5 <= nota < 7.</span>
+
+  <span class="kw">SENÃO</span>
+    <span class="fn">ESCREVA</span>(<span class="str">"Resultado: Reprovado"</span>)
+    <span class="cm">    // Todos os casos restantes: nota < 5.</span>
+
+  <span class="kw">FIM SE</span>
+
+<span class="kw">FIM ALGORITMO</span></pre>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 07 · Pseudocódigo</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 10 — EQUIVALÊNCIAS ENTRE LINGUAGENS            ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 08</p>
+    <h2>Equivalências entre Linguagens</h2>
+    <p>O mesmo algoritmo escrito em Pseudocódigo, JavaScript, PHP e Python.</p>
+  </div>
+
+  <h3>Tabela de Correspondências</h3>
+
+  <table class="tabela-lang">
+    <thead>
+      <tr>
+        <th>Conceito</th>
+        <th>Pseudocódigo</th>
+        <th>JavaScript</th>
+        <th>PHP</th>
+        <th>Python</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Variável</td>
+        <td>VARIÁVEL x: REAL</td>
+        <td>let x</td>
+        <td>$x</td>
+        <td>x = 0</td>
+      </tr>
+      <tr>
+        <td>Entrada</td>
+        <td>LEIA(x)</td>
+        <td>prompt()</td>
+        <td>$_POST['x']</td>
+        <td>input()</td>
+      </tr>
+      <tr>
+        <td>Saída</td>
+        <td>ESCREVA("...")</td>
+        <td>console.log()</td>
+        <td>echo "..."</td>
+        <td>print()</td>
+      </tr>
+      <tr>
+        <td>Se / Senão</td>
+        <td>SE ... SENÃO</td>
+        <td>if ... else</td>
+        <td>if ... else</td>
+        <td>if ... else</td>
+      </tr>
+      <tr>
+        <td>Senão Se</td>
+        <td>SENÃO SE</td>
+        <td>else if</td>
+        <td>elseif</td>
+        <td>elif</td>
+      </tr>
+      <tr>
+        <td>Repita / Até</td>
+        <td>REPITA...ATÉ QUE</td>
+        <td>do...while</td>
+        <td>do...while</td>
+        <td>(while c/ flag)</td>
+      </tr>
+      <tr>
+        <td>Lógico E</td>
+        <td>E</td>
+        <td>&amp;&amp;</td>
+        <td>&amp;&amp;</td>
+        <td>and</td>
+      </tr>
+      <tr>
+        <td>Lógico OU</td>
+        <td>OU</td>
+        <td>||</td>
+        <td>||</td>
+        <td>or</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Classificação em JavaScript</h3>
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">classificacao.js</span>
+    </div>
+    <pre><span class="kw">let</span> nota;
+<span class="kw">do</span> {
+  nota <span class="op">=</span> <span class="fn">parseFloat</span>(<span class="fn">prompt</span>(<span class="str">"Nota (0-10):"</span>));
+} <span class="kw">while</span> (<span class="fn">isNaN</span>(nota) <span class="op">||</span> nota <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> nota <span class="op">&gt;</span> <span class="num">10</span>);
+
+<span class="kw">if</span>      (nota <span class="op">&gt;=</span> <span class="num">7</span>) <span class="fn">alert</span>(<span class="str">"Aprovado"</span>);
+<span class="kw">else if</span> (nota <span class="op">&gt;=</span> <span class="num">5</span>) <span class="fn">alert</span>(<span class="str">"Em Recuperação"</span>);
+<span class="kw">else</span>               <span class="fn">alert</span>(<span class="str">"Reprovado"</span>);</pre>
+  </div>
+
+  <h3>Classificação em PHP</h3>
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">classificacao.php</span>
+    </div>
+    <pre><span class="cm">&lt;?php</span>
+<span class="cm">// PHP processa no servidor. Recebe a nota via formulário HTML.</span>
+<span class="kw">if</span> (<span class="op">$_SERVER</span>[<span class="str">"REQUEST_METHOD"</span>] <span class="op">===</span> <span class="str">"POST"</span>) {
+  <span class="op">$nota</span> <span class="op">=</span> <span class="fn">filter_input</span>(INPUT_POST, <span class="str">'nota'</span>, FILTER_VALIDATE_FLOAT);
+
+  <span class="kw">if</span> (<span class="op">$nota</span> <span class="op">===</span> <span class="kw">false</span> <span class="op">||</span> <span class="op">$nota</span> <span class="op">&lt;</span> <span class="num">0</span> <span class="op">||</span> <span class="op">$nota</span> <span class="op">&gt;</span> <span class="num">10</span>) {
+    <span class="kw">echo</span> <span class="str">"Nota inválida."</span>;
+  } <span class="kw">elseif</span> (<span class="op">$nota</span> <span class="op">&gt;=</span> <span class="num">7</span>) {
+    <span class="kw">echo</span> <span class="str">"Aprovado"</span>;
+  } <span class="kw">elseif</span> (<span class="op">$nota</span> <span class="op">&gt;=</span> <span class="num">5</span>) {
+    <span class="kw">echo</span> <span class="str">"Em Recuperação"</span>;
+  } <span class="kw">else</span> {
+    <span class="kw">echo</span> <span class="str">"Reprovado"</span>;
+  }
+}
+<span class="cm">?&gt;</span></pre>
+  </div>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 PHP vs JavaScript: onde cada um roda?</p>
+    <p><strong>PHP</strong> roda no <strong>servidor</strong> — o usuário nunca vê o código PHP, apenas o HTML resultante.
+    Acessa banco de dados, gerencia sessões e arquivos.<br>
+    <strong>JavaScript</strong> roda no <strong>navegador</strong> — manipula a página em tempo real sem
+    recarregar. Dominar os dois é o que define um desenvolvedor Full Stack.</p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 08 · Equivalências</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 11 — O HTML DA ENTREGA                         ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 09</p>
+    <h2>O HTML da Entrega</h2>
+    <p>Estrutura da página estática entregue na tarefa e explicação de cada tag utilizada.</p>
+  </div>
+
+  <h3>Por que HTML estático?</h3>
+  <p>
+    Nesta tarefa não há lógica funcional em JavaScript. O objetivo é apenas
+    <strong>apresentar o algoritmo em formato legível</strong> dentro de um navegador,
+    usando HTML como ferramenta de formatação de texto — assim como se usaria Word ou Google Docs.
+  </p>
+
+  <h3>Esqueleto Obrigatório</h3>
+  <div class="codigo-bloco">
+    <div class="codigo-header">
+      <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="nome">index.html — estrutura mínima</span>
+    </div>
+    <pre><span class="cm">&lt;!-- 1. Tipo de documento: HTML5 --&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="str">"pt-BR"</span>&gt;          <span class="cm">&lt;!-- define o idioma do documento --&gt;</span>
+&lt;head&gt;
+  &lt;meta charset=<span class="str">"UTF-8"</span> /&gt;   <span class="cm">&lt;!-- suporte a acentos e ç --&gt;</span>
+  &lt;meta name=<span class="str">"viewport"</span>
+        content=<span class="str">"width=device-width, initial-scale=1.0"</span> /&gt;
+  <span class="cm">&lt;!-- viewport: ajusta largura e zoom inicial da página --&gt;</span>
+  &lt;title&gt;Título da aba&lt;/title&gt;
+  &lt;style&gt; <span class="cm">/* CSS interno */</span> &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <span class="cm">&lt;!-- Conteúdo visível da página --&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+  </div>
+
+  <h3>Tags utilizadas na tarefa</h3>
+  <table class="tabela-ops">
+    <thead><tr><th style="width:18%">Tag</th><th>Tipo</th><th>Uso na tarefa</th></tr></thead>
+    <tbody>
+      <tr><td>&lt;header&gt;</td><td>Semântica</td><td>Cabeçalho com título e subtítulo da página</td></tr>
+      <tr><td>&lt;h1&gt;…&lt;h2&gt;</td><td>Títulos</td><td>Hierarquia de títulos das seções</td></tr>
+      <tr><td>&lt;ol&gt;</td><td>Lista</td><td>Passos numerados do algoritmo em linguagem natural</td></tr>
+      <tr><td>&lt;ul&gt;</td><td>Lista</td><td>Sub-itens sem ordem (casos do SE/SENÃO)</td></tr>
+      <tr><td>&lt;li&gt;</td><td>Item</td><td>Cada passo ou sub-item das listas</td></tr>
+      <tr><td>&lt;pre&gt;</td><td>Texto</td><td>Pseudocódigo com espaços e quebras preservados</td></tr>
+      <tr><td>&lt;span&gt;</td><td>Inline</td><td>Coloração de sintaxe e badges de status</td></tr>
+      <tr><td>&lt;table&gt;</td><td>Tabela</td><td>Tabela de classificação por faixa de nota</td></tr>
+      <tr><td>&lt;strong&gt;</td><td>Semântica</td><td>Ênfase forte (negrito) em termos-chave</td></tr>
+      <tr><td>&lt;footer&gt;</td><td>Semântica</td><td>Rodapé com identificação da semana</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p class="callout-titulo">📌 Semântica vs. Apresentação</p>
+    <p>
+      Use <code>&lt;strong&gt;</code> para <strong>importância semântica</strong> e
+      <code>font-weight: bold</code> para <strong>negrito puramente visual</strong>.
+      Use <code>&lt;em&gt;</code> para ênfase semântica e <code>font-style: italic</code> para itálico visual.
+      Leitores de tela interpretam a semântica — não o visual.
+    </p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 09 · HTML da Entrega</span>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  PÁGINA 12 — O CSS DA ENTREGA                          ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div class="pagina">
+  <div class="secao-header">
+    <p class="secao-label">Seção 10</p>
+    <h2>O CSS da Entrega</h2>
+    <p>Os principais conceitos de CSS aplicados na tarefa.</p>
+  </div>
+
+  <h3>Os três pilares do CSS</h3>
+  <div class="grid-2">
+    <div class="conceito-card">
+      <h5>Seletores</h5>
+      <p>Identificam quais elementos receberão o estilo.<br>
+      <code>p</code> → todos os parágrafos<br>
+      <code>.card</code> → classe<br>
+      <code>#titulo</code> → ID único<br>
+      <code>.card h2</code> → descendente</p>
+    </div>
+    <div class="conceito-card">
+      <h5>Propriedades</h5>
+      <p>O que se quer estilizar.<br>
+      <code>color</code>, <code>font-size</code><br>
+      <code>background-color</code><br>
+      <code>margin</code>, <code>padding</code><br>
+      <code>display</code>, <code>border-radius</code></p>
+    </div>
+    <div class="conceito-card">
+      <h5>Valores</h5>
+      <p>O valor da propriedade.<br>
+      <code>16px</code>, <code>1.5rem</code>, <code>100%</code><br>
+      <code>#1a1a2e</code>, <code>rgb()</code>, <code>rgba()</code><br>
+      <code>flex</code>, <code>center</code>, <code>bold</code></p>
+    </div>
+    <div class="conceito-card">
+      <h5>Cascata e Especificidade</h5>
+      <p>Quando há conflito, vence o estilo mais específico:<br>
+      inline &gt; ID &gt; classe &gt; elemento<br>
+      <code>!important</code> força prioridade máxima (evite).</p>
+    </div>
+  </div>
+
+  <h3>Box Model — o modelo de caixa</h3>
+  <p>
+    Todo elemento HTML é uma caixa retangular com quatro camadas,
+    de dentro para fora:
+  </p>
+  <div class="callout">
+    <strong>content</strong> → o conteúdo (texto, imagem)<br>
+    <strong>padding</strong> → espaço interno entre o conteúdo e a borda<br>
+    <strong>border</strong> → a borda do elemento<br>
+    <strong>margin</strong> → espaço externo entre este elemento e os vizinhos
+  </div>
+  <p>Com <code>box-sizing: border-box</code>, padding e borda são incluídos
+  na largura/altura declarada — muito mais intuitivo para layouts.</p>
+
+  <h3>Flexbox — layout unidimensional</h3>
+  <table class="tabela-ops">
+    <thead><tr><th>Propriedade</th><th>Valor usado</th><th>Efeito</th></tr></thead>
+    <tbody>
+      <tr><td>display</td><td>flex</td><td>Ativa o Flexbox no container</td></tr>
+      <tr><td>flex-direction</td><td>column</td><td>Empilha filhos verticalmente</td></tr>
+      <tr><td>gap</td><td>32px</td><td>Espaço entre os itens filhos</td></tr>
+      <tr><td>margin: 0 auto</td><td>—</td><td>Centraliza o bloco horizontalmente</td></tr>
+      <tr><td>max-width</td><td>820px</td><td>Limita largura máxima do container</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Unidades de medida</h3>
+  <table class="tabela-ops">
+    <thead><tr><th>Unidade</th><th>Relativa a</th><th>Quando usar</th></tr></thead>
+    <tbody>
+      <tr><td>px</td><td>Pixel fixo</td><td>Bordas, sombras, valores precisos</td></tr>
+      <tr><td>rem</td><td>Font-size do &lt;html&gt; (16px padrão)</td><td>Fontes, espaçamentos — respeita preferências do usuário</td></tr>
+      <tr><td>%</td><td>Elemento pai</td><td>Larguras fluidas, layouts responsivos</td></tr>
+      <tr><td>mm / cm</td><td>Tamanho físico</td><td>Layouts para impressão (PDF)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout dica">
+    <p class="callout-titulo">💡 Dica de impressão / PDF</p>
+    <p>
+      Use <code>@media print &#123; &#125;</code> para aplicar estilos somente na impressão.
+      Remova sombras, defina largura em <code>mm</code>, use <code>page-break-after: always</code>
+      para forçar quebra de página entre seções. É exatamente assim que esta apostila foi criada.
+    </p>
+  </div>
+
+  <div class="rodape-pagina">
+    <span>Full Stack — Semana 2</span>
+    <span>Seção 10 · CSS da Entrega</span>
+  </div>
+</div>
+
+</body>
+</html>

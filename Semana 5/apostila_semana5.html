@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila Semana 5 - SQL e Banco de Dados</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #007acc;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: #007acc;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            color: #999;
+            font-size: 0.95em;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn-pdf {
+            background-color: #007acc;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pdf:hover {
+            background-color: #005a96;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+
+        h2 {
+            color: #007acc;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            border-left: 4px solid #007acc;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .resumo-box {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007acc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+
+        .topicos-list {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .topicos-list ol {
+            margin-left: 30px;
+        }
+
+        .topicos-list li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .topicos-list strong {
+            color: #007acc;
+        }
+
+        .codigo-container {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
+            page-break-inside: avoid;
+        }
+
+        .codigo-header {
+            background-color: #007acc;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            margin: 0;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .codigo-comentarios {
+            padding: 20px;
+            background-color: #fafafa;
+        }
+
+        .codigo-commentado {
+            background-color: #f9f9f9;
+            border-left: 3px solid #007acc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .comment {
+            color: #008000;
+            font-weight: bold;
+        }
+
+        .keyword {
+            color: #0000ff;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #a31515;
+        }
+
+        .table-info {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+        }
+
+        .warning {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+            color: #721c24;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 3px;
+            color: #155724;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .button-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="apostila">
+        <header>
+            <h1>📚 Apostila Técnica - Semana 5</h1>
+            <p class="subtitle">SQL e Banco de Dados</p>
+            <p class="date">Curso Full Stack Web Development</p>
+        </header>
+
+        <div class="button-container">
+            <button class="btn-pdf" onclick="salvarPDF()">📥 Salvar como PDF</button>
+        </div>
+
+        <!-- RESUMO DA AULA -->
+        <div class="section">
+            <h2>📖 Resumo da Aula</h2>
+
+            <p>A quinta aula da mentoria foi dedicada inteiramente ao aprendizado de <strong>Banco de Dados e SQL</strong>, abordando desde conceitos teóricos fundamentais até a prática de comandos em um ambiente simulado.</p>
+
+            <p>Os principais tópicos técnicos e práticos discutidos foram:</p>
+
+            <div class="topicos-list">
+                <ol>
+                    <li>
+                        <strong>Fundamentos de Banco de Dados</strong>
+                        <ul>
+                            <li><strong>Dados vs. Informação:</strong> Diferenciação entre dado (elemento básico sem contexto), informação (dados associados que geram significado) e conhecimento (discernimento aplicado sobre a informação).</li>
+                            <li><strong>SGBD:</strong> Sistema Gerenciador de Banco de Dados é o software que gerencia o acesso e organização dos dados (exemplos: DB2, PostgreSQL, MySQL, SQLite).</li>
+                            <li><strong>Papel da API:</strong> Atua como ponte ou "tradutor" que permite comunicação segura entre aplicação (como PHP) e banco de dados, abstraindo a complexidade do motor.</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Linguagem SQL e seus Subconjuntos</strong>
+                        <ul>
+                            <li><strong>DQL (Consulta):</strong> Comando SELECT para extrair informações.</li>
+                            <li><strong>DML (Manipulação):</strong> Comandos INSERT, UPDATE e DELETE para gerenciar registros.</li>
+                            <li><strong>DDL (Definição):</strong> Comandos CREATE (criar tabelas), ALTER (modificar estrutura) e DROP (excluir objetos).</li>
+                            <li><strong>DCL (Controle):</strong> Gerenciamento de permissões de usuários.</li>
+                            <li><strong>DTL (Transação):</strong> Comandos BEGIN, COMMIT e ROLLBACK para garantir execução integra ou cancelamento em caso de erro.</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Prática de CRUD e Estrutura</strong>
+                        <ul>
+                            <li><strong>Criação e Tipagem:</strong> Comando CREATE TABLE com tipos como INTEGER e VARCHAR.</li>
+                            <li><strong>Chaves (Keys):</strong> Chave Primária (identificador único) e Chave Estrangeira (vinculação entre tabelas).</li>
+                            <li><strong>Filtros e Consultas:</strong> Cláusula WHERE para filtros e asterisco (*) para selecionar todas as colunas.</li>
+                            <li><strong>Junções (Joins):</strong> INNER JOIN (dados presentes em ambas tabelas) e LEFT JOIN (mantém dados da tabela esquerda).</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Segurança e Consistência</strong>
+                        <ul>
+                            <li><strong>Cuidado com WHERE:</strong> Risco extremo de UPDATE/DELETE sem WHERE apagaria todos os registros.</li>
+                            <li><strong>Transações:</strong> Blocos de transação para testar com ROLLBACK antes de COMMIT.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="resumo-box">
+                <strong>💡 Conclusão:</strong> A mentoria enfatizou a importância da documentação como melhor amiga do desenvolvedor e a necessidade de praticar esses comandos para fixar a lógica, que será usada futuramente integrada ao PHP.
+            </div>
+        </div>
+
+        <!-- EXERCÍCIO 1: CRUD BÁSICO -->
+        <div class="section">
+            <h2>🗂️ Exercício 1: CRUD Básico (Clientes e Pedidos)</h2>
+
+            <p>Este exercício prático trabalha com duas tabelas relacionadas: <strong>CLIENTES</strong> e <strong>PEDIDOS</strong>. Demonstra os conceitos fundamentais de Create, Read, Update e Delete.</p>
+
+            <!-- Criação de Tabelas -->
+            <h3>1️⃣ Criação de Tabelas (DDL)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">CRIAR TABELA CLIENTES</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Cria tabela para armazenar informações de clientes</span>
+<span class="keyword">CREATE TABLE</span> clientes (
+  <span class="comment">-- ID única para cada cliente (chave primária)</span>
+  id <span class="keyword">INT PRIMARY KEY AUTO_INCREMENT</span>,
+
+  <span class="comment">-- Nome do cliente (obrigatório, até 100 caracteres)</span>
+  nome <span class="keyword">VARCHAR</span>(100) <span class="keyword">NOT NULL</span>,
+
+  <span class="comment">-- Email único do cliente (não pode haver duplicação)</span>
+  email <span class="keyword">VARCHAR</span>(100) <span class="keyword">UNIQUE</span>,
+
+  <span class="comment">-- Telefone de contato (até 15 caracteres)</span>
+  telefone <span class="keyword">VARCHAR</span>(15),
+
+  <span class="comment">-- Data de registro (preenchida automaticamente com data/hora atual)</span>
+  data_cadastro <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+);</div>
+                </div>
+            </div>
+
+            <div class="table-info">
+                <strong>📌 Tipos de Dados Utilizados:</strong>
+                <ul>
+                    <li><strong>INT:</strong> Número inteiro para IDs e identificadores</li>
+                    <li><strong>VARCHAR(n):</strong> Texto de tamanho variável (até n caracteres)</li>
+                    <li><strong>TIMESTAMP:</strong> Data e hora, com valor padrão automático</li>
+                </ul>
+            </div>
+
+            <div class="codigo-container">
+                <div class="codigo-header">CRIAR TABELA PEDIDOS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Cria tabela para armazenar pedidos dos clientes</span>
+<span class="keyword">CREATE TABLE</span> pedidos (
+  <span class="comment">-- ID única para cada pedido (chave primária)</span>
+  id <span class="keyword">INT PRIMARY KEY AUTO_INCREMENT</span>,
+
+  <span class="comment">-- ID do cliente que fez o pedido (chave estrangeira vinculada à tabela clientes)</span>
+  cliente_id <span class="keyword">INT NOT NULL</span>,
+
+  <span class="comment">-- Descrição do produto pedido</span>
+  descricao <span class="keyword">VARCHAR</span>(255),
+
+  <span class="comment">-- Valor do pedido (10 dígitos, sendo 2 casas decimais)</span>
+  valor <span class="keyword">DECIMAL</span>(10, 2),
+
+  <span class="comment">-- Status padrão "Pendente" até ser processado</span>
+  status <span class="keyword">VARCHAR</span>(50) <span class="keyword">DEFAULT</span> <span class="string">'Pendente'</span>,
+
+  <span class="comment">-- Data e hora do pedido (automática)</span>
+  data_pedido <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>,
+
+  <span class="comment">-- CHAVE ESTRANGEIRA: vincula cada pedido a um cliente específico</span>
+  <span class="keyword">FOREIGN KEY</span> (cliente_id) <span class="keyword">REFERENCES</span> clientes(id)
+);</div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Importante - Chaves Estrangeiras:</strong> A cláusula FOREIGN KEY garante que cada pedido está vinculado a um cliente válido. Sem isso, você poderia criar pedidos órfãos.
+            </div>
+
+            <!-- Inserção de Dados -->
+            <h3>2️⃣ Inserção de Dados (DML - INSERT)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">INSERIR CLIENTES</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Insere múltiplos clientes em uma única operação</span>
+<span class="keyword">INSERT INTO</span> clientes (nome, email, telefone) <span class="keyword">VALUES</span>
+(<span class="string">'Cliente 1'</span>, <span class="string">'cliente1@email.com'</span>, <span class="string">'11987654321'</span>),
+(<span class="string">'Cliente 2'</span>, <span class="string">'cliente2@email.com'</span>, <span class="string">'11912345678'</span>),
+(<span class="string">'Cliente 3'</span>, <span class="string">'cliente3@email.com'</span>, <span class="string">'11998765432'</span>),
+(<span class="string">'Cliente 4'</span>, <span class="string">'cliente4@email.com'</span>, <span class="string">'11987654310'</span>);
+
+<span class="comment">-- Note: ID será preenchido automaticamente (1, 2, 3, 4)</span>
+<span class="comment">-- Note: data_cadastro será preenchida com a data/hora atual</span></div>
+                </div>
+            </div>
+
+            <div class="codigo-container">
+                <div class="codigo-header">INSERIR PEDIDOS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Insere pedidos vinculando-os aos clientes por cliente_id</span>
+<span class="keyword">INSERT INTO</span> pedidos (cliente_id, descricao, valor) <span class="keyword">VALUES</span>
+(<span class="string">1</span>, <span class="string">'Notebook Dell'</span>, <span class="string">3500.00</span>),  <span class="comment">-- Pedido do Cliente 1</span>
+(<span class="string">1</span>, <span class="string">'Mouse Logitech'</span>, <span class="string">150.00</span>),    <span class="comment">-- Outro pedido do Cliente 1</span>
+(<span class="string">2</span>, <span class="string">'Teclado Mecânico'</span>, <span class="string">450.00</span>),  <span class="comment">-- Pedido do Cliente 2</span>
+(<span class="string">3</span>, <span class="string">'Monitor LG 27"'</span>, <span class="string">1200.00</span>),   <span class="comment">-- Pedido do Cliente 3</span>
+(<span class="string">2</span>, <span class="string">'Webcam HD'</span>, <span class="string">250.00</span>);      <span class="comment">-- Outro pedido do Cliente 2</span></div>
+                </div>
+            </div>
+
+            <!-- Consultas Simples -->
+            <h3>3️⃣ Consultas Simples (DQL - SELECT)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">SELECIONAR DADOS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Mostra TODOS os clientes (asterisco = todas as colunas)</span>
+<span class="keyword">SELECT * FROM</span> clientes;
+
+<span class="comment">-- Mostra apenas nome e email dos clientes (seleção de colunas específicas)</span>
+<span class="keyword">SELECT</span> nome, email <span class="keyword">FROM</span> clientes;
+
+<span class="comment">-- Filtra pedidos com valor maior que R$ 500 usando WHERE</span>
+<span class="keyword">SELECT * FROM</span> pedidos <span class="keyword">WHERE</span> valor > <span class="string">500</span>;
+
+<span class="comment">-- Conta quantos clientes existem (função agregada COUNT)</span>
+<span class="keyword">SELECT COUNT(*) AS</span> total_clientes <span class="keyword">FROM</span> clientes;
+
+<span class="comment">-- Conta quantos pedidos cada cliente fez (agrupamento com GROUP BY)</span>
+<span class="keyword">SELECT</span> cliente_id, <span class="keyword">COUNT(*) AS</span> total_pedidos
+<span class="keyword">FROM</span> pedidos
+<span class="keyword">GROUP BY</span> cliente_id;</div>
+                </div>
+            </div>
+
+            <!-- Junções -->
+            <h3>4️⃣ Junções (JOINS) - Relacionando Tabelas</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">INNER JOIN - Clientes com Pedidos</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- INNER JOIN: mostra APENAS clientes que têm pedidos</span>
+<span class="keyword">SELECT</span>
+  c.nome,
+  c.email,
+  p.descricao,
+  p.valor
+<span class="keyword">FROM</span> clientes c
+<span class="keyword">INNER JOIN</span> pedidos p <span class="keyword">ON</span> c.id = p.cliente_id;
+
+<span class="comment">-- Abreviações: 'c' para clientes, 'p' para pedidos (aliases)</span></div>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>✅ INNER JOIN:</strong> Retorna apenas registros que têm correspondência em AMBAS as tabelas. Se um cliente não tiver pedidos, ele não aparecerá.
+            </div>
+
+            <div class="codigo-container">
+                <div class="codigo-header">LEFT JOIN - Todos os Clientes</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- LEFT JOIN: mostra TODOS os clientes, mesmo sem pedidos</span>
+<span class="keyword">SELECT</span>
+  c.nome,
+  c.email,
+  <span class="keyword">COUNT</span>(p.id) <span class="keyword">AS</span> total_pedidos,
+  <span class="keyword">SUM</span>(p.valor) <span class="keyword">AS</span> valor_total
+<span class="keyword">FROM</span> clientes c
+<span class="keyword">LEFT JOIN</span> pedidos p <span class="keyword">ON</span> c.id = p.cliente_id
+<span class="keyword">GROUP BY</span> c.id, c.nome, c.email;
+
+<span class="comment">-- COUNT(p.id): conta pedidos (NULL não é contado)</span>
+<span class="comment">-- SUM(p.valor): soma valores dos pedidos</span></div>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>✅ LEFT JOIN:</strong> Retorna TODOS os registros da tabela da esquerda (clientes), mesmo que não existam correspondências na tabela direita (pedidos).
+            </div>
+
+            <!-- Atualização -->
+            <h3>5️⃣ Atualização (DML - UPDATE)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">ATUALIZAR REGISTROS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Atualiza email de UM cliente específico (WHERE é CRÍTICO!)</span>
+<span class="keyword">UPDATE</span> clientes
+<span class="keyword">SET</span> email = <span class="string">'cliente1.novo@email.com'</span>
+<span class="keyword">WHERE</span> id = <span class="string">1</span>;
+
+<span class="comment">-- Atualiza status de um pedido específico</span>
+<span class="keyword">UPDATE</span> pedidos
+<span class="keyword">SET</span> status = <span class="string">'Entregue'</span>
+<span class="keyword">WHERE</span> id = <span class="string">1</span>;
+
+<span class="comment">-- Atualiza MÚLTIPLOS pedidos de um cliente</span>
+<span class="keyword">UPDATE</span> pedidos
+<span class="keyword">SET</span> status = <span class="string">'Processando'</span>
+<span class="keyword">WHERE</span> cliente_id = <span class="string">2</span>;
+
+<span class="comment">-- Cálculo: aumenta valor de todos os pedidos em 10%</span>
+<span class="keyword">UPDATE</span> pedidos
+<span class="keyword">SET</span> valor = valor * <span class="string">1.10</span>;</div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ CUIDADO CRÍTICO:</strong> Note a última instrução SEM WHERE! Isso afeta TODOS os pedidos. Sempre teste com SELECT antes de UPDATE!
+            </div>
+
+            <!-- Deleção -->
+            <h3>6️⃣ Deleção (DML - DELETE)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">DELETAR REGISTROS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Deleta UM pedido específico</span>
+<span class="keyword">DELETE FROM</span> pedidos
+<span class="keyword">WHERE</span> id = <span class="string">5</span>;
+
+<span class="comment">-- Deleta TODOS os pedidos de um cliente específico</span>
+<span class="keyword">DELETE FROM</span> pedidos
+<span class="keyword">WHERE</span> cliente_id = <span class="string">3</span>;
+
+<span class="comment">-- Deleta um cliente E seus pedidos (ordem importante!)</span>
+<span class="comment">-- Primeiro deleta os pedidos (chave estrangeira)</span>
+<span class="keyword">DELETE FROM</span> pedidos <span class="keyword">WHERE</span> cliente_id = <span class="string">4</span>;
+<span class="comment">-- Depois deleta o cliente</span>
+<span class="keyword">DELETE FROM</span> clientes <span class="keyword">WHERE</span> id = <span class="string">4</span>;</div>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ NUNCA ESQUEÇA O WHERE!</strong> Um DELETE sem WHERE deleta TODOS os registros da tabela!
+            </div>
+
+            <!-- Transações -->
+            <h3>7️⃣ Transações (DTL - Segurança)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">TRANSAÇÕES COM BEGIN/COMMIT/ROLLBACK</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Inicia uma transação (bloco de operações)</span>
+<span class="keyword">BEGIN</span>;
+
+  <span class="comment">-- Insere cliente de teste</span>
+  <span class="keyword">INSERT INTO</span> clientes (nome, email, telefone)
+  <span class="keyword">VALUES</span> (<span class="string">'Teste Transação'</span>, <span class="string">'teste@email.com'</span>, <span class="string">'11999999999'</span>);
+
+  <span class="comment">-- Insere pedido para este cliente</span>
+  <span class="keyword">INSERT INTO</span> pedidos (cliente_id, descricao, valor)
+  <span class="keyword">VALUES</span> (<span class="string">1</span>, <span class="string">'Teste Produto'</span>, <span class="string">100.00</span>);
+
+<span class="comment">-- Se tudo está OK, CONFIRMA as operações:</span>
+<span class="keyword">COMMIT</span>;
+
+<span class="comment">-- OU se algo deu errado, DESFAZ tudo:</span>
+<span class="comment">-- ROLLBACK;</span></div>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>✅ Transações:</strong> Permitem testar operações em memória. Se algo der errado, ROLLBACK desfaz tudo. Se tudo OK, COMMIT grava permanentemente.
+            </div>
+        </div>
+
+        <!-- EXERCÍCIO 2: DESAFIO SQL -->
+        <div class="section">
+            <h2>🎯 Exercício 2: Desafio SQL (Produtos e Estoque)</h2>
+
+            <p>Este exercício mais avançado trabalha com gestão de produtos e movimentações de estoque, introduzindo conceitos como CASE, agrupamento avançado e cálculos complexos.</p>
+
+            <!-- Criação de Tabelas Avançada -->
+            <h3>1️⃣ Estrutura de Produtos e Estoque</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">CRIAR TABELAS DE PRODUTOS E MOVIMENTAÇÃO</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Tabela para armazenar informações de produtos</span>
+<span class="keyword">CREATE TABLE</span> produtos (
+  id <span class="keyword">INT PRIMARY KEY AUTO_INCREMENT</span>,
+  nome <span class="keyword">VARCHAR</span>(100) <span class="keyword">NOT NULL</span>,
+  categoria <span class="keyword">VARCHAR</span>(50),
+  preco <span class="keyword">DECIMAL</span>(10, 2) <span class="keyword">NOT NULL</span>,
+  estoque <span class="keyword">INT DEFAULT</span> <span class="string">0</span>,
+  data_criacao <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>
+);
+
+<span class="comment">-- Tabela para rastrear HISTÓRICO de movimentações (entrada/saída)</span>
+<span class="keyword">CREATE TABLE</span> estoque_movimentacao (
+  id <span class="keyword">INT PRIMARY KEY AUTO_INCREMENT</span>,
+  produto_id <span class="keyword">INT NOT NULL</span>,
+  tipo <span class="keyword">VARCHAR</span>(20), <span class="comment">-- 'Entrada' ou 'Saída'</span>
+  quantidade <span class="keyword">INT</span>,
+  data_movimentacao <span class="keyword">TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span>,
+  <span class="keyword">FOREIGN KEY</span> (produto_id) <span class="keyword">REFERENCES</span> produtos(id)
+);</div>
+                </div>
+            </div>
+
+            <!-- Instruções Condicionais -->
+            <h3>2️⃣ Consultas com Lógica Condicional (CASE)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">CASE - Classificação Dinâmica de Preços</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Classifica produtos por faixa de preço usando CASE</span>
+<span class="keyword">SELECT</span>
+  nome,
+  preco,
+  <span class="keyword">CASE</span>
+    <span class="keyword">WHEN</span> preco < <span class="string">300 THEN</span> <span class="string">'Econômico'</span>
+    <span class="keyword">WHEN</span> preco <span class="keyword">BETWEEN</span> <span class="string">300 AND</span> <span class="string">700 THEN</span> <span class="string">'Intermediário'</span>
+    <span class="keyword">ELSE</span> <span class="string">'Premium'</span>
+  <span class="keyword">END AS</span> faixa_preco
+<span class="keyword">FROM</span> produtos
+<span class="keyword">ORDER BY</span> preco;
+
+<span class="comment">-- CASE funciona como um IF/ELSE: avalia cada WHEN até encontrar verdadeiro</span></div>
+                </div>
+            </div>
+
+            <div class="codigo-container">
+                <div class="codigo-header">CASE - Nível de Estoque com Alertas</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Verifica saúde do estoque com alertas visuais</span>
+<span class="keyword">SELECT</span>
+  nome,
+  estoque,
+  <span class="keyword">CASE</span>
+    <span class="keyword">WHEN</span> estoque < <span class="string">5 THEN</span> <span class="string">'Crítico - REABASTECER!'</span>
+    <span class="keyword">WHEN</span> estoque < <span class="string">10 THEN</span> <span class="string">'Baixo'</span>
+    <span class="keyword">ELSE</span> <span class="string">'Normal'</span>
+  <span class="keyword">END AS</span> nivel_estoque
+<span class="keyword">FROM</span> produtos;
+
+<span class="comment">-- Útil para dashboards de monitoramento de inventário</span></div>
+                </div>
+            </div>
+
+            <!-- Análise Agregada -->
+            <h3>3️⃣ Análise de Vendas com Agregação</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">ANÁLISE DE VENDAS POR PRODUTO</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Conta quantas vendas (saídas) cada produto teve</span>
+<span class="keyword">SELECT</span>
+  p.nome,
+  p.categoria,
+  <span class="keyword">COUNT</span>(em.id) <span class="keyword">AS</span> total_vendas,
+  <span class="keyword">SUM</span>(em.quantidade) <span class="keyword">AS</span> total_quantidade_vendida
+<span class="keyword">FROM</span> produtos p
+<span class="keyword">LEFT JOIN</span> estoque_movimentacao em
+  <span class="keyword">ON</span> p.id = em.produto_id <span class="keyword">AND</span> em.tipo = <span class="string">'Saída'</span>
+<span class="keyword">GROUP BY</span> p.id, p.nome, p.categoria
+<span class="keyword">ORDER BY</span> total_quantidade_vendida <span class="keyword">DESC</span>;
+
+<span class="comment">-- LEFT JOIN garante que produtos sem vendas também apareçam</span>
+<span class="comment">-- AND em.tipo = 'Saída': filtra apenas saídas (vendas), não entradas</span></div>
+                </div>
+            </div>
+
+            <div class="codigo-container">
+                <div class="codigo-header">VALOR TOTAL EM ESTOQUE</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Calcula o valor total de inventário (quantidade * preço unitário)</span>
+<span class="keyword">SELECT</span>
+  nome,
+  preco,
+  estoque,
+  (preco * estoque) <span class="keyword">AS</span> valor_total_estoque
+<span class="keyword">FROM</span> produtos
+<span class="keyword">ORDER BY</span> valor_total_estoque <span class="keyword">DESC</span>;
+
+<span class="comment">-- Importante para fins contábeis e análise financeira</span></div>
+                </div>
+            </div>
+
+            <!-- Atualização Condicional -->
+            <h3>4️⃣ Atualização Baseada em Condições</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">UPDATE COM LÓGICA CONDICIONAL</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Aplica desconto de 10% apenas em produtos de Audio</span>
+<span class="keyword">UPDATE</span> produtos
+<span class="keyword">SET</span> preco = preco * <span class="string">0.90</span>
+<span class="keyword">WHERE</span> categoria = <span class="string">'Audio'</span>;
+
+<span class="comment">-- Reduz estoque de produtos Premium (preço > R$ 600)</span>
+<span class="keyword">UPDATE</span> produtos
+<span class="keyword">SET</span> estoque = estoque - <span class="string">1</span>
+<span class="keyword">WHERE</span> preco > <span class="string">600 AND</span> estoque > <span class="string">0</span>;
+
+<span class="comment">-- WHERE com AND: múltiplas condições (ambas devem ser verdadeiras)</span></div>
+                </div>
+            </div>
+
+            <!-- Transação com Deleção Segura -->
+            <h3>5️⃣ Deleção Segura com Transação</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">DELETAR COM SEGURANÇA</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Inicia transação para testar exclusão antes de confirmar</span>
+<span class="keyword">BEGIN</span>;
+
+  <span class="comment">-- Remove movimentações do produto</span>
+  <span class="keyword">DELETE FROM</span> estoque_movimentacao <span class="keyword">WHERE</span> produto_id = <span class="string">5</span>;
+
+  <span class="comment">-- Remove o produto</span>
+  <span class="keyword">DELETE FROM</span> produtos <span class="keyword">WHERE</span> id = <span class="string">5</span>;
+
+  <span class="comment">-- Verifica resultado</span>
+  <span class="keyword">SELECT * FROM</span> produtos;
+  <span class="keyword">SELECT * FROM</span> estoque_movimentacao;
+
+  <span class="comment">-- Se tudo OK: COMMIT; (descomente)</span>
+  <span class="comment">-- Se erro: ROLLBACK; (descomente)</span></div>
+                </div>
+            </div>
+
+            <!-- View -->
+            <h3>6️⃣ Criação de View (Visão/Relatório)</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">CREATE VIEW - Relatório de Estoque</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Cria uma "tabela virtual" para simplificar consultas frequentes</span>
+<span class="keyword">CREATE VIEW</span> relatorio_estoque <span class="keyword">AS</span>
+<span class="keyword">SELECT</span>
+  nome,
+  categoria,
+  preco,
+  estoque,
+  (preco * estoque) <span class="keyword">AS</span> valor_total
+<span class="keyword">FROM</span> produtos
+<span class="keyword">WHERE</span> estoque > <span class="string">0</span>
+<span class="keyword">ORDER BY</span> estoque <span class="keyword">ASC</span>;
+
+<span class="comment">-- Usar a view (consultar como se fosse uma tabela normal)</span>
+<span class="keyword">SELECT * FROM</span> relatorio_estoque;
+
+<span class="comment">-- Vantagem: reutilizar queries complexas sem reescrever</span></div>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>✅ VIEW:</strong> É como salvar uma consulta complexa com nome. Você a consulta como tabela normal, mas os dados sempre são atualizados em tempo real.
+            </div>
+
+            <!-- Transação Complexa -->
+            <h3>7️⃣ Transação com Múltiplas Operações</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">TRANSAÇÃO - Simular Venda</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- Simula processo completo de venda</span>
+<span class="keyword">BEGIN</span>;
+
+  <span class="comment">-- Reduz estoque do produto</span>
+  <span class="keyword">UPDATE</span> produtos <span class="keyword">SET</span> estoque = estoque - <span class="string">1</span> <span class="keyword">WHERE</span> id = <span class="string">1</span>;
+
+  <span class="comment">-- Registra a movimentação (saída)</span>
+  <span class="keyword">INSERT INTO</span> estoque_movimentacao (produto_id, tipo, quantidade)
+  <span class="keyword">VALUES</span> (<span class="string">1</span>, <span class="string">'Saída'</span>, <span class="string">1</span>);
+
+  <span class="comment">-- Se tudo correr bem: COMMIT; (descomente)</span>
+  <span class="comment">-- Se der erro: ROLLBACK; (descomente)</span></div>
+                </div>
+            </div>
+
+            <!-- Gabarito -->
+            <h3>📋 Gabarito - Perguntas Práticas</h3>
+            <div class="codigo-container">
+                <div class="codigo-header">RESPOSTAS ESPERADAS</div>
+                <div class="codigo-comentarios">
+                    <div class="codigo-commentado"><span class="comment">-- 1. Quantos produtos existem no banco?</span>
+<span class="keyword">SELECT COUNT(*) AS</span> total_produtos <span class="keyword">FROM</span> produtos;
+
+<span class="comment">-- 2. Qual é o produto mais caro?</span>
+<span class="keyword">SELECT</span> nome, preco <span class="keyword">FROM</span> produtos
+<span class="keyword">ORDER BY</span> preco <span class="keyword">DESC LIMIT</span> <span class="string">1</span>;
+
+<span class="comment">-- 3. Qual categoria tem mais produtos?</span>
+<span class="keyword">SELECT</span> categoria, <span class="keyword">COUNT(*) AS</span> total
+<span class="keyword">FROM</span> produtos
+<span class="keyword">GROUP BY</span> categoria
+<span class="keyword">ORDER BY</span> total <span class="keyword">DESC</span>;
+
+<span class="comment">-- 4. Qual é o estoque total de toda a loja?</span>
+<span class="keyword">SELECT SUM</span>(estoque) <span class="keyword">AS</span> estoque_total <span class="keyword">FROM</span> produtos;
+
+<span class="comment">-- 5. Qual produto teve mais movimentações?</span>
+<span class="keyword">SELECT</span> p.nome, <span class="keyword">COUNT</span>(em.id) <span class="keyword">AS</span> total_movimentacoes
+<span class="keyword">FROM</span> produtos p
+<span class="keyword">LEFT JOIN</span> estoque_movimentacao em <span class="keyword">ON</span> p.id = em.produto_id
+<span class="keyword">GROUP BY</span> p.id, p.nome
+<span class="keyword">ORDER BY</span> total_movimentacoes <span class="keyword">DESC</span>;</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMO DE CONCEITOS -->
+        <div class="section">
+            <h2>🎓 Resumo de Conceitos-Chave</h2>
+
+            <div class="topicos-list">
+                <ol>
+                    <li>
+                        <strong>DDL (Data Definition Language):</strong> CREATE, ALTER, DROP
+                        <ul>
+                            <li>Define a ESTRUTURA das tabelas</li>
+                            <li>CREATE TABLE - criar tabelas</li>
+                            <li>ALTER TABLE - modificar estrutura</li>
+                            <li>DROP - excluir objetos</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>DML (Data Manipulation Language):</strong> INSERT, UPDATE, DELETE
+                        <ul>
+                            <li>Manipula os DADOS dentro das tabelas</li>
+                            <li>INSERT - adicionar registros</li>
+                            <li>UPDATE - modificar registros</li>
+                            <li>DELETE - remover registros</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>DQL (Data Query Language):</strong> SELECT
+                        <ul>
+                            <li>Consulta e extrai dados</li>
+                            <li>SELECT * - todas as colunas</li>
+                            <li>WHERE - filtros</li>
+                            <li>JOIN - relacionar tabelas</li>
+                            <li>GROUP BY - agrupamentos</li>
+                            <li>ORDER BY - ordenação</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>DTL (Data Transaction Language):</strong> BEGIN, COMMIT, ROLLBACK
+                        <ul>
+                            <li>Garante consistência de operações</li>
+                            <li>BEGIN - inicia transação</li>
+                            <li>COMMIT - confirma operações</li>
+                            <li>ROLLBACK - desfaz operações</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Chaves:</strong>
+                        <ul>
+                            <li><strong>PRIMARY KEY:</strong> Identificador único de cada registro</li>
+                            <li><strong>FOREIGN KEY:</strong> Vincula tabelas relacionadas</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>JOINS:</strong>
+                        <ul>
+                            <li><strong>INNER JOIN:</strong> Apenas registros com correspondência</li>
+                            <li><strong>LEFT JOIN:</strong> Todos da esquerda + correspondências da direita</li>
+                            <li><strong>RIGHT JOIN:</strong> Todos da direita + correspondências da esquerda</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="warning">
+                <strong>🔴 Regras Críticas de Segurança:</strong>
+                <ul>
+                    <li>SEMPRE use WHERE ao atualizar ou deletar (teste com SELECT primeiro)</li>
+                    <li>Respeite chaves estrangeiras ao deletar (delete dependentes primeiro)</li>
+                    <li>Use transações para operações críticas</li>
+                    <li>Faça backups regularmente</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Apostila Técnica - Semana 5 | SQL e Banco de Dados</p>
+            <p>Criada para o Curso Full Stack Web Development</p>
+            <p>Data: <span id="dataAtual"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Preenche data atual no rodapé
+        function atualizarData() {
+            const hoje = new Date();
+            const opcoes = { year: 'numeric', month: 'long', day: 'numeric', locale: 'pt-BR' };
+            const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+            document.getElementById('dataAtual').textContent = dataFormatada;
+        }
+
+        // Função para salvar como PDF
+        function salvarPDF() {
+            const elemento = document.getElementById('apostila');
+            const opcoes = {
+                margin: 10,
+                filename: 'apostila_semana5_sql_bd.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+            html2pdf().set(opcoes).from(elemento).save();
+        }
+
+        // Executar ao carregar a página
+        atualizarData();
+    </script>
+</body>
+</html>

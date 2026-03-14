@@ -1,0 +1,6 @@
+tree 5ad0512947d6af6c9a4079cee8783aa0e4108f34
+parent f73690e9a8d6ccc89022a3def202102ff50cee3e
+author Antonio <antoniomarcio.ams@gmail.com> 1773506933 -0300
+committer Antonio <antoniomarcio.ams@gmail.com> 1773506933 -0300
+
+Update .gitignore to exclude video files and local settings

@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- ════════════════════════════════════════════════════════════════
+       META TAGS — Configuração do Documento HTML
+  ════════════════════════════════════════════════════════════════
+       As meta tags fornecem informações sobre o documento ao navegador.
+       Definem codificação, viewport para responsividade e título da página.
+  ═════════════════════════════════════════════════════════════════ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manipulação do DOM — Semana 4 | Full Stack</title>
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       CSS — ESTILOS DA PÁGINA
+    ════════════════════════════════════════════════════════════════
+
+       CSS (Cascading Style Sheets) define a aparência e layout da página.
+       Este projeto utiliza:
+       • CSS Grid: para layout responsivo
+       • Transições: para suavidade visual
+       • Variáveis CSS: para temas (light/dark)
+       • Flexbox: para alinhamento de elementos
+    ═════════════════════════════════════════════════════════════════ */
+
+    /* ──────────────────────────────────
+       VARIÁVEIS CSS (CUSTOM PROPERTIES)
+    ───────────────────────────────────
+
+       Variáveis CSS permitem definir valores uma vez e reutilizá-los.
+       Muito úteis para temas, pois basta mudar as variáveis para alterar
+       todo o design da página.
+
+       Sintaxe: --nome-variavel: valor;
+       Uso:     color: var(--nome-variavel);
+
+       :root define variáveis GLOBAIS (acessíveis em todo o documento).
+    ───────────────────────────────────── */
+    :root {
+      /* ── CORES DO TEMA CLARO (padrão) ── */
+      --cor-fundo: #ffffff;
+      --cor-texto: #333333;
+      --cor-primaria: #3498db;      /* Azul */
+      --cor-secundaria: #e74c3c;    /* Vermelho */
+      --cor-sucesso: #2ecc71;       /* Verde */
+      --cor-aviso: #f39c12;         /* Laranja */
+      --cor-card: #f8f9fa;          /* Cinza muito claro */
+      --cor-borda: #ddd;            /* Cinza claro */
+
+      /* ── TAMANHOS PADRÃO ── */
+      --espacamento-pequeno: 8px;
+      --espacamento-medio: 16px;
+      --espacamento-grande: 24px;
+      --tamanho-borda: 4px;
+
+      /* ── TRANSIÇÃO PADRÃO ── */
+      --tempo-transicao: 0.3s;
+    }
+
+    /* ──────────────────────────────────
+       CLASSE DE TEMA ESCURO
+    ───────────────────────────────────
+
+       Quando o usuário clica no botão de alternar tema, a classe
+       .dark-theme é adicionada ao <body>. Isso sobrescreve as variáveis
+       CSS com novas cores apropriadas para modo escuro.
+
+       O atributo [data-theme] também é definido para fins de rastreamento.
+    ───────────────────────────────────── */
+    :root.dark-theme {
+      /* ── CORES DO TEMA ESCURO ── */
+      --cor-fundo: #1a1a2e;         /* Azul muito escuro */
+      --cor-texto: #ffffff;         /* Branco */
+      --cor-primaria: #00d4ff;      /* Azul ciano */
+      --cor-secundaria: #ff6b6b;    /* Vermelho mais vivo */
+      --cor-sucesso: #51cf66;       /* Verde mais claro */
+      --cor-aviso: #ffa94d;         /* Laranja mais claro */
+      --cor-card: #16213e;          /* Azul escuro */
+      --cor-borda: #444;            /* Cinza escuro */
+    }
+
+    /* ──────────────────────────────────
+       RESET UNIVERSAL
+    ───────────────────────────────────
+
+       O seletor * (asterisco) seleciona TODOS os elementos.
+       Zera margens e paddings padrões do navegador para ter
+       controle total sobre o layout.
+    ───────────────────────────────────── */
+    * {
+      margin: 0;
+      /* Espaço externo: remove margens padrão */
+      padding: 0;
+      /* Espaço interno: remove paddings padrão */
+      box-sizing: border-box;
+      /* Define que width/height incluem padding e border */
+    }
+
+    /* ──────────────────────────────────
+       BODY — Corpo principal
+    ───────────────────────────────────
+
+       O elemento <body> é a raiz do conteúdo visível.
+       Estilos aqui são herdados por todos os elementos filhos.
+    ───────────────────────────────────── */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* Fonte: lista de fallback garante que funcione em qualquer sistema */
+
+      background-color: var(--cor-fundo);
+      /* Usa variável CSS — muda automaticamente com tema */
+
+      color: var(--cor-texto);
+      /* Cor do texto padrão */
+
+      line-height: 1.6;
+      /* Espaço entre linhas: melhora legibilidade */
+
+      transition: background-color var(--tempo-transicao) ease,
+                  color var(--tempo-transicao) ease;
+      /* Quando background-color e color mudam, fazem suavemente (não instantâneo) */
+
+      min-height: 100vh;
+      /* Altura mínima: 100% da altura visível do navegador */
+
+      display: flex;
+      /* Flexbox: para distribuir espaço entre elementos */
+
+      flex-direction: column;
+      /* Elementos filhos em coluna (um embaixo do outro) */
+    }
+
+    /* ──────────────────────────────────
+       CONTAINER — Elemento envolvedor
+    ───────────────────────────────────
+
+       Classe reutilizável para limitar largura máxima do conteúdo
+       e centralizá-lo na tela. Padrão comum em web design.
+    ───────────────────────────────────── */
+    .container {
+      max-width: 1000px;
+      /* Nunca ultrapassar 1000px de largura */
+
+      width: 100%;
+      /* Em telas pequenas, usar toda a largura disponível */
+
+      margin: 0 auto;
+      /* Centralizar horizontalmente (0 no topo/bottom, auto nos lados) */
+
+      padding: var(--espacamento-grande);
+      /* Espaço interno: usa variável CSS */
+
+      flex: 1;
+      /* Crescer para preencher espaço disponível */
+    }
+
+    /* ──────────────────────────────────
+       HEADER — Cabeçalho
+    ───────────────────────────────────– */
+    header {
+      background-color: var(--cor-primaria);
+      /* Usa cor primária do tema atual */
+
+      color: white;
+      padding: var(--espacamento-grande);
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      /* Sombra sutil para profundidade */
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: var(--espacamento-pequeno);
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      /* Ligeiramente mais transparent para visual hierárquico */
+    }
+
+    /* ──────────────────────────────────
+       BOTÃO ALTERNADOR DE TEMA
+    ───────────────────────────────────– */
+    #btn-tema {
+      position: absolute;
+      /* Posicionamento absoluto: livre do fluxo normal */
+
+      top: var(--espacamento-medio);
+      right: var(--espacamento-medio);
+      /* Canto superior direito */
+
+      background-color: var(--cor-secundaria);
+      color: white;
+      border: none;
+      padding: var(--espacamento-pequeno) var(--espacamento-medio);
+      border-radius: var(--tamanho-borda);
+      cursor: pointer;
+      /* Cursor muda para "mão", indicando que é clicável */
+
+      font-weight: bold;
+      transition: background-color var(--tempo-transicao) ease,
+                  transform var(--tempo-transicao) ease;
+      /* Múltiplas transições: cor e transformação (tamanho) */
+    }
+
+    #btn-tema:hover {
+      /* :hover é acionado quando mouse passa sobre o elemento */
+      background-color: var(--cor-aviso);
+      transform: scale(1.05);
+      /* Aumenta 5% o tamanho do botão */
+    }
+
+    #btn-tema:active {
+      /* :active é acionado quando clicado */
+      transform: scale(0.95);
+      /* Diminui para efeito de "pressionado" */
+    }
+
+    /* ──────────────────────────────────
+       SEÇÕES (CARDS)
+    ───────────────────────────────────– */
+    .secao {
+      background-color: var(--cor-card);
+      /* Cor de fundo diferente para seções */
+
+      border: 1px solid var(--cor-borda);
+      /* Borda fina para delimitação */
+
+      border-radius: var(--tamanho-borda);
+      padding: var(--espacamento-grande);
+      margin-bottom: var(--espacamento-grande);
+      /* Espaço embaixo para separar da próxima seção */
+
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: box-shadow var(--tempo-transicao) ease;
+      /* Sombra suave que muda com hover */
+    }
+
+    .secao:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      /* Sombra maior no hover para efeito de "elevação" */
+    }
+
+    .secao h2 {
+      color: var(--cor-primaria);
+      /* Títulos em cor primária do tema */
+
+      font-size: 1.5rem;
+      margin-bottom: var(--espacamento-medio);
+      padding-bottom: var(--espacamento-pequeno);
+      border-bottom: 2px solid var(--cor-primaria);
+      /* Sublinha decorativa */
+    }
+
+    /* ──────────────────────────────────
+       INPUTS E LABELS
+    ───────────────────────────────────– */
+    .form-group {
+      margin-bottom: var(--espacamento-medio);
+      /* Espaço entre grupos de formulário */
+    }
+
+    label {
+      display: block;
+      /* Força label a ocupar linha inteira */
+
+      margin-bottom: var(--espacamento-pequeno);
+      font-weight: bold;
+      color: var(--cor-texto);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      /* Seletor múltiplo: aplica estilo a vários tipos de input */
+      width: 100%;
+      padding: var(--espacamento-pequeno) var(--espacamento-medio);
+      border: 1px solid var(--cor-borda);
+      border-radius: var(--tamanho-borda);
+      font-family: inherit;
+      /* Herda fonte do pai em vez de usar font monospace padrão */
+
+      font-size: 1rem;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      transition: border-color var(--tempo-transicao) ease,
+                  box-shadow var(--tempo-transicao) ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      /* :focus acionado quando elemento tem foco (clicado ou tabbed) */
+      outline: none;
+      /* Remove outline padrão do navegador */
+
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      /* Halo sutil ao redor do input */
+    }
+
+    /* ──────────────────────────────────
+       BOTÕES
+    ───────────────────────────────────– */
+    button {
+      padding: var(--espacamento-pequeno) var(--espacamento-media);
+      border: none;
+      border-radius: var(--tamanho-borda);
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all var(--tempo-transicao) ease;
+      /* "all" aplica transição a TODAS as propriedades que mudam */
+    }
+
+    .btn-primario {
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .btn-primario:hover {
+      background-color: var(--cor-sucesso);
+      transform: translateY(-2px);
+      /* Move botão 2px para cima no hover */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secundario {
+      background-color: var(--cor-secundaria);
+      color: white;
+    }
+
+    .btn-secundario:hover {
+      background-color: var(--cor-aviso);
+    }
+
+    .btn-sucesso {
+      background-color: var(--cor-sucesso);
+      color: white;
+    }
+
+    .btn-sucesso:hover {
+      background-color: var(--cor-primaria);
+    }
+
+    /* ──────────────────────────────────
+       CONTADOR
+    ───────────────────────────────────– */
+    .contador-display {
+      font-size: 3rem;
+      /* Número grande e bem visível */
+
+      font-weight: bold;
+      text-align: center;
+      color: var(--cor-primaria);
+      margin: var(--espacamento-grande) 0;
+      transition: color var(--tempo-transicao) ease;
+    }
+
+    .contador-display.negativo {
+      /* Classe adicionada dinamicamente quando contador < 0 */
+      color: var(--cor-secundaria);
+      /* Muda cor para vermelho quando negativo */
+    }
+
+    .botoes-contador {
+      display: flex;
+      /* Flexbox para colocar botões lado a lado */
+
+      gap: var(--espacamento-medio);
+      /* Espaço entre os dois botões */
+
+      justify-content: center;
+      /* Centraliza horizontalmente */
+    }
+
+    .botoes-contador button {
+      padding: var(--espacamento-medio) var(--espacamento-grande);
+      font-size: 1.2rem;
+      min-width: 120px;
+      /* Garante largura mínima para consistência */
+    }
+
+    /* ──────────────────────────────────
+       MENSAGEM DE BOAS-VINDAS
+    ───────────────────────────────────– */
+    #mensagem-boas-vindas {
+      background-color: var(--cor-sucesso);
+      color: white;
+      padding: var(--espacamento-media);
+      border-radius: var(--tamanho-borda);
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: var(--espacamento-medio);
+
+      opacity: 0;
+      /* Invisível por padrão */
+
+      transform: translateY(-10px);
+      /* Posicionado um pouco acima */
+
+      transition: opacity var(--tempo-transicao) ease,
+                  transform var(--tempo-transicao) ease;
+      pointer-events: none;
+      /* Permite clicar através de elemento invisível */
+    }
+
+    #mensagem-boas-vindas.visivel {
+      /* Classe adicionada dinamicamente quando há mensagem */
+      opacity: 1;
+      transform: translateY(0);
+      /* Volta para posição normal e fica visível */
+    }
+
+    /* ──────────────────────────────────
+       SEÇÃO OCULTÁVEL
+    ───────────────────────────────────– */
+    #secao-ocultavel {
+      transition: opacity var(--tempo-transicao) ease,
+                  max-height var(--tempo-transicao) ease;
+      /* Transição suave ao esconder/mostrar */
+
+      max-height: 1000px;
+      /* Altura máxima: permite scroll se conteúdo maior */
+
+      overflow: hidden;
+      /* Esconde conteúdo que ultrapassa */
+
+      opacity: 1;
+    }
+
+    #secao-ocultavel.escondida {
+      /* Classe adicionada quando deve ser escondida */
+      opacity: 0;
+      max-height: 0;
+      /* Reduz altura para 0, fazendo sumir suavemente */
+    }
+
+    /* ──────────────────────────────────
+       FOOTER
+    ───────────────────────────────────– */
+    footer {
+      background-color: var(--cor-primaria);
+      color: white;
+      text-align: center;
+      padding: var(--espacamento-grande);
+      margin-top: auto;
+      /* auto no margin-top força footer para baixo */
+
+      font-size: 0.9rem;
+    }
+
+    /* ──────────────────────────────────
+       RESPONSIVIDADE (Mobile First)
+    ───────────────────────────────────– */
+    @media (max-width: 768px) {
+      /* Aplicado em telas menores que 768px */
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: var(--espacamento-medio);
+      }
+
+      .contador-display {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ════════════════════════════════════════════════════════════════
+       HEADER — Cabeçalho da página
+  ════════════════════════════════════════════════════════════════
+
+       <header> é elemento semântico que representa o topo da página.
+       Contém título e subtítulo.
+  ═════════════════════════════════════════════════════════════════ -->
+  <header>
+    <h1>🚀 Manipulação do DOM</h1>
+    <p>Semana 4 — Full Stack Mentoria Interna</p>
+
+    <!-- ──────────────────────────────────
+         BOTÃO ALTERNADOR DE TEMA
+    ───────────────────────────────────
+
+         onclick="alternarTema()" invoca a função JavaScript quando clicado.
+         O ID permite que JavaScript encontre e manipule este elemento.
+    ───────────────────────────────────── -->
+    <button id="btn-tema" onclick="alternarTema()">🌙 Tema Escuro</button>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CONTAINER — Wrapper do conteúdo principal
+  ══════════════════════════════════════════════════════════════
+
+       <div class="container"> é um elemento genérico (<div>)
+       com classe "container" que limita largura e centraliza.
+  ═════════════════════════════════════════════════════════════════ -->
+  <div class="container">
+
+    <!-- ──────────────────────────────────
+         SEÇÃO 1: BOAS-VINDAS PERSONALIZADAS
+    ───────────────────────────────────
+
+         Funcionalidade:
+         1. Usuário digita nome em <input>
+         2. Clica no botão "Entrar"
+         3. Mensagem aparece dinamicamente com o nome
+
+         Conceitos DOM utilizados:
+         • document.getElementById() — buscar elemento por ID
+         • .value — ler valor de input
+         • .textContent — modificar texto
+         • classList.add() — adicionar classe CSS
+    ───────────────────────────────────── -->
+    <div class="secao">
+      <h2>👋 Bem-vindo</h2>
+
+      <!-- Mensagem que aparece dinamicamente -->
+      <div id="mensagem-boas-vindas"></div>
+
+      <!-- Formulário de entrada -->
+      <div class="form-group">
+        <label for="nome-usuario">Digite seu nome:</label>
+        <!-- O atributo id permite JavaScript encontrar este elemento -->
+        <input
+          type="text"
+          id="nome-usuario"
+          placeholder="Seu nome aqui..."
+        />
+        <!-- placeholder: texto de sugestão que desaparece ao digitar -->
+      </div>
+
+      <!-- Botão para disparar função -->
+      <button class="btn-primario" onclick="exibirBoasVindas()">
+        ✅ Entrar
+      </button>
+      <!-- onclick invoca exibirBoasVindas() quando clicado -->
+    </div>
+
+    <!-- ──────────────────────────────────
+         SEÇÃO 2: CONTADOR INTERATIVO
+    ───────────────────────────────────
+
+         Funcionalidade:
+         1. Exibe número que começa em 0
+         2. Botão "+" incrementa em 1
+         3. Botão "-" decrementa em 1
+         4. Cor muda para vermelho se negativo
+
+         Conceitos DOM utilizados:
+         • Variáveis globais (contador)
+         • .textContent — atualizar número
+         • classList.toggle() — alternar classe CSS
+         • Lógica de incremento/decremento
+    ───────────────────────────────────── -->
+    <div class="secao">
+      <h2>🔢 Contador</h2>
+
+      <!-- Número exibido -->
+      <div class="contador-display" id="numero-contador">0</div>
+      <!-- id permite JavaScript modificar este elemento -->
+
+      <!-- Botões de incremento/decremento -->
+      <div class="botoes-contador">
+        <button class="btn-secundario" onclick="decrementarContador()">
+          ➖ Diminuir
+        </button>
+        <button class="btn-sucesso" onclick="incrementarContador()">
+          ➕ Aumentar
+        </button>
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────
+         SEÇÃO 3: ALTERNADOR DE TEMA
+    ───────────────────────────────────
+
+         Funcionalidade:
+         1. Clique alterna entre tema claro/escuro
+         2. Cores da página mudam completamente
+         3. Botão atualiza seu texto (🌙 ↔️ ☀️)
+
+         Conceitos DOM utilizados:
+         • classList.toggle() — alternar classe
+         • :root — variáveis CSS globais
+         • transições CSS suaves
+    ───────────────────────────────────── -->
+    <div class="secao">
+      <h2>🎨 Tema da Página</h2>
+      <p>
+        Clique no botão "Tema Escuro" no topo para alternar entre
+        modo claro e modo escuro. As cores da página mudarão completamente!
+      </p>
+      <p>
+        ✨ Este exemplo utiliza variáveis CSS (--cor-fundo, --cor-texto, etc)
+        que são sobrescritas quando a classe .dark-theme é adicionada ao &lt;html&gt;.
+      </p>
+    </div>
+
+    <!-- ──────────────────────────────────
+         SEÇÃO 4: MOSTRAR/ESCONDER
+    ───────────────────────────────────
+
+         Funcionalidade:
+         1. Botão "Alternar Visibilidade" esconde/mostra seção
+         2. Transição suave com CSS
+         3. Elemento é apenas visualmente escondido (ainda no DOM)
+
+         Conceitos DOM utilizados:
+         • classList.toggle() — alternar classe
+         • opacity — transparência
+         • max-height — controlar altura
+         • overflow: hidden — esconder conteúdo que ultrapassa
+    ───────────────────────────────────── -->
+    <div class="secao">
+      <h2>👁️ Mostrar/Esconder Seção</h2>
+      <button class="btn-primario" onclick="alternarVisibilidade()">
+        🔄 Alternar Visibilidade
+      </button>
+
+      <!-- Seção que pode ser escondida -->
+      <div id="secao-ocultavel">
+        <br />
+        <!-- <br> adiciona espaço -->
+
+        <h3>Seção Oculta</h3>
+        <p>
+          Esta seção pode ser escondida clicando no botão acima!
+        </p>
+        <p>
+          O JavaScript adiciona a classe "escondida" que utiliza CSS
+          (opacity: 0, max-height: 0) para fazer sumir suavemente.
+        </p>
+        <p>
+          O elemento continua no HTML (DOM), apenas não é visível.
+          Diferente de display: none que remove do fluxo.
+        </p>
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────
+         SEÇÃO 5: EXEMPLOS DE MANIPULAÇÃO
+    ───────────────────────────────────
+
+         Demonstração adicional de técnicas DOM avançadas.
+    ───────────────────────────────────── -->
+    <div class="secao">
+      <h2>📚 Aprendizado Prático</h2>
+
+      <p>
+        <strong>Conceitos DOM aplicados nesta página:</strong>
+      </p>
+      <ul style="margin-left: 20px; margin-top: 10px;">
+        <li>
+          <strong>getElementById():</strong> Busca elemento único por ID
+        </li>
+        <li>
+          <strong>.value:</strong> Lê/modifica valor de inputs
+        </li>
+        <li>
+          <strong>.textContent:</strong> Modifica texto do elemento
+        </li>
+        <li>
+          <strong>.classList.add():</strong> Adiciona classe CSS
+        </li>
+        <li>
+          <strong>.classList.remove():</strong> Remove classe CSS
+        </li>
+        <li>
+          <strong>.classList.toggle():</strong> Alterna classe (add/remove)
+        </li>
+        <li>
+          <strong>onclick:</strong> Vincula função ao clique do botão
+        </li>
+        <li>
+          <strong>Variáveis globais:</strong> contador, temaAtivo
+        </li>
+        <li>
+          <strong>Transições CSS:</strong> Suaviza mudanças visuais
+        </li>
+        <li>
+          <strong>Variáveis CSS:</strong> --cor-fundo, --cor-texto, etc
+        </li>
+      </ul>
+
+      <br />
+
+      <p>
+        💡 <strong>Dica:</strong> Abra o Console do navegador (F12 → Console)
+        para ver o que acontece internamente quando você interage com a página.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       FOOTER — Rodapé
+  ════════════════════════════════════════════════════════════════ -->
+  <footer>
+    <p>Semana 4 — Manipulação do DOM com JavaScript | Full Stack Mentoria</p>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SCRIPT — Código JavaScript
+  ════════════════════════════════════════════════════════════════
+
+       <script> contém o código JavaScript que roda quando a página carrega.
+       Deve estar no final do <body> para garantir que elementos HTML
+       já foram criados quando JavaScript tenta acessá-los.
+  ═════════════════════════════════════════════════════════════════ -->
+  <script>
+    /* ════════════════════════════════════════════════════════════════
+       VARIÁVEIS GLOBAIS — Dados que persistem durante execução
+    ════════════════════════════════════════════════════════════════
+
+       Variáveis GLOBAIS (fora de funções) são acessíveis por
+       qualquer função no script.
+
+       Bom para dados que precisam ser compartilhados entre funções.
+       Cuidado: podem causar bugs se modificadas acidentalmente.
+    ═════════════════════════════════════════════════════════════════ */
+
+    /* Contador para a seção "Contador Interativo"
+       Iniciado em 0, modificado por incrementarContador/decrementarContador */
+    let contador = 0;
+
+    /* Flag (bandeira) para rastrear estado do tema atual
+       true = tema escuro ativo, false = tema claro ativo */
+    let temaEscuroAtivo = false;
+
+    /* Flag para rastrear se seção oculta está visível ou não
+       true = visível, false = escondida */
+    let secaoVisivel = true;
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 1: Exibir Boas-Vindas Personalizadas
+    ════════════════════════════════════════════════════════════════
+
+       Fluxo:
+       1. Lê nome digitado no input (#nome-usuario)
+       2. Valida se está vazio
+       3. Cria mensagem personalizada
+       4. Adiciona classe "visivel" para aparecer
+       5. Limpa input para nova entrada
+    ═════════════════════════════════════════════════════════════════ */
+    function exibirBoasVindas() {
+      /* ──────────────────────────────────
+         PASSO 1: Encontrar elemento no DOM
+      ───────────────────────────────────
+
+         document.getElementById('nome-usuario') busca <input id="nome-usuario">
+         .value lê o texto que o usuário digitou
+      ───────────────────────────────────── */
+      const inputNome = document.getElementById('nome-usuario');
+      const nome = inputNome.value.trim();
+      /* .trim() remove espaços em branco do início e fim
+         "  Usuário  " vira "Usuário" */
+
+      /* ──────────────────────────────────
+         PASSO 2: Validar entrada
+      ───────────────────────────────────
+
+         if (condição) { código executado se verdadeiro }
+         === compara valor E tipo
+         '' (vazio) é quando usuário digita nada
+      ───────────────────────────────────── */
+      if (nome === '') {
+        alert('Por favor, digite seu nome!');
+        /* alert() exibe caixa de diálogo com mensagem */
+        return;
+        /* return encerra função aqui */
+      }
+
+      /* ──────────────────────────────────
+         PASSO 3: Encontrar elemento mensagem
+      ───────────────────────────────────
+
+         document.getElementById('mensagem-boas-vindas') busca
+         <div id="mensagem-boas-vindas"> que estava vazio
+      ───────────────────────────────────── */
+      const mensagemDiv = document.getElementById('mensagem-boas-vindas');
+
+      /* ──────────────────────────────────
+         PASSO 4: Modificar conteúdo
+      ───────────────────────────────────
+
+         .textContent modifica o TEXTO do elemento
+         Template literal (crase) permite interpolar variáveis
+         `Bem-vindo, ${nome}` substitui ${nome} pelo valor da variável
+      ───────────────────────────────────── */
+      mensagemDiv.textContent = `🎉 Bem-vindo, ${nome}!`;
+      /* Agora a div contém: "🎉 Bem-vindo, [nome do usuário]!" */
+
+      /* ──────────────────────────────────
+         PASSO 5: Adicionar classe CSS
+      ───────────────────────────────────
+
+         .classList.add('visivel') adiciona a classe "visivel"
+         No CSS, .visivel { opacity: 1 } faz aparecer suavemente
+      ───────────────────────────────────── */
+      mensagemDiv.classList.add('visivel');
+      /* A mensagem agora é visível (transição suave CSS) */
+
+      /* ──────────────────────────────────
+         PASSO 6: Limpar input
+      ───────────────────────────────────
+
+         .value = '' apaga o texto do input
+         Deixa pronto para próxima entrada
+      ───────────────────────────────────── */
+      inputNome.value = '';
+      /* Input volta para vazio */
+
+      /* ──────────────────────────────────
+         (OPCIONAL) Esconder mensagem após tempo
+      ───────────────────────────────────
+
+         setTimeout(função, milisegundos) executa função após delay
+         3000 = 3 segundos
+         Aqui não fazemos isso, mas é padrão em notificações reais
+      ───────────────────────────────────── */
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 2: Incrementar Contador
+    ════════════════════════════════════════════════════════════════
+
+       Aumenta a variável 'contador' em 1 e atualiza a tela.
+    ═════════════════════════════════════════════════════════════════ */
+    function incrementarContador() {
+      /* ──────────────────────────────────
+         Aumentar variável em 1
+      ───────────────────────────────────
+
+         contador++ é o mesmo que contador = contador + 1
+         Operador ++ incrementa (incremento) a variável
+      ───────────────────────────────────── */
+      contador++;
+      /* Se contador era 0, agora é 1 */
+
+      /* Atualizar tela com novo valor */
+      atualizarDisplay();
+      /* Chama função auxiliar que modifica o DOM */
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 3: Decrementar Contador
+    ════════════════════════════════════════════════════════════════
+
+       Diminui a variável 'contador' em 1 e atualiza a tela.
+    ═════════════════════════════════════════════════════════════════ */
+    function decrementarContador() {
+      /* ──────────────────────────────────
+         Diminuir variável em 1
+      ───────────────────────────────────
+
+         contador-- é o mesmo que contador = contador - 1
+         Operador -- decremento a variável
+      ───────────────────────────────────── */
+      contador--;
+
+      /* Atualizar tela com novo valor */
+      atualizarDisplay();
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 4 (AUXILIAR): Atualizar Display do Contador
+    ════════════════════════════════════════════════════════════════
+
+       Função reutilizável que:
+       1. Atualiza número na tela
+       2. Muda cor para vermelho se negativo
+       3. Muda cor para normal se positivo
+
+       Boa prática: extrair lógica comum em funções auxiliares (DRY)
+    ═════════════════════════════════════════════════════════════════ */
+    function atualizarDisplay() {
+      /* ──────────────────────────────────
+         Encontrar elemento que exibe número
+      ───────────────────────────────────– */
+      const display = document.getElementById('numero-contador');
+
+      /* ──────────────────────────────────
+         Modificar texto
+      ───────────────────────────────────– */
+      display.textContent = contador;
+      /* display agora mostra valor atual de contador */
+
+      /* ──────────────────────────────────
+         Lógica: mudar cor se negativo
+      ───────────────────────────────────–
+
+         if (condição) { código se verdadeiro }
+         else { código se falso }
+
+         contador < 0 significa número negativo
+      ───────────────────────────────────── */
+      if (contador < 0) {
+        /* Números negativos aparecem em vermelho */
+        display.classList.add('negativo');
+        /* Adiciona classe CSS que muda a cor */
+      } else {
+        /* Números positivos aparecem em azul (padrão) */
+        display.classList.remove('negativo');
+        /* Remove classe CSS, volta cor original */
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 5: Alternar Tema (Claro/Escuro)
+    ════════════════════════════════════════════════════════════════
+
+       Quando usuário clica no botão "Tema Escuro":
+       1. Alterna classe .dark-theme na tag <html>
+       2. Variáveis CSS são sobrescritas
+       3. Página inteira muda de cor automaticamente
+       4. Botão atualiza seu texto
+    ═════════════════════════════════════════════════════════════════ */
+    function alternarTema() {
+      /* ──────────────────────────────────
+         Encontrar elemento raiz
+      ───────────────────────────────────–
+
+         document.documentElement é a tag <html>
+         É a raiz de toda a página
+      ───────────────────────────────────── */
+      const html = document.documentElement;
+
+      /* ──────────────────────────────────
+         Alternar classe .dark-theme
+      ───────────────────────────────────–
+
+         .classList.toggle('dark-theme') faz:
+         • Se classe não existe: adiciona
+         • Se classe existe: remove
+
+         No CSS, :root.dark-theme sobrescreve as cores
+         Todas as variáveis CSS mudam automaticamente
+      ───────────────────────────────────── */
+      html.classList.toggle('dark-theme');
+      /* dark-theme é adicionada ou removida */
+
+      /* ──────────────────────────────────
+         Atualizar variável de controle
+      ───────────────────────────────────– */
+      temaEscuroAtivo = !temaEscuroAtivo;
+      /* ! inverte boolean: true vira false, false vira true */
+
+      /* ──────────────────────────────────
+         Atualizar texto do botão
+      ───────────────────────────────────–
+
+         Se tema escuro está ativo, botão mostra ☀️ (claro)
+         Se tema claro está ativo, botão mostra 🌙 (escuro)
+      ───────────────────────────────────── */
+      const botaoTema = document.getElementById('btn-tema');
+
+      if (temaEscuroAtivo) {
+        botaoTema.textContent = '☀️ Tema Claro';
+        /* Oferece opção de voltar para claro */
+      } else {
+        botaoTema.textContent = '🌙 Tema Escuro';
+        /* Oferece opção de ativar escuro */
+      }
+
+      /* ──────────────────────────────────
+         (OPCIONAL) Salvar preferência
+      ───────────────────────────────────–
+
+         localStorage permite salvar dados no navegador
+         Próxima vez que abrir página, tema será lembrado
+         Aqui não implementamos, mas é padrão profissional
+      ───────────────────────────────────── */
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FUNÇÃO 6: Alternar Visibilidade de Seção
+    ════════════════════════════════════════════════════════════════
+
+       Esconde ou mostra a seção ocultável usando classe CSS.
+    ═════════════════════════════════════════════════════════════════ */
+    function alternarVisibilidade() {
+      /* ──────────────────────────────────
+         Encontrar seção a ser ocultada
+      ───────────────────────────────────– */
+      const secao = document.getElementById('secao-ocultavel');
+
+      /* ──────────────────────────────────
+         Alternar classe .escondida
+      ───────────────────────────────────–
+
+         .toggle('escondida'):
+         • Se não tem classe: adiciona (esconde)
+         • Se tem classe: remove (mostra)
+
+         CSS (transition) faz isso suavemente
+      ───────────────────────────────────── */
+      secao.classList.toggle('escondida');
+      /* Seção fica invisível ou visível */
+
+      /* ──────────────────────────────────
+         Atualizar variável de controle
+      ───────────────────────────────────– */
+      secaoVisivel = !secaoVisivel;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       (OPCIONAL) MELHORIAS POSSÍVEIS
+    ════════════════════════════════════════════════════════════════
+
+       Ideias para expandir este projeto:
+
+       1. PERSISTÊNCIA COM LOCALSTORAGE
+          • Salvar contador no navegador
+          • Recuperar ao recarregar página
+          localStorage.setItem('contador', contador)
+          contador = localStorage.getItem('contador')
+
+       2. ANIMAÇÕES MAIS COMPLEXAS
+          • CSS animations em vez de transitions
+          • Uso de transform para efeitos de escala/rotação
+          • Usar requestAnimationFrame() para animações suaves
+
+       3. VALIDAÇÃO APRIMORADA
+          • Aceitar apenas números em inputs
+          • Máximo/mínimo de caracteres
+          • Mostrar mensagens de erro inline
+
+       4. EVENTOS ADICIONAIS
+          • onkeypress: ativar ao pressionar tecla
+          • onchange: ativar quando valor muda
+          • ondblclick: ativar com duplo clique
+
+       5. MANIPULAÇÃO AVANÇADA DO DOM
+          • createElement(): criar elementos dinamicamente
+          • appendChild(): adicionar elementos ao DOM
+          • removeChild(): remover elementos
+          • getAttribute/setAttribute: manipular atributos
+
+       6. EFEITOS SONOROS OU FEEDBACK
+          • Audio API para sons ao clicar
+          • Vibração (Vibration API) em mobile
+          • Notificações do navegador
+    ═════════════════════════════════════════════════════════════════ */
+  </script>
+</body>
+</html>

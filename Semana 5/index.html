@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semana 5 - SQL e Banco de Dados</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🗄️ Semana 5 - SQL e Banco de Dados</h1>
+      <p>Repetição de atividade prática: CRUD, Transações e Consultas SQL</p>
+    </header>
+
+    <nav class="breadcrumb">
+      <a href="../">Voltar</a> / Semana 5
+    </nav>
+
+    <!-- Seção 1: Atividades Práticas -->
+    <section class="atividade">
+      <h2>📋 1. Atividades Práticas</h2>
+
+      <div class="card">
+        <h3>Atividade 1: Repetição de CRUD Básico</h3>
+        <p><strong>Arquivo:</strong> <code>exercicio_crud_basico.sql</code></p>
+        <p>Exercícios práticos focando em:</p>
+        <ul>
+          <li><strong>CREATE TABLE:</strong> Definir colunas, tipos de dados, chaves primárias e estrangeiras</li>
+          <li><strong>INSERT:</strong> Popular tabelas com dados de clientes e pedidos</li>
+          <li><strong>SELECT e JOIN:</strong> Consultas simples, INNER JOIN e LEFT JOIN</li>
+          <li><strong>UPDATE:</strong> Alterar emails, status e outros campos</li>
+          <li><strong>DELETE:</strong> Remover registros com cuidado ao usar WHERE</li>
+          <li><strong>ALTER TABLE:</strong> Adicionar novas colunas (ex: status)</li>
+          <li><strong>Transações:</strong> BEGIN, COMMIT, ROLLBACK para garantir consistência</li>
+        </ul>
+        <div class="highlight">
+          <strong>Tabelas principais:</strong> clientes e pedidos com relacionamento 1:N
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Atividade 2: Desafio SQL (Conceitual)</h3>
+        <p><strong>Arquivo:</strong> <code>atividade_2_desafio_sql.sql</code></p>
+        <p>Exercícios com desafios diferentes para reforçar aprendizado:</p>
+        <ul>
+          <li><strong>Desafio 1:</strong> Criar sistema de PRODUTOS e ESTOQUE com histórico</li>
+          <li><strong>Desafio 2:</strong> Usar CASE para lógica condicional</li>
+          <li><strong>Desafio 3:</strong> Análise de vendas com agregação (COUNT, SUM)</li>
+          <li><strong>Desafio 4:</strong> UPDATE com condições</li>
+          <li><strong>Desafio 5:</strong> DELETE com transações</li>
+          <li><strong>Desafio 6:</strong> Junções complexas (3+ tabelas)</li>
+          <li><strong>Desafio 7:</strong> Window Functions (recursos avançados)</li>
+          <li><strong>Desafio 8:</strong> Criar e usar VIEWs</li>
+          <li><strong>Desafio 9:</strong> Transações com múltiplas operações</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Seção 2: Ferramentas Recomendadas -->
+    <section class="ferramentas">
+      <h2>🛠️ 2. Ferramentas para Praticar</h2>
+
+      <div class="card">
+        <h3>Para Gerenciar Banco Local</h3>
+        <ul>
+          <li><strong>HeidiSQL</strong> - Interface gráfica para MySQL/MariaDB (Windows)</li>
+          <li><strong>RAID</strong> - Gerenciador de banco de dados alternativo</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Para Testes Rápidos Online</h3>
+        <ul>
+          <li><strong>SQL Lite Online</strong> - Editor SQL no navegador (sem instalar nada)</li>
+          <li><strong>Replit SQL</strong> - Ambiente de programação com suporte a SQL</li>
+          <li><strong>SQLFiddle</strong> - Teste queries em tempo real</li>
+        </ul>
+      </div>
+
+      <div class="card info">
+        <p>💡 <strong>Dica:</strong> Use SQL Lite Online para começar rapidinho sem precisar instalar nada!</p>
+      </div>
+    </section>
+
+    <!-- Seção 3: Trilhas de Estudo Alura -->
+    <section class="trilhas">
+      <h2>📚 3. Trilhas de Estudo na Alura (Recomendado)</h2>
+      <p>Seguir NESSA ORDEM pedagógica (prática ANTES de teoria pesada):</p>
+
+      <div class="trilha">
+        <h3>Ordem Recomendada:</h3>
+
+        <div class="card">
+          <h4>1️⃣ Conhecendo SQL</h4>
+          <p><strong>Foco:</strong> Conceitos fundamentais e primeiros passos</p>
+          <p>O que aprenderá:</p>
+          <ul>
+            <li>Sintaxe básica de SQL</li>
+            <li>Diferença entre bancos de dados</li>
+            <li>Primeiras queries SELECT</li>
+            <li>Estrutura de um database</li>
+          </ul>
+          <p><em>Tempo estimado: 2-3 horas</em></p>
+        </div>
+
+        <div class="card">
+          <h4>2️⃣ Praticando SQL</h4>
+          <p><strong>Foco:</strong> Exercícios práticos (aqui você está agora!)</p>
+          <p>O que aprenderá:</p>
+          <ul>
+            <li>CREATE, INSERT, SELECT, UPDATE, DELETE</li>
+            <li>WHERE, ORDER BY, GROUP BY</li>
+            <li>JOINs (INNER, LEFT, RIGHT)</li>
+            <li>Funções de agregação (COUNT, SUM, AVG)</li>
+            <li>Transações (BEGIN, COMMIT, ROLLBACK)</li>
+          </ul>
+          <p><em>Tempo estimado: 4-6 horas (ou mais praticando)</em></p>
+        </div>
+
+        <div class="card">
+          <h4>3️⃣ Modelagem de Banco de Dados</h4>
+          <p><strong>Foco:</strong> Teoria de design (APÓS ter prática com tabelas)</p>
+          <p>O que aprenderá:</p>
+          <ul>
+            <li>Normalização (1NF, 2NF, 3NF)</li>
+            <li>Diagrama Entidade-Relacionamento (ER)</li>
+            <li>Boas práticas de design</li>
+            <li>Relacionamentos (1:1, 1:N, N:N)</li>
+            <li>Chaves primárias e estrangeiras</li>
+          </ul>
+          <p><em>Tempo estimado: 3-4 horas</em></p>
+          <div class="highlight">
+            ⚠️ <strong>Importante:</strong> Comece este APÓS ter praticado os dois anteriores!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 4: Como Usar os Arquivos SQL -->
+    <section class="guia">
+      <h2>🎯 4. Como Usar os Arquivos SQL</h2>
+
+      <div class="card">
+        <h4>Passo a Passo:</h4>
+        <ol>
+          <li><strong>Abra uma ferramenta SQL</strong> (HeidiSQL, SQL Lite Online, etc)</li>
+          <li><strong>Copie o código</strong> de <code>exercicio_crud_basico.sql</code> ou <code>atividade_2_desafio_sql.sql</code></li>
+          <li><strong>Cole na ferramenta</strong> e execute os comandos em ordem</li>
+          <li><strong>Observe os resultados</strong> de cada query</li>
+          <li><strong>Experimente modificar</strong> os comandos para entender como funcionam</li>
+          <li><strong>Pratique transações:</strong> use BEGIN/COMMIT/ROLLBACK para testar sem medo</li>
+        </ol>
+      </div>
+
+      <div class="card info">
+        <h4>💡 Dicas de Estudo:</h4>
+        <ul>
+          <li>✅ Sempre teste um SELECT antes de fazer UPDATE/DELETE</li>
+          <li>✅ Use transações (BEGIN...COMMIT) para praticar sem "estragar" os dados</li>
+          <li>✅ Pratique as JOINs várias vezes — é essencial!</li>
+          <li>✅ Modifique os dados e veja o resultado mudar</li>
+          <li>✅ Crie suas próprias queries além dos exercícios</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Seção 5: Objetivos da Semana -->
+    <section class="objetivos">
+      <h2>🎓 5. Objetivos da Semana</h2>
+
+      <div class="checklist">
+        <label>
+          <input type="checkbox" />
+          <span>✅ Executar todos os comandos da Atividade 1 (CRUD Básico)</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Entender a diferença entre INNER JOIN e LEFT JOIN</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Praticar transações (BEGIN/COMMIT/ROLLBACK) com segurança</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Completar a Atividade 2 (Desafios SQL)</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Iniciar a trilha "Conhecendo SQL" na Alura</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Iniciar a trilha "Praticando SQL" na Alura</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>✅ Sentir-se confiante com CRUD básico</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Seção 6: Próximos Passos -->
+    <section class="proximos">
+      <h2>🚀 6. Próximos Passos (Semanas 6-7)</h2>
+
+      <div class="card">
+        <h3>Semana 6: PHP Básico</h3>
+        <p>Integrar SQL com PHP para criar aplicações backend</p>
+      </div>
+
+      <div class="card">
+        <h3>Semana 7-8: PHP Avançado</h3>
+        <p>Funções, métodos GET/POST, formulários e superglobais</p>
+      </div>
+
+      <div class="card highlight">
+        <h3>Semana 9+: Full Stack</h3>
+        <p>Integrar Frontend (HTML/CSS/JS) com Backend (PHP) e Banco de Dados (SQL)</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Semana 5 — SQL e Banco de Dados — Encontro Síncrono</p>
+      <p>Trilhas Alura recomendadas</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+  DOCTYPE: informa ao navegador que este é um documento HTML5.
+  Sempre deve ser a primeira linha do arquivo.
+-->
+
+<html lang="pt-BR">
+<!--
+  <html>: elemento raiz que envolve todo o conteúdo da página.
+  O atributo lang="pt-BR" informa ao navegador
+  que o idioma da página é Português Brasileiro.
+-->
+
+<head>
+  <!--
+    <head>: seção de configurações da página.
+    O conteúdo aqui NÃO aparece visualmente — serve para configurar
+    o comportamento e a aparência do documento.
+  -->
+
+  <meta charset="UTF-8" />
+  <!--
+    <meta charset>: define a codificação de caracteres.
+    UTF-8 suporta acentos, cedilha e caracteres especiais corretamente.
+    Sem isso, palavras como "ação" podem aparecer corrompidas.
+  -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    <meta viewport>: define como o navegador ajusta a largura e o zoom
+    inicial da página ao renderizá-la.
+    width=device-width → a largura da página se adapta à largura da tela.
+    initial-scale=1.0  → sem zoom inicial ao carregar.
+  -->
+
+  <title>Lista de Filmes Favoritos</title>
+  <!--
+    <title>: define o texto que aparece na aba do navegador.
+  -->
+
+  <link rel="stylesheet" href="style.css" />
+  <!--
+    <link>: conecta um arquivo externo ao HTML.
+    rel="stylesheet" → informa que é um arquivo de estilos CSS.
+    href="style.css"  → caminho do arquivo (está na mesma pasta).
+  -->
+
+</head>
+
+<body>
+  <!--
+    <body>: tudo que está aqui aparece visualmente na página.
+    É o "corpo" do documento.
+  -->
+
+  <div class="container">
+    <!--
+      <div>: é uma caixa genérica usada para agrupar elementos.
+      Não tem significado semântico próprio, mas é muito útil
+      para organizar e aplicar estilos em blocos de conteúdo.
+      class="container" → permite estilizar este div no CSS.
+    -->
+
+    <header>
+      <!--
+        <header>: elemento semântico que representa o cabeçalho da página.
+        "Semântico" significa que o nome da tag já descreve seu propósito,
+        ajudando navegadores a entenderem a estrutura do documento.
+      -->
+
+      <h1>🎬 Minha Lista de Filmes</h1>
+      <!--
+        <h1>: título principal da página (heading nível 1).
+        Deve existir apenas um <h1> por página.
+        Os níveis vão de h1 (mais importante) até h6 (menos importante).
+      -->
+
+      <p>Adicione os filmes que você quer assistir ou já assistiu!</p>
+      <!--
+        <p>: representa um parágrafo de texto.
+        O navegador adiciona automaticamente um espaço acima e abaixo.
+      -->
+
+    </header>
+
+    <section class="formulario">
+      <!--
+        <section>: elemento semântico que agrupa um bloco de conteúdo
+        relacionado. Aqui usamos para isolar a área do formulário.
+      -->
+
+      <input type="text" id="inputFilme"
+       placeholder="Digite o nome do filme..." />
+      <!--
+        <input>: campo onde o usuário pode digitar informações.
+        type="text"   → define que aceita texto comum.
+        id="inputFilme" → identificador único, usado pelo JavaScript
+                          para encontrar este elemento (document.getElementById).
+        placeholder   → texto cinza exibido enquanto o campo está vazio,
+                        serve como dica para o usuário.
+      -->
+
+      <button id="btnAdicionar">Adicionar</button>
+      <!--
+        <button>: cria um botão clicável.
+        O texto entre as tags ("Adicionar") é o rótulo visível.
+        id="btnAdicionar" → identificador para o JavaScript capturar
+                            o evento de clique neste botão.
+      -->
+
+    </section>
+
+    <section class="lista-section">
+
+      <h2>Filmes na lista <span id="contador">(0)</span></h2>
+      <!--
+        <h2>: título de segundo nível, hierarquicamente abaixo do <h1>.
+        <span>: elemento inline genérico (como o <div>, mas para textos).
+                Usado aqui para isolar o contador e atualizá-lo via JavaScript
+                sem afetar o restante do texto do <h2>.
+        id="contador" → o JavaScript irá modificar este texto dinamicamente.
+      -->
+
+      <ul id="listaFilmes">
+        <!--
+          <ul>: lista não ordenada (Unordered List) — exibe marcadores (bullets).
+          Use <ol> quando a ordem importa (lista numerada).
+          Os itens da lista são adicionados aqui pelo JavaScript,
+          por isso está vazio no HTML.
+          id="listaFilmes" → referenciado no script.js para inserir os <li>.
+        -->
+      </ul>
+
+    </section>
+
+    <footer>
+      <!--
+        <footer>: elemento semântico de rodapé.
+        Geralmente contém informações secundárias como créditos, links, etc.
+      -->
+      <p>Feito com HTML, CSS e JavaScript &mdash; Semana 1</p>
+      <!--
+        &mdash; → é uma entidade HTML que representa o caractere "—" (travessão).
+        Entidades HTML são usados para caracteres especiais que poderiam
+        ser confundidos com código (como < e > que viram &lt; e &gt;).
+      -->
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  <!--
+    <script>: carrega e executa um arquivo JavaScript.
+    src="script.js" → caminho do arquivo (mesma pasta).
+    IMPORTANTE: o <script> é colocado no FINAL do <body> para garantir
+    que todos os elementos HTML já existam na página antes de o JavaScript
+    tentar encontrá-los. Se colocado no <head>, os elementos ainda não
+    existiriam e o script falharia.
+  -->
+
+</body>
+</html>
