@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npm list:*)",
+      "Bash(pip install:*)",
+      "Bash(cd:*)",
+      "Bash(node:*)",
+      "Bash(pip show:*)",
+      "Bash(gh repo:*)",
+      "Bash(ssh-keygen:*)",
+      "Bash(cp:*)",
+      "Bash(code --install-extension esbenp.prettier-vscode)",
+      "Bash(code --install-extension ritwickdey.LiveServer)"
+    ]
+  }
+}
